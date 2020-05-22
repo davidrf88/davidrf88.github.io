@@ -106,26 +106,26 @@
             },
             {
                 "Id": "134542345y4AB",
-                "Selected": false,
+                "Selected": true,
                 "MatchStart": "Vienres 22 08:30 PM",
                 "Duration": "23m 15s",
-                "Placement": 3,
+                "Placement": 13,
                 "Players": [
                     {
                         "UserName": "Lord-Raxta",
-                        "Kills": 7
+                        "Kills": 1
                     },
                     {
                         "UserName": "Bunkerman",
-                        "Kills": 5
+                        "Kills": 1
                     },
                     {
-                        "UserName": "TBD",
+                        "UserName": "KennyQuintal",
+                        "Kills": 1
+                    },
+                    {
+                        "UserName": "DarkForce",
                         "Kills": 4
-                    },
-                    {
-                        "UserName": "TBD2",
-                        "Kills": 6
                     }
                 ]
             }
