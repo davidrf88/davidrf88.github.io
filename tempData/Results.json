@@ -427,10 +427,10 @@
             },
             {
                 "Id": "134234AdfthB",
-                "Selected": false,
+                "Selected": true,
                 "MatchStart": "Vienres 22 08:30 PM",
                 "Duration": "23m 15s",
-                "Placement": 0,
+                "Placement": 17,
                 "Players": [
                     {
                         "UserName": "Rex5120",
@@ -438,7 +438,7 @@
                     },
                     {
                         "UserName": "Davidrf88",
-                        "Kills": 0
+                        "Kills": 4
                     },
                     {
                         "UserName": "Shak",
