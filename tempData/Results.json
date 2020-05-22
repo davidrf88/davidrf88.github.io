@@ -477,10 +477,10 @@
             },
             {
                 "Id": "13tyh664234AB",
-                "Selected": false,
+                "Selected": true,
                 "MatchStart": "Vienres 22 08:30 PM",
                 "Duration": "23m 15s",
-                "Placement": 0,
+                "Placement": 40,
                 "Players": [
                     {
                         "UserName": "Rex5120",
@@ -492,7 +492,7 @@
                     },
                     {
                         "UserName": "Shak",
-                        "Kills": 0
+                        "Kills": 3
                     },
                     {
                         "UserName": "Clemente",
