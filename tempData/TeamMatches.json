@@ -1,0 +1,157 @@
+
+    {
+        "Id": 1,
+        "TeamName": "Raxta-Gaming",
+        "Matches": [
+            {
+                "Id": "134234AB",
+                "Selected": true,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 5,
+                "Players": [
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 5
+                    },
+                    {
+                        "UserName": "GeraP",
+                        "Kills": 2
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 9
+                    },
+                    {
+                        "UserName": "Ate",
+                        "Kills": 8
+                    }
+                ]
+            },
+            {
+                "Id": "657934234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 09:00 PM",
+                "Duration": "20m 15s",
+                "Placement": 8,
+                "Players": [
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 1
+                    },
+                    {
+                        "UserName": "GeraP",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Ate",
+                        "Kills": 3
+                    }
+                ]
+            },
+            {
+                "Id": "23534234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 11:30 PM",
+                "Duration": "26m 15s",
+                "Placement": 1,
+                "Players": [
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "GeraP",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "Ate",
+                        "Kills": 3
+                    }
+                ]
+            },
+            {
+                "Id": "567592234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 12:50 PM",
+                "Duration": "20m 34s",
+                "Placement": 9,
+                "Players": [
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 2
+                    },
+                    {
+                        "UserName": "GeraP",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 10
+                    },
+                    {
+                        "UserName": "Ate",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "23456723434AB",
+                "Selected": false,
+                "MatchStart": "Sabado 23 02:00 AM",
+                "Duration": "28m 30s",
+                "Placement": 5,
+                "Players": [
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 12
+                    },
+                    {
+                        "UserName": "GeraP",
+                        "Kills": 5
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 3
+                    },
+                    {
+                        "UserName": "Ate",
+                        "Kills": 5
+                    }
+                ]
+            },
+            {
+                "Id": "3545234254AB",
+                "Selected": false,
+                "MatchStart": "Sabado 23 02:00 AM",
+                "Duration": "17m 15s",
+                "Placement": 18,
+                "Players": [
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "GeraP",
+                        "Kills": 5
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 1
+                    },
+                    {
+                        "UserName": "Ate",
+                        "Kills": 3
+                    }
+                ]
+            }
+        ]
+    }

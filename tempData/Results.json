@@ -1,0 +1,1060 @@
+[
+
+    {
+        "Id": 1,
+        "TeamName": "Raxta-Gaming",
+        "Matches": [
+            {
+                "Id": "1342df34AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 1,
+                "Players": [
+                    {
+                        "UserName": "Lord-Raxta",
+                        "Kills": 3
+                    },
+                    {
+                        "UserName": "Bunkerman",
+                        "Kills": 80
+                    },
+                    {
+                        "UserName": "TBD",
+                        "Kills": 10
+                    },
+                    {
+                        "UserName": "TBD2",
+                        "Kills": 2
+                    }
+                ]
+            },
+            {
+                "Id": "134g23drg4AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 10,
+                "Players": [
+                    {
+                        "UserName": "Lord-Raxta",
+                        "Kills": 3
+                    },
+                    {
+                        "UserName": "Bunkerman",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "TBD",
+                        "Kills": 1
+                    },
+                    {
+                        "UserName": "TBD2",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1342dg5y34AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 21,
+                "Players": [
+                    {
+                        "UserName": "Lord-Raxta",
+                        "Kills": 1
+                    },
+                    {
+                        "UserName": "Bunkerman",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "TBD",
+                        "Kills": 6
+                    },
+                    {
+                        "UserName": "TBD2",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1345y4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 11,
+                "Players": [
+                    {
+                        "UserName": "Lord-Raxta",
+                        "Kills": 2
+                    },
+                    {
+                        "UserName": "Bunkerman",
+                        "Kills": 1
+                    },
+                    {
+                        "UserName": "TBD",
+                        "Kills": 3
+                    },
+                    {
+                        "UserName": "TBD2",
+                        "Kills": 4
+                    }
+                ]
+            },
+            {
+                "Id": "134542345y4AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 3,
+                "Players": [
+                    {
+                        "UserName": "Lord-Raxta",
+                        "Kills": 7
+                    },
+                    {
+                        "UserName": "Bunkerman",
+                        "Kills": 5
+                    },
+                    {
+                        "UserName": "TBD",
+                        "Kills": 4
+                    },
+                    {
+                        "UserName": "TBD2",
+                        "Kills": 6
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 2,
+        "TeamName": "Ate Gamingg",
+        "Matches": [
+            {
+                "Id": "34534534589",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ate",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Reggnier",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "jeepol Z",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alex_Luna94",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "134564234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ate",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Reggnier",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "jeepol Z",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alex_Luna94",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "134435234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ate",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Reggnier",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "jeepol Z",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alex_Luna94",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "134288734AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ate",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Reggnier",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "jeepol Z",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alex_Luna94",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "134235234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ate",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Reggnier",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "jeepol Z",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alex_Luna94",
+                        "Kills": 0
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 3,
+        "TeamName": "Costal de Papas",
+        "Matches": [
+            {
+                "Id": "1342efrt34AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Darkforce69",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "raultodo podero",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "YaiShamalito",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "133456ghfj4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Darkforce69",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "raultodo podero",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "YaiShamalito",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "135gf634234AB3546",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 5,
+                "Players": [
+                    {
+                        "UserName": "Darkforce69",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "raultodo podero",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "YaiShamalito",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1354dftyh5634234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Darkforce69",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "raultodo podero",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "YaiShamalito",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1342344fghj564AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Darkforce69",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "DMBU94",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "raultodo podero",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "YaiShamalito",
+                        "Kills": 0
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 4,
+        "TeamName": "Sleepless Soldiers",
+        "Matches": [
+            {
+                "Id": "13dgfh4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 1,
+                "Players": [
+                    {
+                        "UserName": "Rex5120",
+                        "Kills": 10
+                    },
+                    {
+                        "UserName": "Davidrf88",
+                        "Kills": 15
+                    },
+                    {
+                        "UserName": "Shak",
+                        "Kills": 9
+                    },
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 2
+                    }
+                ]
+            },
+            {
+                "Id": "134234AdfthB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Rex5120",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Davidrf88",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Shak",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "13dfgth4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Rex5120",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Davidrf88",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Shak",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "13tyh664234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Rex5120",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Davidrf88",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Shak",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "13esrtyg4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Rex5120",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Davidrf88",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Shak",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Clemente",
+                        "Kills": 0
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 5,
+        "TeamName": "Cartel del Peje",
+        "Matches": [
+            {
+                "Id": "134rety22234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Los_PerezD10",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Richymanboy",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "CesarWolf19",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Raul",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1252534234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Los_PerezD10",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Richymanboy",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "CesarWolf19",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Raul",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "13252525uf4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Los_PerezD10",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Richymanboy",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "CesarWolf19",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Raul",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "ty134234ABrth",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Los_PerezD10",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Richymanboy",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "CesarWolf19",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Raul",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1dfgh610034234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Los_PerezD10",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Richymanboy",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "CesarWolf19",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Raul",
+                        "Kills": 0
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 6,
+        "TeamName": "Latinoamerica Gamer",
+        "Matches": [
+            {
+                "Id": "134543234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "GabrielEB",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "chapoantraxr5",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MichelHdz13",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Miguel4T",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "13346dsgfmui4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "GabrielEB",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "chapoantraxr5",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MichelHdz13",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Miguel4T",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1342346dfgn34AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "GabrielEB",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "chapoantraxr5",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MichelHdz13",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Miguel4T",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1343465gbasz234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "GabrielEB",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "chapoantraxr5",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MichelHdz13",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Miguel4T",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "134stdgfmh45234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "GabrielEB",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "chapoantraxr5",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MichelHdz13",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Miguel4T",
+                        "Kills": 0
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 7,
+        "TeamName": "Los Paisas",
+        "Matches": [
+            {
+                "Id": "13jhkh454234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ivandx1",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "villarce",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Humbertowski96",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alanis117",
+                        "Kills": 8
+                    }
+                ]
+            },
+            {
+                "Id": "133423274537334AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ivandx1",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "villarce",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Humbertowski96",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alanis117",
+                        "Kills": 8
+                    }
+                ]
+            },
+            {
+                "Id": "13345gdfaaa4234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ivandx1",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "villarce",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Humbertowski96",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alanis117",
+                        "Kills": 8
+                    }
+                ]
+            },
+            {
+                "Id": "2364gt134234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ivandx1",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "villarce",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Humbertowski96",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alanis117",
+                        "Kills": 8
+                    }
+                ]
+            },
+            {
+                "Id": "34tsgfw134234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "Ivandx1",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "villarce",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Humbertowski96",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Alanis117",
+                        "Kills": 8
+                    }
+                ]
+            }
+        ]
+    },
+    
+    {
+        "Id": 8,
+        "TeamName": "Darkstence",
+        "Matches": [
+            {
+                "Id": "134234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "AlexMtzx2",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MonkeyRS21",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Bexyer",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Marvin",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1wert534234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "AlexMtzx2",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MonkeyRS21",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Bexyer",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Marvin",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "1we4rt34234AB34t",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "AlexMtzx2",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MonkeyRS21",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Bexyer",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Marvin",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "wsg134234AB5hjj",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "AlexMtzx2",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MonkeyRS21",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Bexyer",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Marvin",
+                        "Kills": 0
+                    }
+                ]
+            },
+            {
+                "Id": "44444134234AB",
+                "Selected": false,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
+                "Placement": 0,
+                "Players": [
+                    {
+                        "UserName": "AlexMtzx2",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "MonkeyRS21",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Bexyer",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "Marvin",
+                        "Kills": 0
+                    }
+                ]
+            }
+        ]
+    }
+
+
+]

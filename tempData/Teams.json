@@ -1,0 +1,102 @@
+[
+    {
+        "Id": 1,
+        "Name": "Sleepless Soldiers",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "Rex5120",
+                "UserName": "jmartinez90#1335",
+                "platform": "battlenet",
+                "IsCaptain": true
+            }
+
+        ]
+    },
+    {
+        "Id": 2,
+        "Name": "ATE Gamingg",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "ATE",
+                "UserName": "ate#11402",
+                "platform": "battlenet",
+                "IsCaptain": true
+            }
+        ]
+    },
+    {
+        "Id": 3,
+        "Name": "Raxta-Gaming",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "Lord-Raxta",
+                "UserName": "LordRaxta#1440",
+                "platform": "battlenet",
+                "IsCaptain": true
+            }
+            
+        ]
+    },
+
+    {
+        "Id": 4,
+        "Name": "Latinoamerica Gamer",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "GabrielEB",
+                "UserName": "GabrielEB#11554",
+                "platform": "battlenet",
+                "IsCaptain": true
+            }
+            
+        ]
+    },
+    {
+        "Id": 5,
+        "Name": "Costal de Papas",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "Darkforce69",
+                "UserName": "Darkforce69",
+                "platform": "atvi",
+                "IsCaptain": true
+            }
+            
+        ]
+    },
+
+    {
+        "Id": 6,
+        "Name": "Cartel del Peje",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "Los_PerezD10",
+                "UserName": "Los_PerezD10",
+                "platform": "psn",
+                "IsCaptain": true
+            }
+            
+        ]
+    },
+
+    {
+        "Id": 7,
+        "Name": "Los Paisas",
+        "StartTime": null,
+        "Players": [
+            {
+                "DisplayName": "Ivandx1",
+                "UserName": "ivandx1#2848633",
+                "platform": "atvi",
+                "IsCaptain": true
+            }
+            
+        ]
+    }
+]
