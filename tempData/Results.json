@@ -213,14 +213,14 @@
             },
             {
                 "Id": "134288734AB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
+                "Selected": true,
+                "MatchStart": "Sabado 6:29 PM",
+                "Duration": " ",
                 "Placement": 0,
                 "Players": [
                     {
                         "UserName": "Ate",
-                        "Kills": 0
+                        "Kills": 3
                     },
                     {
                         "UserName": "Reggnier",
