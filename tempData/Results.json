@@ -320,18 +320,18 @@
             },
             {
                 "Id": "135gf634234AB3546",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 5,
+                "Selected": true,
+                "MatchStart": "Vienres 10:02 PM",
+                "Duration": " ",
+                "Placement": 3,
                 "Players": [
                     {
                         "UserName": "Darkforce69",
-                        "Kills": 0
+                        "Kills": 4
                     },
                     {
                         "UserName": "DMBU94",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "raultodo podero",
@@ -339,7 +339,7 @@
                     },
                     {
                         "UserName": "YaiShamalito",
-                        "Kills": 0
+                        "Kills": 2
                     }
                 ]
             },
