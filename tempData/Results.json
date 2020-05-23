@@ -238,26 +238,26 @@
             },
             {
                 "Id": "134235234AB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 0,
+                "Selected": true,
+                "MatchStart": "sabado 7:30 PM",
+                "Duration": " ",
+                "Placement": 2,
                 "Players": [
                     {
                         "UserName": "Ate",
-                        "Kills": 0
+                        "Kills": 7
                     },
                     {
                         "UserName": "Reggnier",
-                        "Kills": 0
+                        "Kills": 3
                     },
                     {
                         "UserName": "jeepol Z",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "Alex_Luna94",
-                        "Kills": 0
+                        "Kills": 4
                     }
                 ]
             }
