@@ -427,26 +427,26 @@
             },
             {
                 "Id": "134234AdfthB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 17,
+                "Selected": true,
+                "MatchStart": "Sabado 00 00:30 PM",
+                "Duration": " ",
+                "Placement": 26,
                 "Players": [
                     {
                         "UserName": "Rex5120",
-                        "Kills": 0
+                        "Kills": 1
                     },
                     {
                         "UserName": "Davidrf88",
-                        "Kills": 4
+                        "Kills": 1
                     },
                     {
                         "UserName": "Shak",
-                        "Kills": 0
+                        "Kills": 1
                     },
                     {
                         "UserName": "Clemente",
-                        "Kills": 0
+                        "Kills": 3
                     }
                 ]
             },
