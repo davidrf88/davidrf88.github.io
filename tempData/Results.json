@@ -823,26 +823,26 @@
             },
             {
                 "Id": "133423274537334AB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 0,
+                "Selected": true,
+                "MatchStart": "Sabado 4:28 PM",
+                "Duration": " ",
+                "Placement": 7,
                 "Players": [
                     {
                         "UserName": "Ivandx1",
-                        "Kills": 0
+                        "Kills": 6
                     },
                     {
                         "UserName": "villarce",
-                        "Kills": 0
+                        "Kills": 6
                     },
                     {
                         "UserName": "Humbertowski96",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "Alanis117",
-                        "Kills": 8
+                        "Kills": 9
                     }
                 ]
             },
