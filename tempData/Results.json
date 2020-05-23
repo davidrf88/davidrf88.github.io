@@ -955,26 +955,22 @@
             },
             {
                 "Id": "1wert534234AB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 0,
+                "Selected": true,
+                "MatchStart": "Vienres 10:07 PM",
+                "Duration": " ",
+                "Placement": 17,
                 "Players": [
                     {
                         "UserName": "AlexMtzx2",
-                        "Kills": 0
-                    },
-                    {
-                        "UserName": "MonkeyRS21",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "Bexyer",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "Marvin",
-                        "Kills": 0
+                        "Kills": 4
                     }
                 ]
             },
