@@ -82,25 +82,25 @@
             {
                 "Id": "1345y4234AB",
                 "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 39,
+                "MatchStart": "Sabado 11:00 PM",
+                "Duration": " ",
+                "Placement": 2,
                 "Players": [
                     {
                         "UserName": "Lord-Raxta",
-                        "Kills": 2
-                    },
-                    {
-                        "UserName": "Bunkerman",
-                        "Kills": 1
-                    },
-                    {
-                        "UserName": "KennyQuintal",
                         "Kills": 3
                     },
                     {
-                        "UserName": "JackPointJP",
+                        "UserName": "Bunkerman",
                         "Kills": 0
+                    },
+                    {
+                        "UserName": "KennyQuintal",
+                        "Kills": 2
+                    },
+                    {
+                        "UserName": "JackPointJP",
+                        "Kills": 3
                     }
                 ]
             },
