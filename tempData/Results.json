@@ -84,6 +84,31 @@
                 "Selected": true,
                 "MatchStart": "Sabado 11:00 PM",
                 "Duration": " ",
+                "Placement": 2,
+                "Players": [
+                    {
+                        "UserName": "Lord-Raxta",
+                        "Kills": 3
+                    },
+                    {
+                        "UserName": "Bunkerman",
+                        "Kills": 0
+                    },
+                    {
+                        "UserName": "KennyQuintal",
+                        "Kills": 2
+                    },
+                    {
+                        "UserName": "JackPointJP",
+                        "Kills": 3
+                    }
+                ]
+            },
+            {
+                "Id": "134542345y4AB",
+                "Selected": true,
+                "MatchStart": "Vienres 22 08:30 PM",
+                "Duration": "23m 15s",
                 "Placement": 14,
                 "Players": [
                     {
@@ -97,31 +122,6 @@
                     {
                         "UserName": "KennyQuintal",
                         "Kills": 4
-                    },
-                    {
-                        "UserName": "JackPointJP",
-                        "Kills": 2
-                    }
-                ]
-            },
-            {
-                "Id": "134542345y4AB",
-                "Selected": true,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 13,
-                "Players": [
-                    {
-                        "UserName": "Lord-Raxta",
-                        "Kills": 0
-                    },
-                    {
-                        "UserName": "Bunkerman",
-                        "Kills": 0
-                    },
-                    {
-                        "UserName": "KennyQuintal",
-                        "Kills": 0
                     },
                     {
                         "UserName": "JackPointJP",
