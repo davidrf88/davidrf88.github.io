@@ -738,26 +738,18 @@
             },
             {
                 "Id": "134stdgfmh45234AB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 0,
+                "Selected": true,
+                "MatchStart": "Sabado 11:00 PM",
+                "Duration": " ",
+                "Placement":16 ,
                 "Players": [
                     {
                         "UserName": "GabrielEsquivelB",
-                        "Kills": 0
-                    },
-                    {
-                        "UserName": "chapoantraxr5",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "MichelHdz13",
-                        "Kills": 0
-                    },
-                    {
-                        "UserName": "Miguel4T",
-                        "Kills": 0
+                        "Kills": 6
                     }
                 ]
             }
