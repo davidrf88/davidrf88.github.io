@@ -584,26 +584,26 @@
             },
             {
                 "Id": "13252525uf4234AB",
-                "Selected": false,
-                "MatchStart": "Vienres 22 08:30 PM",
-                "Duration": "23m 15s",
-                "Placement": 0,
+                "Selected": true,
+                "MatchStart": "Sabado 11:00 PM",
+                "Duration": " ",
+                "Placement": 2,
                 "Players": [
                     {
                         "UserName": "Los_PerezD10",
-                        "Kills": 0
+                        "Kills": 6
                     },
                     {
                         "UserName": "Richymanboy",
-                        "Kills": 0
+                        "Kills": 3
                     },
                     {
                         "UserName": "CesarWolf19",
-                        "Kills": 0
+                        "Kills": 2
                     },
                     {
                         "UserName": "Raul",
-                        "Kills": 0
+                        "Kills": 6
                     }
                 ]
             },
