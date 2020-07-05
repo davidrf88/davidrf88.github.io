@@ -9978,7 +9978,7 @@ p {
 
 @media (min-width: 768px) {
   section {
-    padding: 9rem 0;
+     padding: 2rem 0; 
   }
 }
 ::-moz-selection {
