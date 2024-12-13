@@ -1,0 +1,1 @@
+import{f as t,o as a,c as l,aa as n}from"./hs9a8vFw.js";const s=t({__name:"ProseCode",props:{code:{type:String,default:""},language:{type:String,default:null},filename:{type:String,default:null},highlights:{type:Array,default:()=>[]},meta:{type:String,default:null}},setup(r){return(e,o)=>(a(),l("div",null,[n(e.$slots,"default")]))}});export{s as _};
