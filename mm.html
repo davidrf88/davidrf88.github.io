@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body{
+            min-height: 2000px;
+        }
+
+        #twins
+        {
+
+            background-color: blue;
+            width: 100px;
+            height: 100px;
+            position: fixed;
+            animation: moveRight 2s linear infinite;
+            animation-play-state: paused;
+            animation-delay: calc(var(--scroll) * -1s);
+        }
+        @keyframes rotate {
+        to {
+            transform: rotate(360deg);
+            }
+        }
+
+        @keyframes moveRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(200vh);
+  }
+}
+
+
+    </style>
+</head>
+<body>
+    <div id="twins"><img src="sprite.gif" width="100%" height="100%" alt=""></div>
+    <script>
+
+window.addEventListener('scroll', () => {
+    //console.log('dfd')
+  document.body.style.setProperty('--scroll', window.pageYOffset / (document.body.offsetHeight - window.innerHeight));
+}, false);
+
+    </script>
+</body>
+</html>
