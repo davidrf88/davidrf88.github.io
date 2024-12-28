@@ -23,6 +23,31 @@
             color: white;
         }
 
+        #output {
+      position: fixed; /* Ensures it doesn't move with the page scroll */
+      bottom: 10px;    /* Position it 10px from the bottom */
+      right: 10px;     /* Position it 10px from the right */
+      background-color: #f9f9f9; /* Light background for visibility */
+      color: #333;     /* Dark text for contrast */
+      padding: 10px;   /* Add some space inside the box */
+      border: 1px solid #ccc; /* Light border for definition */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      z-index: 1000;   /* Ensures it's above other elements */
+    }
+    #output2 {
+      position: fixed; /* Ensures it doesn't move with the page scroll */
+      bottom: 50px;    /* Position it 10px from the bottom */
+      right: 10px;     /* Position it 10px from the right */
+      background-color: #f9f9f9; /* Light background for visibility */
+      color: #333;     /* Dark text for contrast */
+      padding: 10px;   /* Add some space inside the box */
+      border: 1px solid #ccc; /* Light border for definition */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      z-index: 1000;   /* Ensures it's above other elements */
+    }
+
         #section1 { background-color: #ff6f61; }
         #section2 { background-color: #6a67ce; }
         #section3 { background-color: #68b0ab; }
@@ -31,6 +56,8 @@
     </style>
 </head>
 <body>
+  <div id="output">Current Value: </div>
+  <div id="output2">Current Value: </div>
     <div class="section" id="section1">Section 1</div>
     <div class="section" id="section2">Section 2</div>
     <div class="section" id="section3">Section 3</div>
@@ -40,10 +67,48 @@
     <script>
       var activeSection =1;
       let scrolldelay = 1000;
+      let scrollPosition = 0;
+      let touchStartY = 0;
 
 const scrollableElement = document.body
     
     let scroll = 0;
+
+      scrollableElement.addEventListener('touchstart',(event)=>{
+        touchStartY = event.touches[0].clientY;
+
+      })
+
+      scrollableElement.addEventListener('touchmove',handleTouchMove)
+
+      function handleTouchMove(event) {
+        
+    const touchY = event.touches[0].clientY;
+    
+    const deltaY = touchStartY - touchY; // Calculate touch delta
+    scrollPosition += deltaY; // Update scroll position
+    console.log('move '+ deltaY)
+    touchStartY = touchY; // Update start position for next move
+    console.log('Scroll Position (mobile):', scrollPosition);
+
+    const displayElement = document.getElementById('output2');
+      displayElement.innerHTML = 'Current Value: '+ scrollPosition
+
+
+      if (scrollPosition > scrolldelay)
+      {
+        scrollPosition = 0;
+        scrollSection('down')
+      }
+      if(scrollPosition < (-1 * scrolldelay))
+      {
+        scrollPosition = 0;
+        scrollSection('up')
+      }
+
+
+}
+
 
     scrollableElement.addEventListener('wheel', (event) => {
       // Check the direction of the scroll
@@ -51,6 +116,8 @@ const scrollableElement = document.body
       scroll += event.deltaY
 
       console.log(`Vertical scroll (Top): ${scroll}`);
+      const displayElement = document.getElementById('output');
+      displayElement.innerHTML = 'Current Value: '+ scroll
       if (scroll > scrolldelay)
       {
         scroll = 0;
@@ -86,13 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollToTarget('section1');
     });
 
-    window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY || window.pageYOffset;
-  const scrollX = window.scrollX || window.pageXOffset;
-
-  console.log(`Vertical scroll (Y): ${scrollY}`);
-  console.log(`Horizontal scroll (X): ${scrollX}`);
-});
 
     function scrollToTarget(section) {
       console.log('moving to ' + section)
