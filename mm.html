@@ -34,6 +34,7 @@
       border-radius: 5px; /* Rounded corners */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
       z-index: 1000;   /* Ensures it's above other elements */
+      display: none;
     }
     #output2 {
       position: fixed; /* Ensures it doesn't move with the page scroll */
@@ -46,7 +47,25 @@
       border-radius: 5px; /* Rounded corners */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
       z-index: 1000;   /* Ensures it's above other elements */
+      
     }
+    #movable {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      position: absolute;
+      top: 0; /* Initial position */
+      left: 50%; /* Center horizontally */
+      transform: translateX(-50%); /* Adjust for perfect center */
+    }
+    .fade {
+  transition: opacity  2s ease; /* Adjust duration to match the fade effect */
+  opacity: 1;
+}
+.fade-out {
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
 
         #section1 { background-color: #ff6f61; }
         #section2 { background-color: #6a67ce; }
@@ -58,6 +77,7 @@
 <body>
   <div id="output">Current Value: </div>
   <div id="output2">Current Value: </div>
+  <div id="movable"></div>
     <div class="section" id="section1">Section 1</div>
     <div class="section" id="section2">Section 2</div>
     <div class="section" id="section3">Section 3</div>
@@ -65,108 +85,112 @@
     <div class="section" id="section5">Section 5</div>
 
     <script>
-      var activeSection =1;
-      let scrolldelay = 1000;
-      let scrollPosition = 0;
-      let touchStartY = 0;
 
-const scrollableElement = document.body
-    
-    let scroll = 0;
+let activeSection = 1;
+const scrolldelay = 500;
+let scrollPosition = 0;
+let touchStartY = 0;
+let scroll = 0;
+let moving = false;
 
-      scrollableElement.addEventListener('touchstart',(event)=>{
-        touchStartY = event.touches[0].clientY;
+const element = document.getElementById("movable");
+let position = 0;
 
-      })
-
-      scrollableElement.addEventListener('touchmove',handleTouchMove)
-
-      function handleTouchMove(event) {
-        
-    const touchY = event.touches[0].clientY;
-    
-    const deltaY = touchStartY - touchY; // Calculate touch delta
-    scrollPosition += deltaY; // Update scroll position
-    console.log('move '+ deltaY)
-    touchStartY = touchY; // Update start position for next move
-    console.log('Scroll Position (mobile):', scrollPosition);
-
-    const displayElement = document.getElementById('output2');
-      displayElement.innerHTML = 'Current Value: '+ scrollPosition
-
-
-      if (scrollPosition > scrolldelay)
-      {
-        scrollPosition = 0;
-        scrollSection('down')
+function moveVertically(value) {
+      if (value < 0 || value > 500) {
+        console.warn("Value must be between 0 and 500.");
+        return;
       }
-      if(scrollPosition < (-1 * scrolldelay))
-      {
-        scrollPosition = 0;
-        scrollSection('up')
-      }
+      position = value;
+      element.style.top = `${position}px`;
+    }
 
+const scrollableElement = document.body;
 
+// Handle touch start event
+scrollableElement.addEventListener("touchstart", (event) => {
+  if(moving) {return}
+  touchStartY = event.touches[0].clientY;
+});
+
+// Handle touch move event
+scrollableElement.addEventListener("touchmove", (event) => {
+  if(moving) {return}
+  const touchY = event.touches[0].clientY;
+  const deltaY = touchStartY - touchY;
+  scrollPosition += deltaY;
+  touchStartY = touchY;
+
+  moveVertically(scrollPosition);
+  document.getElementById("output2").innerHTML = `Current Value: ${scrollPosition}`;
+
+  if (scrollPosition > scrolldelay) {
+    scrollPosition = 0;
+    scrollSection("down");
+  } else if (scrollPosition < 0) {
+    scrollPosition = scrolldelay;
+    scrollSection("up");
+  }
+});
+
+// Handle wheel event
+scrollableElement.addEventListener("wheel", (event) => {
+  scroll += event.deltaY;
+  document.getElementById("output").innerHTML = `Current Value: ${scroll}`;
+
+  if (scroll > scrolldelay) {
+    scroll = 0;
+    scrollSection("down");
+  } else if (scroll < -scrolldelay) {
+    scroll = 0;
+    scrollSection("up");
+  }
+});
+
+// Scroll to the next or previous section
+function scrollSection(direction) {
+  if( direction === "up" && activeSection == 1)
+    {
+      scrollPosition = 0;
+    }
+
+    if( direction === "down" && activeSection == 5)
+    {
+      scrollPosition = scrolldelay;
+    }
+  if (direction === "up" && activeSection > 1) {
+    
+    activeSection--;
+  } else if (direction === "down" && activeSection < 5) {
+    activeSection++;
+  }
+  scrollToTarget(`section${activeSection}`);
 }
 
-
-    scrollableElement.addEventListener('wheel', (event) => {
-      // Check the direction of the scroll
-      
-      scroll += event.deltaY
-
-      console.log(`Vertical scroll (Top): ${scroll}`);
-      const displayElement = document.getElementById('output');
-      displayElement.innerHTML = 'Current Value: '+ scroll
-      if (scroll > scrolldelay)
-      {
-        scroll = 0;
-        scrollSection('down')
-      }
-      if(scroll < (-1 * scrolldelay))
-      {
-        scroll = 0;
-        scrollSection('up')
-      }
-
+// Smoothly scroll to a target section
+function scrollToTarget(section) {
+  moving = true;
+  element.classList.add('fade-out');
+  const targetElement = document.getElementById(section);
+  if (targetElement) {
+    targetElement.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
+  }
 
-    function scrollSection(direction )
-    {
-        //scrollToTarget('section4')
-      if(direction == 'up' && activeSection > 1)
-    {
-      activeSection--;
-    }
-    if(direction == 'down' && activeSection < 5)
-    {
-      activeSection++;
-    }
+  setTimeout(() => {
+    element.classList.remove('fade-out');
+    element.classList.add('fade');
+    moving = false;
+    }, 1000);
+}
 
-       scrollToTarget('section'+activeSection)
-
-    }
-
-
+// Initialize scrolling on DOM load
 document.addEventListener("DOMContentLoaded", () => {
-      console.log("DOM fully loaded and parsed");
-      scrollToTarget('section1');
-    });
+  scrollToTarget("section1");
+});
 
-
-    function scrollToTarget(section) {
-      console.log('moving to ' + section)
-          const targetElement = document.getElementById(section);
-          targetElement.scrollIntoView({
-            behavior: 'smooth', // For smooth scrolling
-            block: 'start',     // Aligns the element to the top of the viewport
-            inline: 'nearest',   // Horizontal alignment (optional)
-            
-          });
-        }
-
-
-        
 
     </script>
 
