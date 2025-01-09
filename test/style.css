@@ -1,0 +1,182 @@
+html
+{
+    height: 100%;
+}
+
+
+body
+{
+    background-color: rgb(8, 63, 32);
+    min-width: 300px !important;
+    height:100%;
+    
+}
+
+.wrapper{
+    max-width: 750px;
+    aspect-ratio: 1 / 1; 
+    width: 100%;
+    margin: auto;
+
+    
+}
+
+.jeep{
+    margin: auto;
+    aspect-ratio: 1 / 1;
+    background-image: url(jeep.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+    padding-top: 10%;
+    padding-left: 3%;
+    animation: bounce 0.4s ease-in-out infinite;
+}
+.windshield{
+    position: relative;
+    background-color: #607800;
+    width: 66%;
+    border-radius: 15%;
+    
+    margin-left: auto;
+    margin-right: auto;
+    
+    aspect-ratio: 1.9 / 1;
+    border: 10px solid black;
+    transition: background 0.2s ease; 
+    
+    
+}
+
+.facewrapper
+{
+display: flex;
+flex-direction: row;
+
+}
+
+.miguel{
+  position: relative;
+    background-color: rgb(255, 255, 255);
+    width: 40%;
+    border-radius: 50%;
+    margin-top: 3%;
+    margin-left: 8%;
+    aspect-ratio: 1 / 1;
+    border: 3px solid black;
+    transition: background 0.2s ease;
+    background-image: url(MiguelFace.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+
+}
+
+.mateo{
+  position: relative;
+    background-color: rgb(255, 255, 255);
+    width: 40%;
+    border-radius: 50%;
+    margin-top: 3%;
+    margin-left: 5%;
+    aspect-ratio: 1 / 1;
+    border: 3px solid black;
+    transition: background 0.2s ease;
+    background-image: url(MiguelFace.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(0, -3px); /* Slight bounce */
+    }
+  }
+
+  
+
+
+
+  .controls {
+    margin: auto;
+    aspect-ratio: 1/ 1; /* Maintain 1:1 aspect ratio */
+    gap: 0.5em; /* Space between buttons */
+    width: 100%; /* Responsive size, maxed to viewport */
+    background-image: url(radio.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+    padding: 0.5em;
+    border-radius: 6%;
+    position: relative;
+}
+
+.controls button {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff9999, #ff6666); /* Default gradient */
+    color: #fff;
+    border-radius: 50%; /* Rounded corners */
+    cursor: pointer;
+    transition: transform 0.01s, box-shadow 0.01s;
+    aspect-ratio: 1 / 1; 
+    width: 41%;
+
+
+}
+
+#btnbackground {
+    background: linear-gradient(45deg, #ffd699, #ff9933);
+    width: 10%;
+    left: 68.7%;
+    top: 42.2%;
+    position: absolute;
+}
+
+#btnPattern {
+    background: linear-gradient(45deg, #ff99ff, #cc33cc);
+    width: 8.1%;
+    left: 40.7%;
+    top: 63.4%;
+    position: absolute;
+}
+
+#btnFace {
+    background: linear-gradient(45deg, #9999ff, #3333ff);
+    width: 12.5%;
+  left: 66.9%;
+  top: 59.2%;
+  position: absolute;
+    
+}
+
+#btnFaceColor {
+  background: linear-gradient(45deg, #99ff99, #33cc33);
+  width: 8.1%;
+    left: 53.1%;
+    top: 63.4%;
+    position: absolute;
+}
+
+#btnBody {
+  background: linear-gradient(45deg, #dbe47c, #d8ec04);
+  width: 6.7%;
+    left: 58.5%;
+    top: 50.7%;
+    position: absolute;
+}
+
+.controls button:hover {
+    transform: scale(1.01); /* Cartoon hover effect */
+
+}
+
+.controls button:active {
+    transform: scale(0.98); /* Shrink slightly on click */
+}
