@@ -3,51 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Smooth Section Scrolling</title>
     <style>
-
-        body{
-            min-height: 2000px;
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevent default scroll behavior */
+            
         }
 
-        #twins
-        {
-
-            background-color: blue;
-            width: 100px;
-            height: 100px;
-            position: fixed;
-            animation: moveRight 2s linear infinite;
-            animation-play-state: paused;
-            animation-delay: calc(var(--scroll) * -1s);
-        }
-        @keyframes rotate {
-        to {
-            transform: rotate(360deg);
-            }
+        .section {
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
         }
 
-        @keyframes moveRight {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(200vh);
-  }
+        #output {
+      position: fixed; /* Ensures it doesn't move with the page scroll */
+      bottom: 10px;    /* Position it 10px from the bottom */
+      right: 10px;     /* Position it 10px from the right */
+      background-color: #f9f9f9; /* Light background for visibility */
+      color: #333;     /* Dark text for contrast */
+      padding: 10px;   /* Add some space inside the box */
+      border: 1px solid #ccc; /* Light border for definition */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      z-index: 1000;   /* Ensures it's above other elements */
+      display: none;
+    }
+    #output2 {
+      position: fixed; /* Ensures it doesn't move with the page scroll */
+      bottom: 50px;    /* Position it 10px from the bottom */
+      right: 10px;     /* Position it 10px from the right */
+      background-color: #f9f9f9; /* Light background for visibility */
+      color: #333;     /* Dark text for contrast */
+      padding: 10px;   /* Add some space inside the box */
+      border: 1px solid #ccc; /* Light border for definition */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      z-index: 1000;   /* Ensures it's above other elements */
+      
+    }
+    #movable {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      position: absolute;
+      top: 0; /* Initial position */
+      left: 50%; /* Center horizontally */
+      transform: translateX(-50%); /* Adjust for perfect center */
+    }
+    .fade {
+  transition: opacity  2s ease; /* Adjust duration to match the fade effect */
+  opacity: 1;
+}
+.fade-out {
+  transition: opacity 0.2s ease;
+  opacity: 0;
 }
 
-
+        #section1 { background-color: #ff6f61; }
+        #section2 { background-color: #6a67ce; }
+        #section3 { background-color: #68b0ab; }
+        #section4 { background-color: #f7d794; }
+        #section5 { background-color: #e056fd; }
     </style>
 </head>
 <body>
-    <div id="twins"><img src="sprite.gif" width="100%" height="100%" alt=""></div>
+  <div id="output">Current Value: </div>
+  <div id="output2">Current Value: </div>
+  <div id="movable"></div>
+    <div class="section" id="section1">Section 1</div>
+    <div class="section" id="section2">Section 2</div>
+    <div class="section" id="section3">Section 3</div>
+    <div class="section" id="section4">Section 4</div>
+    <div class="section" id="section5">Section 5</div>
+
     <script>
 
-window.addEventListener('scroll', () => {
-    //console.log('dfd')
-  document.body.style.setProperty('--scroll', window.pageYOffset / (document.body.offsetHeight - window.innerHeight));
-}, false);
+let activeSection = 1;
+const scrolldelay = 500;
+let scrollPosition = 0;
+let touchStartY = 0;
+let scroll = 0;
+let moving = false;
+
+const element = document.getElementById("movable");
+let position = 0;
+
+function moveVertically(value) {
+      if (value < 0 || value > 500) {
+        console.warn("Value must be between 0 and 500.");
+        return;
+      }
+      position = value;
+      element.style.top = `${position}px`;
+    }
+
+const scrollableElement = document.body;
+
+// Handle touch start event
+scrollableElement.addEventListener("touchstart", (event) => {
+  if(moving) {return}
+  touchStartY = event.touches[0].clientY;
+});
+
+// Handle touch move event
+scrollableElement.addEventListener("touchmove", (event) => {
+  if(moving) {return}
+  const touchY = event.touches[0].clientY;
+  const deltaY = touchStartY - touchY;
+  scrollPosition += deltaY;
+  touchStartY = touchY;
+
+  moveVertically(scrollPosition);
+  document.getElementById("output2").innerHTML = `Current Value: ${scrollPosition}`;
+
+  if (scrollPosition > scrolldelay) {
+    scrollPosition = 0;
+    scrollSection("down");
+  } else if (scrollPosition < 0) {
+    scrollPosition = scrolldelay;
+    scrollSection("up");
+  }
+});
+
+// Handle wheel event
+scrollableElement.addEventListener("wheel", (event) => {
+  scroll += event.deltaY;
+  document.getElementById("output").innerHTML = `Current Value: ${scroll}`;
+
+  if (scroll > scrolldelay) {
+    scroll = 0;
+    scrollSection("down");
+  } else if (scroll < -scrolldelay) {
+    scroll = 0;
+    scrollSection("up");
+  }
+});
+
+// Scroll to the next or previous section
+function scrollSection(direction) {
+  if( direction === "up" && activeSection == 1)
+    {
+      scrollPosition = 0;
+    }
+
+    if( direction === "down" && activeSection == 5)
+    {
+      scrollPosition = scrolldelay;
+    }
+  if (direction === "up" && activeSection > 1) {
+    
+    activeSection--;
+  } else if (direction === "down" && activeSection < 5) {
+    activeSection++;
+  }
+  scrollToTarget(`section${activeSection}`);
+}
+
+// Smoothly scroll to a target section
+function scrollToTarget(section) {
+  moving = true;
+  element.classList.add('fade-out');
+  const targetElement = document.getElementById(section);
+  if (targetElement) {
+    targetElement.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
+  setTimeout(() => {
+    element.classList.remove('fade-out');
+    element.classList.add('fade');
+    moving = false;
+    }, 1000);
+}
+
+// Initialize scrolling on DOM load
+document.addEventListener("DOMContentLoaded", () => {
+  scrollToTarget("section1");
+});
+
 
     </script>
+
 </body>
 </html>

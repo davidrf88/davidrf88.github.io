@@ -1,0 +1,103 @@
+html
+{
+    height: 100%;
+}
+
+
+body
+{
+    background-color: rgb(8, 63, 32);
+    min-width: 300px !important;
+    height:100%;
+    
+}
+
+.wrapper{
+    max-width: 750px;
+    aspect-ratio: 1 / 1; 
+    width: 100%;
+    margin: auto;
+
+    
+}
+
+.jeep{
+    margin: auto;
+    aspect-ratio: 1 / 1;
+    background-image: url(jeep.png);
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+    padding-top: 10%;
+    padding-left: 3%;
+    animation: bounce 0.4s ease-in-out infinite;
+}
+.windshield{
+    position: relative;
+    background-color: #607800;
+    width: 66%;
+    border-radius: 15%;
+    
+    margin-left: auto;
+    margin-right: auto;
+    
+    aspect-ratio: 3.4 / 1;
+    border: 10px solid black;
+    transition: background 0.2s ease; 
+    
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(0, -3px); /* Slight bounce */
+    }
+  }
+
+
+
+
+  /* Container for the face */
+.face {
+    position: relative;
+    width: 30%;
+    height: 200px;
+    background-color: #fce5cd; /* Skin color */
+    border-radius: 50%; /* Circle shape */
+    position: relative;
+    margin: 50px auto;
+  }
+  
+  /* Eyes styles */
+  .eye {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%; /* Circular eyes */
+    position: absolute;
+    top: 50px;
+  }
+  
+  .left-eye {
+    left: 40px; /* Position for the left eye */
+  }
+  
+  .right-eye {
+    right: 40px; /* Position for the right eye */
+  }
+  
+  /* Mouth style */
+  .mouth {
+    width: 120px;
+    height: 40px;
+    border-radius: 50% / 30%;
+    background-color: #cc4e4e; /* Red for the mouth */
+    position: absolute;
+    bottom: 30px;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+  }
+  
