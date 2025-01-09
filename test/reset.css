@@ -1,0 +1,21 @@
+/* Reset margins, paddings, and box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Set a consistent font size and line height */
+  html {
+    font-size: 100%; /* 16px is the default in most browsers */
+    line-height: 1.5;
+  }
+  
+  /* Ensure body takes the full height */
+  body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif; /* Use a basic sans-serif font */
+    background: #fff;
+    color: #000;
+  }
+  
