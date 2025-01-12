@@ -1,0 +1,138 @@
+html
+{
+
+}
+body
+{
+    background-color: rgb(63, 182, 176);
+    margin: 0;
+}
+
+#intro{
+
+background-color: cadetblue;
+width: 80%;
+max-width: 750px;
+margin-left: auto;
+margin-right: auto;
+margin-top:20vh;
+min-height: 200px;
+
+}
+
+#intro .title{
+    font-size: 2em;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: auto;
+    width: 90%;
+    text-align: center;
+}
+
+.btnStart
+{
+    padding-top: 2em;
+    text-align: center;
+}
+
+.btnStart button
+{
+    background-color: darkgreen;
+    padding: 10px 20px 10px 20px;
+    border-radius: 15% 15%; 
+    margin: auto;
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(0, 100%); /* Slight bounce */
+      opacity: 0;
+    }
+  }
+
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate(0, 100%);
+
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes moveTree {
+    0% {
+      transform: translateX(0) scale(1); /* Start at normal size */
+      
+    }
+ 
+    100% {
+      transform: translateX(60px) scale(0.1); /* Move farther and shrink more */
+      
+    }
+  }
+
+
+  #scene1{
+    opacity: 1;
+    overflow: hidden;
+
+  }
+  #scene1Background{
+
+    background-color: blueviolet;
+    width: 80%;
+max-width: 750px;
+margin-left: auto;
+margin-right: auto;
+margin-top:5vh;
+min-height: 500px;
+
+  }
+
+  #introJeep
+  {
+    position: absolute;
+    bottom: 5em;
+    height: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-height: 100px;
+    background-color: brown;
+    margin: auto;
+    aspect-ratio: 1/1;
+    
+  }
+
+.parallax-parent
+{
+    border: 4px solid firebrick;
+    height: 100vh;
+}
+
+.parallax-container {
+    height: 100%;
+	background-image: url('../img/woods.jpg');
+    background-repeat: repeat-x;
+    
+
+    
+	animation: scroll-anim 5s linear infinite;
+    border: 4px solid yellowgreen;
+  }
+
+
+
+@keyframes scroll-anim {
+	100% {
+		background-position: -100% 0;
+	}
+}
