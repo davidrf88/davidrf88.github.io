@@ -17,7 +17,7 @@ function setup() {
   canvas.parent('canvas-container');  // Attach to the div
   bg.setup();
   jeep.setup();
-  dialog.setup();
+  dialog.setup(canvas);
   
 }
 
@@ -34,3 +34,4 @@ function draw() {
   
   
 }
+

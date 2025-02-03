@@ -5,18 +5,22 @@ class myDialog {
     preload() {
         // Preload any assets here, e.g., images or sounds
         this.img = loadImage('/p5/assets/dialog.png'); // Example asset
+        this.btnImg = loadImage('/p5/assets/button.png'); // Example asset
         this.miguel = loadImage('/p5/assets/Miguel.png'); // Example asset
         this.mateo = loadImage('/p5/assets/Mateo.png'); // Example asset
 
     }
 
     
-    setup() {
+    setup(canvas) {
         // Setup any properties for this object
+        console.log('canvas obj', canvas.position())
 
         this.img.resize(width - 20, 0);
         this.mateo.resize(width - 240, 0);
         this.miguel.resize(width - 240, 0);
+        this.canvas = canvas;
+    
         this.yPos = 30;
         this.xPos = 10;
         this.startTime = millis();
@@ -25,7 +29,6 @@ class myDialog {
         this.show = true;
         this.step = 1;
         this.myButton = createButton("continuar");
-        this.myButton.position(-1000, -115)
 
         // Add styles using .style()
         this.myButton.style("background-color", "#4CAF50");
@@ -36,6 +39,7 @@ class myDialog {
         this.myButton.style("border-radius", "5px");
         this.myButton.style("cursor", "pointer");
         this.myButton.mousePressed(() => {this.handleClick(this)});
+        this.myButton.hide()
 
     }
 
@@ -59,7 +63,9 @@ class myDialog {
             if (this.step == 1) {
                 this.kidImg = this.mateo
                 this.dialogText = "¡Hey Miguel! \n¿Seguro que vamos por \n el camino correcto?"
-                this.myButton.position(this.xPos + 80, this.yPos + 40)
+                this.myButton.position(this.canvas.position().x + 230, this.canvas.position().y + 110)
+                console.log(this.canvas.position().x, this.canvas.position().y)
+                this.myButton.show()
             }
 
             if (this.step == 2) {
