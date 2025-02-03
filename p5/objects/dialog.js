@@ -59,7 +59,7 @@ class myDialog {
             if (this.step == 1) {
                 this.kidImg = this.mateo
                 this.dialogText = "¡Hey Miguel! \n¿Seguro que vamos por \n el camino correcto?"
-                this.myButton.position(width +138, 125)
+                this.myButton.position(this.xPos + 80, this.yPos + 40)
             }
 
             if (this.step == 2) {
