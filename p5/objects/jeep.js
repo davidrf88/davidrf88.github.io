@@ -4,8 +4,8 @@ class myJeep {
     }
     preload() {
         // Preload any assets here, e.g., images or sounds
-        this.img = loadImage('../assets/jeep.png'); // Example asset
-        this.btire = loadImage('../assets/tire.png'); // Example asset
+        this.img = loadImage('/assets/jeep.png'); // Example asset
+        this.btire = loadImage('/assets/tire.png'); // Example asset
       }
     
       setup() {
