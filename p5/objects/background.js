@@ -4,7 +4,7 @@ class myBackground {
     }
     preload() {
         // Preload any assets here, e.g., images or sounds
-        this.img = loadImage('/p5/assets/woods.jpg'); // Example asset
+        this.img = loadImage('/../assets/woods.jpg'); // Example asset
       }
     
       setup() {
