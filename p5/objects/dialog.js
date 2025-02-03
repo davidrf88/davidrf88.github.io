@@ -20,7 +20,7 @@ class myDialog {
         this.yPos = 30;
         this.xPos = 10;
         this.startTime = millis();
-        this.dialogStart = 3000
+        this.dialogStart = 10000
         this.kidImg = this.mateo
         this.show = true;
         this.step = 1;
