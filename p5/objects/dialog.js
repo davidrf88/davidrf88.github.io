@@ -5,8 +5,8 @@ class myDialog {
     preload() {
         // Preload any assets here, e.g., images or sounds
         this.img = loadImage('/p5/assets/dialog.png'); // Example asset
-        this.miguel = loadImage('/p5/assets/miguel.png'); // Example asset
-        this.mateo = loadImage('/p5/assets/mateo.png'); // Example asset
+        this.miguel = loadImage('/p5/assets/Miguel.png'); // Example asset
+        this.mateo = loadImage('/p5/assets/Mateo.png'); // Example asset
 
     }
 
