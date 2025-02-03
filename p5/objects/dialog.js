@@ -100,7 +100,7 @@ class myDialog {
 
             if (this.step == 8) {
                 this.kidImg = this.mateo
-                this.dialogText = "Tenemos que darnos prisa \n ya se escucha musica \ny huele a comida!"
+                this.dialogText = "Tenemos que darnos prisa \n ya se escucha musica \ny huele a carne asada!"
             }
 
             if (this.step == 9) {
