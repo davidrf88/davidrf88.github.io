@@ -1,13 +1,14 @@
 class myDialog {
 
-    constructor() {
+    constructor(p) {
+        this.p = p;
     }
     preload() {
         // Preload any assets here, e.g., images or sounds
-        this.img = loadImage('/p5/assets/dialog.png'); // Example asset
-        this.btnImg = loadImage('/p5/assets/button.png'); // Example asset
-        this.miguel = loadImage('/p5/assets/Miguel.png'); // Example asset
-        this.mateo = loadImage('/p5/assets/Mateo.png'); // Example asset
+        this.img = this.p.loadImage('/assets/dialog.png'); // Example asset
+        this.btnImg = this.p.loadImage('/assets/button.png'); // Example asset
+        this.miguel = this.p.loadImage('/assets/Miguel.png'); // Example asset
+        this.mateo = this.p.loadImage('/assets/Mateo.png'); // Example asset
 
     }
 
@@ -16,19 +17,19 @@ class myDialog {
         // Setup any properties for this object
         console.log('canvas obj', canvas.position())
 
-        this.img.resize(width - 20, 0);
-        this.mateo.resize(width - 240, 0);
-        this.miguel.resize(width - 240, 0);
+        this.img.resize(this.p.width - 20, 0);
+        this.mateo.resize(this.p.width - 240, 0);
+        this.miguel.resize(this.p.width - 240, 0);
         this.canvas = canvas;
     
         this.yPos = 30;
         this.xPos = 10;
-        this.startTime = millis();
+        this.startTime = this.p.millis();
         this.dialogStart = 10000
         this.kidImg = this.mateo
         this.show = true;
         this.step = 1;
-        this.myButton = createButton("continuar");
+        this.myButton = this.p.createButton("continuar");
 
         // Add styles using .style()
         this.myButton.style("background-color", "#4CAF50");
@@ -56,8 +57,8 @@ class myDialog {
     draw() {
 
         // Check if 10 seconds (10,000 milliseconds) have passed
-        if ( this.show && millis() - this.startTime >= this.dialogStart) {
-            image(this.img, this.xPos, this.yPos);
+        if ( this.show && this.p.millis() - this.startTime >= this.dialogStart) {
+            this.p.image(this.img, this.xPos, this.yPos);
            
             
             if (this.step == 1) {
@@ -109,9 +110,9 @@ class myDialog {
          }
             
 
-            image(this.kidImg, this.xPos + 12, this.yPos + 15);
-            textSize(15)
-            text(this.dialogText, this.xPos + 100, this.yPos + 30);
+         this.p.image(this.kidImg, this.xPos + 12, this.yPos + 15);
+         this.p.textSize(15)
+         this.p.text(this.dialogText, this.xPos + 100, this.yPos + 30);
         }
 
     }

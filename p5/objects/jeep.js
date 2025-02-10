@@ -1,11 +1,12 @@
 class myJeep {
 
-    constructor() {
+    constructor(p) {
+      this.p = p;
     }
     preload() {
         // Preload any assets here, e.g., images or sounds
-        this.img = loadImage('/p5/assets/jeep.png'); // Example asset
-        this.btire = loadImage('/p5/assets/tire.png'); // Example asset
+        this.img = this.p.loadImage('/assets/jeep.png'); // Example asset
+        this.btire = this.p.loadImage('/assets/tire.png'); // Example asset
       }
     
       setup() {
@@ -13,11 +14,11 @@ class myJeep {
 
         this.img.resize(0, 200);
         this.btire.resize(0,80);
-        this.yPos = (height/2);
+        this.yPos = (this.p.height/2);
         this.xPos = -1600;
         this.angle = 0;
         this.radius = 50;
-        this.startTime = millis();
+        this.startTime = this.p.millis();
         this.continueMoving = false;
       }
       runAway(){
@@ -29,40 +30,40 @@ class myJeep {
       draw() {
 
 
-        push();
-        translate(this.xPos+98, (height / 2)+ 165);  // Move to tire position
-        rotate(this.angle);  // Apply rotation
-        imageMode(CENTER);
-        image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
-        pop();
+        this.p.push();
+        this.p.translate(this.xPos+98, (this.p.height / 2)+ 165);  // Move to tire position
+        this.p.rotate(this.angle);  // Apply rotation
+        this.p.imageMode(this.p.CENTER);
+        this.p.image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
+        this.p.pop();
 
-        push();
-        translate(this.xPos+210, (height / 2)+ 165);  // Move to tire position
-        rotate(this.angle);  // Apply rotation
-        imageMode(CENTER);
-        image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
-        pop();
+        this.p.push();
+        this.p.translate(this.xPos+210, (this.p.height / 2)+ 165);  // Move to tire position
+        this.p.rotate(this.angle);  // Apply rotation
+        this.p.imageMode(this.p.CENTER);
+        this.p.image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
+        this.p.pop();
     
 
-        push();
-        translate(this.xPos+40, (height / 2)+ 165);  // Move to tire position
-        rotate(this.angle);  // Apply rotation
-        imageMode(CENTER);
-        image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
-        pop();
+        this.p.push();
+        this.p.translate(this.xPos+40, (this.p.height / 2)+ 165);  // Move to tire position
+        this.p.rotate(this.angle);  // Apply rotation
+        this.p.imageMode(this.p.CENTER);
+        this.p.image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
+        this.p.pop();
         
 
-        push();
-        translate(this.xPos+160, (height / 2)+ 165);  // Move to tire position
-        rotate(this.angle);  // Apply rotation
-        imageMode(CENTER);
-        image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
-        pop();
+        this.p.push();
+        this.p.translate(this.xPos+160, (this.p.height / 2)+ 165);  // Move to tire position
+        this.p.rotate(this.angle);  // Apply rotation
+        this.p.imageMode(this.p.CENTER);
+        this.p.image(this.btire, 0, 0, (this.radius * 2)-25, (this.radius * 2) -25);  // Draw tire
+        this.p.pop();
         this.angle += 0.18;  // Increment angle for rotation
        
 
         
-        image(this.img, this.xPos, this.yPos);
+        this.p.image(this.img, this.xPos, this.yPos);
 
 
 

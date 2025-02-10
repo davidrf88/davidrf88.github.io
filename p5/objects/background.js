@@ -1,23 +1,24 @@
 class myBackground {
 
-    constructor() {
+    constructor(p) {
+      this.p = p;
     }
     preload() {
         // Preload any assets here, e.g., images or sounds
-        this.img = loadImage('/p5/assets/woods.jpg'); // Example asset
+        this.img = this.p.loadImage('/assets/woods.jpg'); // Example asset
       }
     
       setup() {
         // Setup any properties for this object
 
-        this.img.resize(0, height);
-        this.yPos = (height);
+        this.img.resize(0, this.p.height);
+        this.yPos = (this.p.height);
         this.xPos = 0;
       }
     
       draw() {
-        image(this.img, this.xPos, this.yPos);
-        image(this.img, this.xPos + this.img.width, this.yPos);
+        this.p.image(this.img, this.xPos, this.yPos);
+        this.p.image(this.img, this.xPos + this.img.width, this.yPos);
 
         this.xPos -= 5;
         //Reset the image position when it reaches the top

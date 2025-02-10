@@ -1,28 +1,20 @@
+
+let sketch1 = function(p)
+{
+
 let bg;
 let jeep;
-function preload() {
-  // Load the image in the preload function
-  bg =new  myBackground()
-  bg.preload();
 
-  jeep =new  myJeep()
-  jeep.preload();
-
-  dialog =new  myDialog()
-  dialog.preload();
-}
-
-function setup() {
-  let canvas = createCanvas(320, 600); // Set canvas size
-  canvas.parent('canvas-container');  // Attach to the div
+p.setup = function setup() {
+  let canvas = p.createCanvas(320, 600).parent('canvas-container'); // Set canvas size // Attach to the div
   bg.setup();
   jeep.setup();
   dialog.setup(canvas);
   
 }
 
-function draw() {
-  background('#a2d9ff');
+p.draw = function draw() {
+  p.background('#a2d9ff');
   bg.draw()
   jeep.draw()
   dialog.draw()
@@ -34,4 +26,28 @@ function draw() {
   
   
 }
+
+p.preload = function preload() {
+  // Load the image in the preload function
+  bg =new  myBackground(p)
+  bg.preload();
+
+  jeep =new  myJeep(p)
+  jeep.preload();
+
+  dialog =new  myDialog(p)
+  dialog.preload();
+}
+
+
+
+}
+
+
+
+
+
+
+
+
 
