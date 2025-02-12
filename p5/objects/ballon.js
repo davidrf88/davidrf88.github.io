@@ -8,6 +8,8 @@ class myBallon {
         this.bouncer = false;
         this.goingDown = true;
         this.frameNo = 0;
+        this.speed = 1.4;
+        this.goAwaySpeed = 2;
     }
 
     draw() {
@@ -26,7 +28,7 @@ class myBallon {
 
                 if( !(this.bouncer) && this.initialX > (this.y -5))
                 {
-                    this.initialX -= 2
+                    this.initialX -= this.goAwaySpeed
                 }
                 else
                 { this.bouncer = true}
@@ -39,11 +41,11 @@ class myBallon {
                     if(this.goingDown)
                     {
                         
-                        this.initialX += 1
+                        this.initialX += this.speed
                     }
                     else
                     {
-                        this.initialX -= 1
+                        this.initialX -= this.speed
 
                     }
                     if( this.initialX > (this.y +5))
