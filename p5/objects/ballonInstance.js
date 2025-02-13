@@ -1,12 +1,12 @@
 class myBallonInstance {
 
-    constructor( letter,color, x, y) {
+    constructor( letter,color, x, y,flyDirectio) {
         this.letter = letter;
         this.color = color;
         this.x = x;
         this.y = y;
         this.posIndex = 0;
-        this.randDirection;
+        this.flyDirection = flyDirectio
     }
     updateY(y)
     {
@@ -15,12 +15,12 @@ class myBallonInstance {
 
     updateRandomX()
     {
-        if(this.randDirection == undefined)
-        {
-            this.randDirection =  random() < 0.5
-        }
+         if(this.flyDirection == 'stay')
+         {
+            this.y = this.y-2
+         }
 
-         if(this.randDirection )
+         if(this.flyDirection == 'right')
          {
             this.x = this.x +2
          }

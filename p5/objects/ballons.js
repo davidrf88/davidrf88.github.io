@@ -15,6 +15,11 @@ class myBallons {
         this.ballonsMiguel = []
         this.ballonsMateo = []
         this.flyAway = false;
+        this.ballonSpeed = 3;
+        this.ballonBounceSpeed = 1;
+        this.timeGap = 300;
+        this.MiguellBallonColor = '#fc6f03'
+        this.MateoBallonColor = '#006915'
     }
 
     setup()
@@ -23,22 +28,22 @@ class myBallons {
         this.letterY = this.y;
         let gap = this.gap;
         
-setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("M","#64B6AC",this.letterX, this.letterY))}, 1);
-setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("a","#64B6AC",this.letterX + gap,this.letterY))}, 500);
-setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("t","#64B6AC",this.letterX + (gap*2),this.letterY))}, 1000);
-setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("e","#64B6AC",this.letterX + (gap*3),this.letterY))}, 1500);
-setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("0","#64B6AC",this.letterX + (gap*4),this.letterY))}, 2000);
+setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("M",this.MateoBallonColor,this.letterX, this.letterY, 'right'))}, 1);
+setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("a",this.MateoBallonColor,this.letterX + gap,this.letterY, 'right'))}, this.timeGap);
+setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("t",this.MateoBallonColor,this.letterX + (gap*2),this.letterY, 'right'))}, this.timeGap*2);
+setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("e",this.MateoBallonColor,this.letterX + (gap*3),this.letterY, 'right'))}, this.timeGap*3);
+setTimeout(() => {this.ballonsMateo.push(new myBallonInstance("0",this.MateoBallonColor,this.letterX + (gap*4),this.letterY, 'right'))}, this.timeGap*4);
 
 
-setTimeout(() => {this.ballonY = new myBallonInstance("&","#fff",this.letterX + (gap*2),this.letterY)}, 3000);
+setTimeout(() => {this.ballonY = new myBallonInstance("&","#fff",this.letterX + (gap*2),this.letterY, 'stay')}, this.timeGap * 5);
 
 
-setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("M","#05668D",this.letterX + gap - (gap * 1.5),this.letterY))}, 3500);
-setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("i","#05668D",this.letterX + (gap*2) - (gap*1.5),this.letterY))}, 4000);
-setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("g","#05668D",this.letterX + (gap*3) -  (gap*1.5),this.letterY))}, 4500);
-setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("u","#05668D",this.letterX + (gap*4) -  (gap*1.5),this.letterY))}, 5000);
-setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("e","#05668D",this.letterX + (gap*5) -  (gap*1.5),this.letterY))}, 5500);
-setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",'#05668D',this.letterX + (gap*6) -  (gap*1.5),this.letterY))}, 6000);
+setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("M",this.MiguellBallonColor,this.letterX + gap - (gap * 1.5),this.letterY, 'left'))}, this.timeGap *2);
+setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("i",this.MiguellBallonColor,this.letterX + (gap*2) - (gap*1.5),this.letterY, 'left'))}, this.timeGap*3);
+setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("g",this.MiguellBallonColor,this.letterX + (gap*3) -  (gap*1.5),this.letterY, 'left'))}, this.timeGap*4);
+setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("u",this.MiguellBallonColor,this.letterX + (gap*4) -  (gap*1.5),this.letterY, 'left'))}, this.timeGap*5);
+setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("e",this.MiguellBallonColor,this.letterX + (gap*5) -  (gap*1.5),this.letterY, 'left'))}, this.timeGap*6);
+setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",this.MiguellBallonColor,this.letterX + (gap*6) -  (gap*1.5),this.letterY, 'left'))}, this.timeGap*7);
 
     }
 
@@ -68,7 +73,7 @@ setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",'#05668D',thi
 
                 if( !(this.bouncer) && this.initialX > (this.y -5))
                 {
-                    this.initialX -= 2
+                    this.initialX -= this.ballonSpeed
                 }
                 else
                 { this.bouncer = true}
@@ -81,11 +86,11 @@ setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",'#05668D',thi
                     if(this.goingDown)
                     {
                         
-                        this.initialX += 1
+                        this.initialX += this.ballonBounceSpeed
                     }
                     else
                     {
-                        this.initialX -= 1
+                        this.initialX -= this.ballonBounceSpeed
 
                     }
                     if( this.initialX > (this.y +5))
@@ -176,28 +181,7 @@ setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",'#05668D',thi
             ballon.draw();
         });
            
-        
-        
 
-        
-        
-        
-
-        // if(this.posIndex == 999)
-        // {
-        //     this.posIndex = 999
-        // }
-        // else
-        // {
-        // this.posIndex++
-        // }
-
-        // if(this.posIndex > 100)
-        // {
-        //     addNextBallon()
-        // }
-              
-              
               
 
     }

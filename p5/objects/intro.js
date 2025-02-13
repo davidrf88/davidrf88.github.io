@@ -1,12 +1,12 @@
 class myIntro {
 
-    constructor() {
-
+    constructor(canvas) {
+        this.canvas = canvas
     }
     preload() {
 
-        this.font = loadFont('/assets/fonts/ballon.ttf');
-        this.fontTitle = loadFont('/assets/fonts/main.otf');
+        this.font = loadFont('assets/fonts/ballon.ttf');
+        this.fontTitle = loadFont('assets/fonts/main.otf');
 
     }
 
@@ -24,15 +24,21 @@ class myIntro {
         this.myButton.style("font-size", "12px");
         this.myButton.style("border-radius", "5px");
         this.myButton.style("cursor", "pointer");
+        this.myButton.style("width", "150px")
+        this.myButton.style("height", "30px")
         this.myButton.mousePressed(() => {this.handleClick(this)});
         this.myButton.hide()
+        this.myButton.style("opacity", "0")
         this.initialX = this.canvas.height -30
         this.bouncer = false;
         this.goingDown = true;
         this.frameNo = 0;
         this.flyAway = false;
-        this.moverY = -.5;
+        this.moverY = -.8;
         this.lerpAmount = 0;
+        this.showButton = false;
+        this.buttonOpacity = 0;
+        this.finished = false;
 
         console.log(this.font)
         textFont(this.font);
@@ -55,26 +61,36 @@ class myIntro {
        for (let i = 0; i < this.numStars; i++) {
         this.stars.push({
           x: random(width + 500),
-          y: random(height + 300),
+          y: random(height),
           speed: random(0.02, 0.05), // Different fade speeds
           size: random(2, 5) // Different star sizes
         });
       }
 
-      setTimeout(() => {
-        this.flyAway = true;
-        this.ballons.setFlyAway()
+    //   setTimeout(() => {
+    //     this.flyAway = true;
+    //     this.ballons.setFlyAway()
         
-      }, 15000);
-
+    //   }, 10000);
       setTimeout(() => {
-       // remove();  // Clean up the current sketch
-        new p5(sketch1); // Start the second sketch
+        this.showButton = true;
         
-      }, 25000);
+      }, 6000);
+;
 
  
 
+
+    }
+
+    handleClick()
+    {
+        this.flyAway = true;
+        this.ballons.setFlyAway()
+
+        setTimeout(() => {
+            this.finished = true;
+        }, 5000);
 
     }
 
@@ -83,7 +99,7 @@ class myIntro {
         background('#050004');
         let bgColor = lerpColor(color('#050004'), color('#a2d9ff'), this.lerpAmount); // Interpolate colors
         background(bgColor);
-        this.lerpAmount = constrain(this.lerpAmount + 0.002, 0, 1);
+        this.lerpAmount = constrain(this.lerpAmount + 0.005, 0, 1);
 
         this.titley = this.titley + this.moverY;
         this.titlex = this.titlex + this.moverY;
@@ -108,6 +124,10 @@ class myIntro {
         text("Cumpleaños de ", this.titlex,this.titley)
         pop();
         this.ballons.draw()
+
+        this.myButton.style("disabled", true)
+        this.buttonOpacity = this.buttonOpacity - .02
+        this.myButton.style("opacity", this.buttonOpacity)
 
 
 
@@ -147,6 +167,21 @@ class myIntro {
             pop();
             this.ballons.draw()
 
+            if(this.showButton)
+            {
+                if(this.buttonOpacity < 1)
+                {
+                    this.buttonOpacity = this.buttonOpacity + .02
+                    this.myButton.style("opacity", this.buttonOpacity)
+                    
+                }
+
+              
+
+            
+            this.myButton.position((this.canvas.position().x + 77) , this.canvas.position().y + 400)
+            this.myButton.show()
+            }
               
 
     }
