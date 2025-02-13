@@ -6,7 +6,7 @@ class myIntro {
     preload() {
 
         this.font = loadFont('assets/fonts/ballon.ttf');
-        this.fontTitle = loadFont('assets/fonts/main.otf');
+        this.fontTitle = loadFont('assets/fonts/Main.otf');
 
     }
 
