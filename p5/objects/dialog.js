@@ -9,6 +9,7 @@ class myDialog {
         this.btnImg = loadImage('assets/button.png'); // Example asset
         this.miguel = loadImage('assets/Miguel.png'); // Example asset
         this.mateo = loadImage('assets/Mateo.png'); // Example asset
+        this.fontTitle = loadFont('assets/fonts/Main.otf');
 
     }
 
@@ -26,7 +27,7 @@ class myDialog {
         this.yPos = 30;
         this.xPos = 10;
         this.startTime = millis();
-        this.dialogStart = 10000
+        this.dialogStart = 18000
         this.kidImg = this.mateo
         this.show = true;
         this.step = 1;
@@ -110,10 +111,11 @@ class myDialog {
                 this.myButton.position(-1000,-100)
          }
             
-
+           
             image(this.kidImg, this.xPos + 12, this.yPos + 15);
             textSize(15)
-            text(this.dialogText, this.xPos + 100, this.yPos + 30);
+            textFont(this.fontTitle);
+            text(this.dialogText, this.xPos + 150, this.yPos + 30);
         }
 
     }
