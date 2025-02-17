@@ -18,8 +18,8 @@ class myBallons {
         this.ballonSpeed = 3;
         this.ballonBounceSpeed = 1;
         this.timeGap = 300;
-        this.MiguellBallonColor = '#fc6f03'
-        this.MateoBallonColor = '#006915'
+        this.MiguellBallonColor = '#E4542B'
+        this.MateoBallonColor = '#019946'
     }
 
     setup()
@@ -117,35 +117,35 @@ setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",this.MiguellB
 
     }
 
-    randomFly()
+    randomFly(ballonFont)
     {
 
         this.ballonY.updateRandomX()
         this.ballonY.updateRandomY();
-        this.ballonY.draw();
+        this.ballonY.draw(ballonFont);
 
         this.ballonsMiguel.forEach(ballon => {
             
             ballon.updateRandomX();
             ballon.updateRandomY();
-            ballon.draw();
+            ballon.draw(ballonFont);
         });
 
         this.ballonsMateo.forEach(ballon => {
             
             ballon.updateRandomX();
             ballon.updateRandomY();
-            ballon.draw();
+            ballon.draw(ballonFont);
         });
 
 
     }
 
-    draw() {
+    draw(ballonFont) {
         
             if(this.flyAway)
             {
-                this.randomFly();
+                this.randomFly(ballonFont);
                 return;
             }
 
@@ -164,7 +164,7 @@ setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",this.MiguellB
                
             ballon.updateY(this.positions[ballon.posIndex] );
            
-            ballon.draw();
+            ballon.draw(ballonFont);
             
         });
 
@@ -172,13 +172,13 @@ setTimeout(() => {this.ballonsMiguel.push(new myBallonInstance("l",this.MiguellB
             if(this.positions.length < 999)
                 this.ballonY.updatePosIndex();
         this.ballonY.updateY(this.positions[this.ballonY.posIndex] + (this.gap*3) ) ;
-        this.ballonY.draw();
+        this.ballonY.draw(ballonFont);
         }
         this.ballonsMiguel.forEach(ballon => {
             if(this.positions.length < 999)
                 ballon.updatePosIndex();
             ballon.updateY(this.positions[ballon.posIndex] + (this.gap*5));
-            ballon.draw();
+            ballon.draw(ballonFont);
         });
            
 

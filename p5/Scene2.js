@@ -26,7 +26,7 @@ setup(canvas) {
   //this.bg.setup(this.canvas);
   this.jeep.setup(this.canvas);
   this.dialog.setup(this.canvas);
-  this.mountains = new myBGLayer(this.mountainImage,this.canvas.height,this.canvas.height+100,100,.3)
+  this.mountains = new myBGLayer(this.mountainImage,this.canvas.height,this.canvas.height+0,0,.3)
   this.mountains.setup(canvas)
 
   this.clouds = new myBGLayer(this.cloudsImage,this.canvas.height,this.canvas.height+100,100,.3)
@@ -38,8 +38,9 @@ setup(canvas) {
   this.grass = new myBGLayer(this.grassImage,700,(this.canvas.height) -100,-100,3)
   this.grass.setup(canvas)
 
-  this.trees = new myBGLayer(this.treesImage,this.canvas.height+500,this.canvas.height-400,-400,1)
+  this.trees = new myBGLayer(this.treesImage,this.canvas.height-40,this.canvas.height+0,0,1.5,-100)
   this.trees.setup(canvas)
+
 }
 
 draw() {
@@ -54,7 +55,7 @@ draw() {
 
 
   
-  this.dialog.draw()
+ // this.dialog.draw()
   if(this.dialog.getStep() == 9)
   {
     setTimeout(() => {

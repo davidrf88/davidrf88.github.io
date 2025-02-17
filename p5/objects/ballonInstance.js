@@ -40,10 +40,13 @@ class myBallonInstance {
         this.posIndex++
     }
    
-    draw() {
+    draw(ballonFont) {
+        push()
+        textSize(120)
+        textFont(ballonFont);
         fill(this.color)
         text(this.letter,this.x, this.y);
-
+        pop()
             
 
         // if(this.posIndex == 999)

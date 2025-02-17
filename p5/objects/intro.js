@@ -40,12 +40,7 @@ class myIntro {
         this.buttonOpacity = 0;
         this.finished = false;
 
-        console.log(this.font)
-        textFont(this.font);
-        textSize(120)
-        fill('#851818'); 
-        textAlign(CENTER, CENTER);
-        
+  
 
        
         this.letterX = 60
@@ -53,7 +48,7 @@ class myIntro {
        this.ballons = new myBallons(this.p,"X",90,180, 30)
        this.ballons.setup()
 
-       this.titlex =width/1.9
+       this.titlex =25
        this.titley = 60
 
        this.numStars = 150
@@ -110,9 +105,11 @@ class myIntro {
             let alpha = map(sin(frameCount * star.speed), -1, 1, 50, 255); // Fade in & out
             star.y += (this.moverY * 3);
             star.x += (this.moverY * 3);
+            push()
             fill(255, 255, 200, alpha); // Yellowish white with transparency
             noStroke();
             ellipse(star.x, star.y, star.size);
+            pop()
         }
        
 
@@ -123,7 +120,16 @@ class myIntro {
         fill('#B1B1B1'); 
         text("Cumpleaños de ", this.titlex,this.titley)
         pop();
-        this.ballons.draw()
+
+
+        push()
+        textFont(this.font);
+        textSize(120)
+        fill('#851818'); 
+        textAlign(CENTER, CENTER);
+        this.ballons.draw(this.font)
+        pop()
+        
 
         this.myButton.style("disabled", true)
         this.buttonOpacity = this.buttonOpacity - .02
@@ -165,7 +171,7 @@ class myIntro {
             fill('#B1B1B1'); 
             text("Cumpleaños de ", this.titlex,this.titley)
             pop();
-            this.ballons.draw()
+            this.ballons.draw(this.font)
 
             if(this.showButton)
             {

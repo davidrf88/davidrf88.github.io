@@ -1,11 +1,12 @@
 class myBGLayer {
 
-    constructor( image,resize, ypos,finalypos, speed) {
+    constructor( image,resize, ypos,finalypos, speed,initialx) {
         this.image = image;
         this.resize = resize;
         this.ypos = ypos;
         this.finalypos = finalypos;
         this.speed = speed;
+        this.initialx = (initialx)?initialx:0;
     }
     setup(canvas)
     {
@@ -14,7 +15,7 @@ class myBGLayer {
         this.image.resize(0, this.resize);
        
         this.imageYPos = this.ypos;
-        this.imageXPos = 0;
+        this.imageXPos = this.initialx;
     }
 
     draw() {
