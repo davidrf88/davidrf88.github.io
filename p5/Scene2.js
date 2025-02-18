@@ -12,7 +12,7 @@ class Scene2
     this.grassImage = loadImage('assets/art/grass.png')
     this.higrassImage = loadImage('assets/art/higrass.png')
     
-    this.treesImage = loadImage('assets//art/trees.png')
+    this.treesImage = loadImage('assets/art/trees.png')
   
     this.jeep =new  myJeep()
     this.jeep.preload();
