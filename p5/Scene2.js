@@ -7,12 +7,12 @@ class Scene2
     // Load the image in the preload function
     // this.bg =new myBackground()
     // this.bg.preload();
-    this.mountainImage = loadImage('assets/mountains.png')
+    this.mountainImage = loadImage('assets/art/mountains.png')
     this.cloudsImage = loadImage('assets/clouds.png')
-    this.grassImage = loadImage('assets/grass.png')
-    this.higrassImage = loadImage('assets/higrass.png')
+    this.grassImage = loadImage('assets/art/grass.png')
+    this.higrassImage = loadImage('assets/art/higrass.png')
     
-    this.treesImage = loadImage('assets/trees.png')
+    this.treesImage = loadImage('assets//art/trees.png')
   
     this.jeep =new  myJeep()
     this.jeep.preload();
@@ -26,7 +26,7 @@ setup(canvas) {
   //this.bg.setup(this.canvas);
   this.jeep.setup(this.canvas);
   this.dialog.setup(this.canvas);
-  this.mountains = new myBGLayer(this.mountainImage,this.canvas.height,this.canvas.height+0,0,.3)
+  this.mountains = new myBGLayer(this.mountainImage,this.canvas.height,this.canvas.height+0,0,.2,-550)
   this.mountains.setup(canvas)
 
   this.clouds = new myBGLayer(this.cloudsImage,this.canvas.height,this.canvas.height+100,100,.3)
