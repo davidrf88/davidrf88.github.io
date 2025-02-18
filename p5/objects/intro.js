@@ -92,7 +92,7 @@ class myIntro {
     flyAwayMode()
     {
         background('#050004');
-        let bgColor = lerpColor(color('#050004'), color('#b6cff7'), this.lerpAmount); // Interpolate colors
+        let bgColor = lerpColor(color('#050004'), color('#B3CCF6'), this.lerpAmount); // Interpolate colors
         background(bgColor);
         this.lerpAmount = constrain(this.lerpAmount + 0.005, 0, 1);
 
