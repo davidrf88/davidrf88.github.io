@@ -1,7 +1,7 @@
 
 
 let scene1 = new Scene1();
-let scene2 = new Scene2();
+let scene2 = new Scene2Test();
 let currentScene = scene2
 
 
