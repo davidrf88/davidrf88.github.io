@@ -18,8 +18,8 @@ class myBallons {
         this.ballonSpeed = 3;
         this.ballonBounceSpeed = 1;
         this.timeGap = 300;
-        this.MiguellBallonColor = '#E4542B'
-        this.MateoBallonColor = '#019946'
+        this.MiguellBallonColor = '#6d9eed'
+        this.MateoBallonColor = '#6d9eed'
     }
 
     setup()

@@ -31,7 +31,7 @@ class myDialog {
         this.kidImg = this.mateo
         this.show = true;
         this.step = 1;
-        this.myButton = createButton("continuar");
+        this.myButton = createButton("Continuar");
 
         // Add styles using .style()
         this.myButton.style("background-color", "#4CAF50");

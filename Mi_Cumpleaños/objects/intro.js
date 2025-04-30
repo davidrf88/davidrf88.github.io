@@ -14,11 +14,11 @@ class myIntro {
     setup(canvas) {
         this.canvas = canvas;
         // Setup any properties for this object
-        this.myButton = createButton("empezar");
+        this.myButton = createButton("Vamos!");
 
         // Add styles using .style()
-        this.myButton.style("background-color", "#4CAF50");
-        this.myButton.style("color", "white");
+        this.myButton.style("background-color", "#fff");
+        this.myButton.style("color", "black");
         this.myButton.style("border", "none");
         this.myButton.style("padding", "3px 6px");
         this.myButton.style("font-size", "12px");
