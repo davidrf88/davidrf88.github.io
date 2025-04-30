@@ -3,10 +3,10 @@ class myBackground {
     preload() {
         // Preload any assets here, e.g., images or sounds
         //this.img = loadImage('assets/woods.jpg'); // Example asset
-        this.mountain = loadImage('assets/mountains.png')
-        this.clouds = loadImage('assets/clouds.png')
-        this.grass = loadImage('assets/grass.png')
-        this.trees = loadImage('assets/trees.png')
+        this.mountain = loadImage('assets/mountains.webp')
+        this.clouds = loadImage('assets/clouds.webp')
+        this.grass = loadImage('assets/grass.webp')
+        this.trees = loadImage('assets/trees.webp')
       }
     
       setup(canvas) {

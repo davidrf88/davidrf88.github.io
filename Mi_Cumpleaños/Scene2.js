@@ -7,12 +7,12 @@ class Scene2
     // Load the image in the preload function
     // this.bg =new myBackground()
     // this.bg.preload();
-    this.mountainImage = loadImage('assets/art/mountains.png')
-    this.cloudsImage = loadImage('assets/clouds.png')
-    this.grassImage = loadImage('assets/art/grass.png')
-    this.higrassImage = loadImage('assets/art/higrass.png')
+    this.mountainImage = loadImage('assets/art/mountains.webp')
+    this.cloudsImage = loadImage('assets/clouds.webp')
+    this.grassImage = loadImage('assets/art/grass.webp')
+    this.higrassImage = loadImage('assets/art/higrass.webp')
     
-    this.treesImage = loadImage('assets/art/trees.png')
+    this.treesImage = loadImage('assets/art/trees.webp')
   
     this.jeep =new  myJeep()
     this.jeep.preload();

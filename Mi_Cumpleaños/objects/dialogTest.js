@@ -5,10 +5,10 @@ class myDialogTest {
     }
     preload() {
         // Preload any assets here, e.g., images or sounds
-        this.img = loadImage('assets/dialog.png'); // Example asset
-        this.btnImg = loadImage('assets/button.png'); // Example asset
-        this.miguel = loadImage('assets/Miguel.png'); // Example asset
-        this.mateo = loadImage('assets/Mateo.png'); // Example asset
+        this.img = loadImage('assets/dialog.webp'); // Example asset
+        this.btnImg = loadImage('assets/button.webp'); // Example asset
+        this.miguel = loadImage('assets/Miguel.webp'); // Example asset
+        this.mateo = loadImage('assets/Mateo.webp'); // Example asset
         this.fontTitle = loadFont('assets/fonts/Main.otf');
 
     }
