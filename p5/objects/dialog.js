@@ -7,8 +7,8 @@ class myDialog {
         // Preload any assets here, e.g., images or sounds
         this.img = loadImage('assets/dialog.png'); // Example asset
         this.btnImg = loadImage('assets/button.png'); // Example asset
-        this.miguel = loadImage('assets/Miguel.png'); // Example asset
-        this.mateo = loadImage('assets/Mateo.png'); // Example asset
+        this.miguel = loadImage('assets/art/Miguel.png'); // Example asset
+        this.mateo = loadImage('assets/art/Mateo.png'); // Example asset
         this.fontTitle = loadFont('assets/fonts/Main.otf');
 
     }
@@ -27,7 +27,7 @@ class myDialog {
         this.yPos = 30;
         this.xPos = 10;
         this.startTime = millis();
-        this.dialogStart = 18000
+        this.dialogStart = 10000
         this.kidImg = this.mateo
         this.show = true;
         this.step = 1;
@@ -65,7 +65,7 @@ class myDialog {
             
             if (this.step == 1) {
                 this.kidImg = this.mateo
-                this.dialogText = "¡Hey Miguel! \n¿Seguro que vamos por \n el camino correcto?"
+                this.dialogText = "¿Ves algo desde \n ahí arriba?"
                 this.myButton.position(this.canvas.position().x + 230, this.canvas.position().y + 110)
                 console.log(this.canvas.position().x, this.canvas.position().y)
                 this.myButton.show()
@@ -73,49 +73,70 @@ class myDialog {
 
             if (this.step == 2) {
                 this.kidImg = this.miguel
-                this.dialogText = "Hmm… ¡Creo que sí! \n Solo sigue recto…"
+                this.dialogText = "¡Nada todavía! Solo \n lianas y hojas gigantes"
             }
 
             if (this.step == 3) {
-                this.kidImg = this.miguel
-                this.dialogText = "¡Mira, allá adelante \n hay una señal!"
+                this.kidImg = this.mateo
+                this.dialogText = "Hmm… este camino \nse siente misterioso."
             }
 
             if (this.step == 4) {
-                this.kidImg = this.mateo
-                this.dialogText = "¿Qué dice?"
+                this.kidImg = this.miguel
+                this.dialogText = "¡Esperaaa! \n¡Vi algo moverse!"
             }
 
             if (this.step == 5) {
-                this.kidImg = this.miguel
-                this.dialogText = "dice.."
+                this.kidImg = this.mateo
+                this.dialogText = "¿Un tigre? \n ¿Un elefante?"
             }
 
             if (this.step == 6) {
                 this.kidImg = this.miguel
-                this.dialogText = "dice.. \nFiesta de..."
+                this.dialogText = "¡No! ¡Un mono volando \nen trapecio!"
             }
 
             if (this.step == 7) {
-                this.kidImg = this.miguel
-                this.dialogText = "dice.. \nFiesta de...\n cumpleaños de\n Miguel y Mateo!"
+                this.kidImg = this.mateo
+                this.dialogText = "¡Entonces estamos cerca \nde los animales acrobáticos!"
             }
 
             if (this.step == 8) {
-                this.kidImg = this.mateo
-                this.dialogText = "Tenemos que darnos prisa \n ya se escucha musica \ny huele a carne asada!"
+                this.kidImg = this.miguel
+                this.dialogText = "¿Escuchas eso?"
             }
 
             if (this.step == 9) {
+                this.kidImg = this.mateo
+                this.dialogText = "¿Un tambor? \n¡Sí! ¡Allá en la selva!"
+            }
+
+            if (this.step == 10) {
+                this.kidImg = this.miguel
+                this.dialogText = "¡Es la señal! \n¡Están comenzando el show!"
+            }
+
+            if (this.step == 11) {
+                this.kidImg = this.miguel
+                this.dialogText = "¡Acelera modo safari!"
+            }
+            if (this.step == 12) {
+                this.kidImg = this.mateo
+                this.dialogText = "¡Vamos, \nque empieza la fiestaaa!"
+            }
+
+            if (this.step == 13) {
                 this.show = false
                 this.myButton.position(-1000,-100)
          }
             
-           
+           push()
+           fill('black')
             image(this.kidImg, this.xPos + 12, this.yPos + 15);
-            textSize(15)
+            textSize(20)
             textFont(this.fontTitle);
-            text(this.dialogText, this.xPos + 150, this.yPos + 30);
+            text(this.dialogText, this.xPos + 110, this.yPos + 35);
+            pop()
         }
 
     }

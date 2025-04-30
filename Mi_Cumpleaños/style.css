@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+#canvas-container {
+  background-color: black;
+  text-align: center;
+    display: flex;
+    align-items: center; /* Centers vertically */
+    justify-content: center; /* Centers horizontally (optional) */
+    height: 100dvh; /* Adjust as needed */
+}

@@ -55,13 +55,18 @@ draw() {
 
 
   
- // this.dialog.draw()
-  if(this.dialog.getStep() == 9)
+  this.dialog.draw()
+  if(this.dialog.getStep() == 13)
   {
     setTimeout(() => {
       this.jeep.runAway();
       
     }, 2000);
+
+
+    setTimeout(() => {
+      this.finished = true
+    }, 5000);
     
   }
 }

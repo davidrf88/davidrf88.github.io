@@ -15,7 +15,7 @@ class myJeep {
         this.img.resize(0, 200);
         this.btire.resize(0,80);
         this.yPos = this.canvas.height -250;
-        this.xPos = -2600;
+        this.xPos = -1600;
         this.angle = 0;
         this.radius = 50;
         this.startTime = millis();

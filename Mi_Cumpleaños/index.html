@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #000;">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Miguel & Mateo</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/png">
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!--=============== SWIPER CSS ===============-->
+    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap');
+    
+      .MainWeb {
+        opacity: 0;
+        transition: opacity 4s ease;
+      }
+
+      body {
+        background-color: #2f4f2f;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(34, 139, 34, 0.3) 0%, transparent 70%),
+    radial-gradient(circle at 80% 30%, rgba(0, 100, 0, 0.3) 0%, transparent 70%),
+    radial-gradient(circle at 50% 70%, rgba(46, 139, 87, 0.3) 0%, transparent 70%);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+
+      .MainWeb.visible {
+        opacity: 1;
+      }
+      .evento-info {
+        background-color: #c4f4cb; /* Verde suave tipo naturaleza */
+        border: 4px dashed #2b7a3b; /* Verde oscuro para contraste */
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 600px;
+        border-radius: 20px;
+        text-align: center;
+        font-family: 'Fredoka', sans-serif;
+        color: #2b3d4f; /* Azul grisáceo para buena legibilidad */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    
+      .evento-info h2 {
+        font-size: 2.5rem;
+        color: #1f5f3c;
+        margin-bottom: 1rem;
+      }
+    
+      .evento-info p {
+        font-size: 1.5rem;
+        margin: 0.5rem 0;
+      }
+    </style>
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+  </head>
+
+  <body>
+    <div id="canvas-container">
+
+    </div>
+
+    <div class="MainWeb" style="display: none;">
+
+
+      <main class="main">
+        <!--==================== HOME ====================-->
+        <section class="home" id="home" style="background-image:url('assets/img/xhome1.jpg'); background-size: cover; background-position:center; background-repeat: no-repeat;">
+            
+            <div class="home__container container grid" style="text-align: center;">
+                <div class="home__data" style="padding-bottom: 12rem;">
+                    <img src="assets/img/logo.png" alt="logo" style="max-width: 300px; width: 50%; align-self: center; margin-top: 5rem;">
+
+                </div>
+
+
+
+     
+            </div>
+        </section>
+
+        <!--==================== SUBSCRIBE ====================-->
+        <section class="subscribe section">
+          <div class="subscribe__container container evento-info">
+                    <h2>¡Estás invitado!</h2>
+                    <p><strong>📅 Fecha:</strong> Sábado 13 de Septiembre, 2025</p>
+                    <p><strong>📍 Lugar:</strong> <a href="#" onclick="window.open('https://maps.app.goo.gl/9MGvn5uVdHa1rRYL7')">Hula Hoop Playground</a> </p>
+                    <p><strong>🕒 Hora:</strong> 3:00 PM a 7:00 PM</p>
+              
+
+            </div>
+        </section>
+
+        
+        <!--==================== DISCOVER ====================-->
+        <section class="discover section" id="discover">
+           
+            
+            <div class="discover__container container swiper-container">
+                <div class="swiper-wrapper">
+                    <!--==================== DISCOVER 1 ====================-->
+                    <div class="discover__card swiper-slide">
+                        <img src="assets/img/xdiscover1.jpg" alt="" class="discover__img">
+                        <div class="discover__data">
+                            <h2 class="discover__title">Jessica & David</h2>
+                            <span class="discover__description">Los Papás</span>
+                        </div>
+                    </div>
+
+                    <!--==================== DISCOVER 2 ====================-->
+                    <div class="discover__card swiper-slide">
+                        <img src="assets/img/xdiscover2.jpg" alt="" class="discover__img">
+                        <div class="discover__data">
+                            <h2 class="discover__title">Mateo</h2>
+                            <span class="discover__description">Cariño Puro</span>
+                        </div>
+                    </div>
+
+                    <!--==================== DISCOVER 3 ====================-->
+                    <div class="discover__card swiper-slide">
+                        <img src="assets/img/xdiscover3.jpg" alt="" class="discover__img">
+                        <div class="discover__data">
+                            <h2 class="discover__title">Miguel</h2>
+                            <span class="discover__description">Alma Alegre</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+      
+    </main>
+
+    </div>
+
+
+    <script src="objects/bglayer.js"></script>
+    <script src="objects/jeep.js"></script>
+    <script src="objects/dialog.js"></script>
+    <script src="objects/ballonInstance.js"></script>
+    <script src="objects/ballons.js"></script>
+    <script src="objects/intro.js"></script>
+    <script src="Scene1.js"></script>
+    <script src="Scene2.js"></script>
+    <script src="sceneManager.js"></script>
+    
+    
+    <!--=============== SCROLL REVEAL===============-->
+    <script src="assets/js/scrollreveal.min.js"></script>
+    
+    <!--=============== SWIPER JS ===============-->
+    <script src="assets/js/swiper-bundle.min.js"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+
+    
+  </body>
+</html>
