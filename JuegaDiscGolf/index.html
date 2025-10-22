@@ -11,6 +11,16 @@
     <!-- Vue.js 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
+    <!-- Google Maps JavaScript API -->
+        <script async defer src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
+    <script>
+        // Función global para inicializar el mapa - será llamada por la API de Google Maps
+        function initMap() {
+            // Esta función será sobrescrita por el componente Vue cuando esté listo
+            console.log('Google Maps API loaded');
+        }
+    </script>
+    
     <style>
         .state-path {
             transition: all 0.3s ease;
@@ -139,375 +149,9 @@
                         
                         <p class="text-gray-600 mb-6">Haz clic en los estados verdes para ver información sobre disc golf</p>
                         
-                        <!-- Mexico Map SVG -->
-                        <div class="w-full overflow-auto">
-                            <svg viewBox="0 0 1000 700" class="w-full h-auto max-h-[500px] border border-gray-200 rounded">
-                                <!-- Complete Mexico Map - All 32 States -->
-                                
-                                <!-- Northern States -->
-                                
-                                <!-- Baja California -->
-                                <path 
-                                    :class="getStateClass('baja-california')" 
-                                    @click="selectState('baja-california')"
-                                    @mouseenter="hoverState('baja-california')"
-                                    @mouseleave="unhoverState()"
-                                    d="M20,100 L20,30 L60,30 L70,50 L70,180 L40,200 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Baja California Sur -->
-                                <path 
-                                    :class="getStateClass('baja-california-sur')" 
-                                    @click="selectState('baja-california-sur')"
-                                    @mouseenter="hoverState('baja-california-sur')"
-                                    @mouseleave="unhoverState()"
-                                    d="M40,200 L70,180 L70,280 L50,300 L30,280 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Sonora -->
-                                <path 
-                                    :class="getStateClass('sonora')" 
-                                    @click="selectState('sonora')"
-                                    @mouseenter="hoverState('sonora')"
-                                    @mouseleave="unhoverState()"
-                                    d="M70,50 L170,50 L190,90 L170,160 L70,180 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Chihuahua -->
-                                <path 
-                                    :class="getStateClass('chihuahua')" 
-                                    @click="selectState('chihuahua')"
-                                    @mouseenter="hoverState('chihuahua')"
-                                    @mouseleave="unhoverState()"
-                                    d="M190,90 L290,90 L310,130 L290,180 L170,160 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Coahuila -->
-                                <path 
-                                    :class="getStateClass('coahuila')" 
-                                    @click="selectState('coahuila')"
-                                    @mouseenter="hoverState('coahuila')"
-                                    @mouseleave="unhoverState()"
-                                    d="M310,130 L400,130 L420,160 L400,190 L290,180 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Nuevo León -->
-                                <path 
-                                    :class="getStateClass('nuevo-leon')" 
-                                    @click="selectState('nuevo-leon')"
-                                    @mouseenter="hoverState('nuevo-leon')"
-                                    @mouseleave="unhoverState()"
-                                    d="M420,160 L470,160 L480,190 L460,210 L400,190 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Tamaulipas -->
-                                <path 
-                                    :class="getStateClass('tamaulipas')" 
-                                    @click="selectState('tamaulipas')"
-                                    @mouseenter="hoverState('tamaulipas')"
-                                    @mouseleave="unhoverState()"
-                                    d="M480,190 L530,190 L540,230 L520,260 L460,210 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Central-Western States -->
-                                
-                                <!-- Sinaloa -->
-                                <path 
-                                    :class="getStateClass('sinaloa')" 
-                                    @click="selectState('sinaloa')"
-                                    @mouseenter="hoverState('sinaloa')"
-                                    @mouseleave="unhoverState()"
-                                    d="M70,280 L170,160 L170,240 L120,280 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Durango -->
-                                <path 
-                                    :class="getStateClass('durango')" 
-                                    @click="selectState('durango')"
-                                    @mouseenter="hoverState('durango')"
-                                    @mouseleave="unhoverState()"
-                                    d="M170,240 L290,180 L310,220 L270,260 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Zacatecas -->
-                                <path 
-                                    :class="getStateClass('zacatecas')" 
-                                    @click="selectState('zacatecas')"
-                                    @mouseenter="hoverState('zacatecas')"
-                                    @mouseleave="unhoverState()"
-                                    d="M270,260 L310,220 L350,240 L330,280 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- San Luis Potosí -->
-                                <path 
-                                    :class="getStateClass('san-luis-potosi')" 
-                                    @click="selectState('san-luis-potosi')"
-                                    @mouseenter="hoverState('san-luis-potosi')"
-                                    @mouseleave="unhoverState()"
-                                    d="M350,240 L400,190 L440,220 L420,260 L330,280 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Aguascalientes -->
-                                <path 
-                                    :class="getStateClass('aguascalientes')" 
-                                    @click="selectState('aguascalientes')"
-                                    @mouseenter="hoverState('aguascalientes')"
-                                    @mouseleave="unhoverState()"
-                                    d="M300,280 L330,280 L330,300 L300,300 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Nayarit -->
-                                <path 
-                                    :class="getStateClass('nayarit')" 
-                                    @click="selectState('nayarit')"
-                                    @mouseenter="hoverState('nayarit')"
-                                    @mouseleave="unhoverState()"
-                                    d="M220,300 L270,260 L290,290 L240,320 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Jalisco -->
-                                <path 
-                                    :class="getStateClass('jalisco')" 
-                                    @click="selectState('jalisco')"
-                                    @mouseenter="hoverState('jalisco')"
-                                    @mouseleave="unhoverState()"
-                                    d="M240,320 L290,290 L330,300 L350,330 L300,360 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Colima -->
-                                <path 
-                                    :class="getStateClass('colima')" 
-                                    @click="selectState('colima')"
-                                    @mouseenter="hoverState('colima')"
-                                    @mouseleave="unhoverState()"
-                                    d="M240,340 L280,340 L280,360 L240,360 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Michoacán -->
-                                <path 
-                                    :class="getStateClass('michoacan')" 
-                                    @click="selectState('michoacan')"
-                                    @mouseenter="hoverState('michoacan')"
-                                    @mouseleave="unhoverState()"
-                                    d="M300,360 L350,330 L380,350 L360,380 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Central States -->
-                                
-                                <!-- Guanajuato -->
-                                <path 
-                                    :class="getStateClass('guanajuato')" 
-                                    @click="selectState('guanajuato')"
-                                    @mouseenter="hoverState('guanajuato')"
-                                    @mouseleave="unhoverState()"
-                                    d="M330,300 L380,280 L400,310 L350,330 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Querétaro -->
-                                <path 
-                                    :class="getStateClass('queretaro')" 
-                                    @click="selectState('queretaro')"
-                                    @mouseenter="hoverState('queretaro')"
-                                    @mouseleave="unhoverState()"
-                                    d="M400,310 L430,300 L440,320 L410,330 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Hidalgo -->
-                                <path 
-                                    :class="getStateClass('hidalgo')" 
-                                    @click="selectState('hidalgo')"
-                                    @mouseenter="hoverState('hidalgo')"
-                                    @mouseleave="unhoverState()"
-                                    d="M430,300 L470,280 L480,310 L450,330 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Estado de México -->
-                                <path 
-                                    :class="getStateClass('estado-mexico')" 
-                                    @click="selectState('estado-mexico')"
-                                    @mouseenter="hoverState('estado-mexico')"
-                                    @mouseleave="unhoverState()"
-                                    d="M410,330 L450,330 L460,350 L420,360 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Ciudad de México (CDMX) -->
-                                <path 
-                                    :class="getStateClass('cdmx')" 
-                                    @click="selectState('cdmx')"
-                                    @mouseenter="hoverState('cdmx')"
-                                    @mouseleave="unhoverState()"
-                                    d="M430,340 L440,340 L440,350 L430,350 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Morelos -->
-                                <path 
-                                    :class="getStateClass('morelos')" 
-                                    @click="selectState('morelos')"
-                                    @mouseenter="hoverState('morelos')"
-                                    @mouseleave="unhoverState()"
-                                    d="M430,360 L450,360 L450,380 L430,380 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Tlaxcala -->
-                                <path 
-                                    :class="getStateClass('tlaxcala')" 
-                                    @click="selectState('tlaxcala')"
-                                    @mouseenter="hoverState('tlaxcala')"
-                                    @mouseleave="unhoverState()"
-                                    d="M460,330 L475,330 L475,345 L460,345 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Puebla -->
-                                <path 
-                                    :class="getStateClass('puebla')" 
-                                    @click="selectState('puebla')"
-                                    @mouseenter="hoverState('puebla')"
-                                    @mouseleave="unhoverState()"
-                                    d="M450,360 L490,340 L500,370 L470,380 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Guerrero -->
-                                <path 
-                                    :class="getStateClass('guerrero')" 
-                                    @click="selectState('guerrero')"
-                                    @mouseenter="hoverState('guerrero')"
-                                    @mouseleave="unhoverState()"
-                                    d="M360,380 L430,380 L450,410 L340,420 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Eastern States -->
-                                
-                                <!-- Veracruz -->
-                                <path 
-                                    :class="getStateClass('veracruz')" 
-                                    @click="selectState('veracruz')"
-                                    @mouseenter="hoverState('veracruz')"
-                                    @mouseleave="unhoverState()"
-                                    d="M480,280 L520,260 L530,320 L490,370 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Oaxaca -->
-                                <path 
-                                    :class="getStateClass('oaxaca')" 
-                                    @click="selectState('oaxaca')"
-                                    @mouseenter="hoverState('oaxaca')"
-                                    @mouseleave="unhoverState()"
-                                    d="M450,410 L530,380 L550,430 L480,460 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Southern States -->
-                                
-                                <!-- Chiapas -->
-                                <path 
-                                    :class="getStateClass('chiapas')" 
-                                    @click="selectState('chiapas')"
-                                    @mouseenter="hoverState('chiapas')"
-                                    @mouseleave="unhoverState()"
-                                    d="M550,430 L600,420 L620,470 L570,490 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Tabasco -->
-                                <path 
-                                    :class="getStateClass('tabasco')" 
-                                    @click="selectState('tabasco')"
-                                    @mouseenter="hoverState('tabasco')"
-                                    @mouseleave="unhoverState()"
-                                    d="M600,420 L650,410 L660,440 L620,450 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Campeche -->
-                                <path 
-                                    :class="getStateClass('campeche')" 
-                                    @click="selectState('campeche')"
-                                    @mouseenter="hoverState('campeche')"
-                                    @mouseleave="unhoverState()"
-                                    d="M650,410 L710,400 L720,440 L670,450 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Yucatán -->
-                                <path 
-                                    :class="getStateClass('yucatan')" 
-                                    @click="selectState('yucatan')"
-                                    @mouseenter="hoverState('yucatan')"
-                                    @mouseleave="unhoverState()"
-                                    d="M720,380 L780,370 L790,410 L730,420 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- Quintana Roo -->
-                                <path 
-                                    :class="getStateClass('quintana-roo')" 
-                                    @click="selectState('quintana-roo')"
-                                    @mouseenter="hoverState('quintana-roo')"
-                                    @mouseleave="unhoverState()"
-                                    d="M790,370 L830,360 L840,420 L800,430 Z"
-                                    class="state-path">
-                                </path>
-                                
-                                <!-- State Labels -->
-                                <text x="45" y="115" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">BC</text>
-                                <text x="50" y="240" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">BCS</text>
-                                <text x="130" y="115" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">SON</text>
-                                <text x="250" y="135" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">CHIH</text>
-                                <text x="355" y="155" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">COAH</text>
-                                <text x="445" y="175" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">NL</text>
-                                <text x="505" y="215" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">TAMPS</text>
-                                <text x="95" y="230" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">SIN</text>
-                                <text x="230" y="250" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">DGO</text>
-                                <text x="300" y="250" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">ZAC</text>
-                                <text x="375" y="230" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">SLP</text>
-                                <text x="315" y="290" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">AGS</text>
-                                <text x="255" y="310" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">NAY</text>
-                                <text x="270" y="340" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">JAL</text>
-                                <text x="260" y="350" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">COL</text>
-                                <text x="330" y="370" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">MICH</text>
-                                <text x="365" y="315" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">GTO</text>
-                                <text x="425" y="315" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">QRO</text>
-                                <text x="455" y="295" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">HGO</text>
-                                <text x="435" y="345" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">EDOMEX</text>
-                                <text x="435" y="345" text-anchor="middle" class="text-[6px] fill-gray-700 pointer-events-none font-semibold">CDMX</text>
-                                <text x="440" y="370" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">MOR</text>
-                                <text x="467" y="337" text-anchor="middle" class="text-[7px] fill-gray-700 pointer-events-none font-semibold">TLAX</text>
-                                <text x="470" y="360" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">PUE</text>
-                                <text x="395" y="400" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">GRO</text>
-                                <text x="505" y="315" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">VER</text>
-                                <text x="515" y="435" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">OAX</text>
-                                <text x="585" y="455" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">CHIS</text>
-                                <text x="635" y="430" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">TAB</text>
-                                <text x="690" y="425" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">CAMP</text>
-                                <text x="755" y="395" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">YUC</text>
-                                <text x="815" y="395" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">QR</text>
-                            </svg>
+                        <!-- Google Maps -->
+                        <div class="w-full">
+                            <div id="map" class="w-full h-[500px] border border-gray-200 rounded"></div>
                         </div>
                         
                         <!-- Legend -->
@@ -845,6 +489,7 @@
                     searchQuery: '', // Para el campo de búsqueda
                     showDropdown: false, // Para mostrar/ocultar el dropdown
                     filteredStates: [], // Estados filtrados según la búsqueda
+                    map: null, // Instancia del mapa de Google Maps
                     // All Mexican States - Complete list of 32 states
                     allStates: {
                         'aguascalientes': { name: 'Aguascalientes' },
@@ -1253,6 +898,79 @@
                     }
                     
                     return classes;
+                },
+                initMap() {
+                    // Configuración del mapa centrado en México
+                    const mexicoCenter = { lat: 23.6345, lng: -102.5528 };
+                    
+                    // Crear el mapa
+                    this.map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 5,
+                        center: mexicoCenter,
+                        mapTypeId: 'roadmap',
+                        styles: [
+                            {
+                                featureType: 'administrative.country',
+                                elementType: 'geometry.stroke',
+                                stylers: [{ color: '#2d3748' }, { weight: 2 }]
+                            }
+                        ]
+                    });
+                    
+                    // Coordenadas aproximadas de los estados con disc golf
+                    const stateCoordinates = {
+                        'baja-california': { lat: 30.8406, lng: -115.2838 },
+                        'chihuahua': { lat: 28.6329, lng: -106.0691 },
+                        'nuevo-leon': { lat: 25.5922, lng: -99.9962 },
+                        'jalisco': { lat: 20.6767, lng: -103.3475 },
+                        'queretaro': { lat: 20.5888, lng: -100.3899 },
+                        'cdmx': { lat: 19.4326, lng: -99.1332 },
+                        'estado-mexico': { lat: 19.3554, lng: -99.6563 },
+                        'yucatan': { lat: 20.7099, lng: -89.0943 },
+                        'quintana-roo': { lat: 19.1817, lng: -87.4653 }
+                    };
+                    
+                    // Crear marcadores para los estados con disc golf
+                    Object.entries(this.discGolfStates).forEach(([stateId, stateData]) => {
+                        const coords = stateCoordinates[stateId];
+                        if (coords) {
+                            const marker = new google.maps.Marker({
+                                position: coords,
+                                map: this.map,
+                                title: this.allStates[stateId]?.name,
+                                icon: {
+                                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                                        <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="15" cy="15" r="12" fill="#10b981" stroke="#065f46" stroke-width="2"/>
+                                            <circle cx="15" cy="15" r="6" fill="#ffffff"/>
+                                            <text x="15" y="19" text-anchor="middle" fill="#065f46" font-size="8" font-weight="bold">DG</text>
+                                        </svg>
+                                    `),
+                                    scaledSize: new google.maps.Size(30, 30),
+                                    anchor: new google.maps.Point(15, 15)
+                                }
+                            });
+                            
+                            // Agregar evento click al marcador
+                            marker.addListener('click', () => {
+                                this.selectState(stateId);
+                            });
+                        }
+                    });
+                }
+            },
+            mounted() {
+                // Inicializar el mapa cuando el componente esté montado
+                const self = this;
+                window.initMap = function() {
+                    self.initMap();
+                };
+                
+                // Si Google Maps ya está cargado, inicializar inmediatamente
+                if (window.google && window.google.maps) {
+                    this.$nextTick(() => {
+                        this.initMap();
+                    });
                 }
             }
         }).mount('#app');
