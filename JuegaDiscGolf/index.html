@@ -43,6 +43,19 @@
                 transform: translateY(0);
             }
         }
+        .dropdown-enter {
+            animation: dropdownSlide 0.2s ease-out;
+        }
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -70,6 +83,60 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h2 class="text-2xl font-semibold mb-4 text-gray-800">Mapa de Estados</h2>
+                        
+                        <!-- State Search Dropdown -->
+                        <div class="mb-6 relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Buscar estado:
+                            </label>
+                            <div class="relative">
+                                <input
+                                    v-model="searchQuery"
+                                    @input="filterStates"
+                                    @focus="showDropdown = true"
+                                    @blur="hideDropdown"
+                                    type="text"
+                                    placeholder="Escribe el nombre del estado o selecciona en el mapa..."
+                                    class="w-full px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
+                                >
+                                <!-- Clear Button -->
+                                <button v-if="searchQuery" 
+                                        @click="clearSearch"
+                                        class="absolute right-10 top-2.5 w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                                <!-- Search Icon -->
+                                <svg class="absolute right-3 top-2.5 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            
+                            <!-- Dropdown List -->
+                            <div v-if="showDropdown && filteredStates.length > 0" 
+                                 class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto dropdown-enter">
+                                <div v-for="state in filteredStates" :key="state.id"
+                                     @mousedown="selectStateFromDropdown(state)"
+                                     class="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-800">{{ state.name }}</span>
+                                        <div class="flex items-center">
+                                            <span v-if="discGolfStates[state.id]" class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                {{ discGolfStates[state.id].parks.length }} parque(s)
+                                            </span>
+                                            <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                                                Sin info
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <p class="text-gray-600 mb-6">Haz clic en los estados verdes para ver información sobre disc golf</p>
                         
                         <!-- Mexico Map SVG -->
@@ -775,6 +842,9 @@
                     selectedState: null,
                     hoveredState: null,
                     expandedHosts: {}, // Para controlar qué secciones de anfitriones están expandidas
+                    searchQuery: '', // Para el campo de búsqueda
+                    showDropdown: false, // Para mostrar/ocultar el dropdown
+                    filteredStates: [], // Estados filtrados según la búsqueda
                     // All Mexican States - Complete list of 32 states
                     allStates: {
                         'aguascalientes': { name: 'Aguascalientes' },
@@ -1111,6 +1181,44 @@
                 selectState(stateId) {
                     this.selectedState = stateId;
                     // Limpiar expansiones de anfitriones al cambiar de estado
+                    this.expandedHosts = {};
+                    // Actualizar el campo de búsqueda con el nombre del estado seleccionado
+                    this.searchQuery = this.allStates[stateId]?.name || '';
+                },
+                selectStateFromDropdown(state) {
+                    this.selectState(state.id);
+                    this.showDropdown = false;
+                },
+                filterStates() {
+                    if (!this.searchQuery.trim()) {
+                        this.filteredStates = [];
+                        this.showDropdown = false;
+                        // Si el campo está vacío, deseleccionar estado
+                        if (this.searchQuery === '') {
+                            this.selectedState = null;
+                        }
+                        return;
+                    }
+                    
+                    const query = this.searchQuery.toLowerCase();
+                    this.filteredStates = Object.entries(this.allStates)
+                        .map(([id, state]) => ({ id, name: state.name }))
+                        .filter(state => state.name.toLowerCase().includes(query))
+                        .slice(0, 8); // Limitar a 8 resultados
+                    
+                    this.showDropdown = this.filteredStates.length > 0;
+                },
+                hideDropdown() {
+                    // Delay para permitir clic en items del dropdown
+                    setTimeout(() => {
+                        this.showDropdown = false;
+                    }, 200);
+                },
+                clearSearch() {
+                    this.searchQuery = '';
+                    this.selectedState = null;
+                    this.filteredStates = [];
+                    this.showDropdown = false;
                     this.expandedHosts = {};
                 },
                 toggleHosts(parkName) {
