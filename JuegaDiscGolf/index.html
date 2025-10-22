@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disc Golf México - Mapa Interactivo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <style>
+        .state-path {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .state-path:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+        .state-active {
+            fill: #10b981;
+        }
+        .state-inactive {
+            fill: #d1d5db;
+        }
+        .state-hover {
+            stroke: #065f46;
+            stroke-width: 2;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-green-600 text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <h1 class="text-3xl font-bold text-center">Disc Golf México</h1>
+                <p class="text-center mt-2 text-green-100 text-lg">Conectando jugadores, eliminando barreras</p>
+                <div class="text-center mt-4 max-w-4xl mx-auto">
+                    <p class="text-green-50 text-sm leading-relaxed">
+                        <span class="font-semibold">🎯 Nuestra misión:</span> Promover el disc golf y eliminar las barreras para iniciar. 
+                        <span class="font-semibold">Sin costo, sin equipo necesario, sin importar tu nivel.</span> 
+                        Un deporte inclusivo para todas las edades en un ambiente amigable y divertido.
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Map Section -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Mapa de Estados</h2>
+                        <p class="text-gray-600 mb-6">Haz clic en los estados verdes para ver información sobre disc golf</p>
+                        
+                        <!-- Mexico Map SVG -->
+                        <div class="w-full overflow-auto">
+                            <svg viewBox="0 0 1000 700" class="w-full h-auto max-h-[500px] border border-gray-200 rounded">
+                                <!-- Complete Mexico Map - All 32 States -->
+                                
+                                <!-- Northern States -->
+                                
+                                <!-- Baja California -->
+                                <path 
+                                    :class="getStateClass('baja-california')" 
+                                    @click="selectState('baja-california')"
+                                    @mouseenter="hoverState('baja-california')"
+                                    @mouseleave="unhoverState()"
+                                    d="M20,100 L20,30 L60,30 L70,50 L70,180 L40,200 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Baja California Sur -->
+                                <path 
+                                    :class="getStateClass('baja-california-sur')" 
+                                    @click="selectState('baja-california-sur')"
+                                    @mouseenter="hoverState('baja-california-sur')"
+                                    @mouseleave="unhoverState()"
+                                    d="M40,200 L70,180 L70,280 L50,300 L30,280 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Sonora -->
+                                <path 
+                                    :class="getStateClass('sonora')" 
+                                    @click="selectState('sonora')"
+                                    @mouseenter="hoverState('sonora')"
+                                    @mouseleave="unhoverState()"
+                                    d="M70,50 L170,50 L190,90 L170,160 L70,180 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Chihuahua -->
+                                <path 
+                                    :class="getStateClass('chihuahua')" 
+                                    @click="selectState('chihuahua')"
+                                    @mouseenter="hoverState('chihuahua')"
+                                    @mouseleave="unhoverState()"
+                                    d="M190,90 L290,90 L310,130 L290,180 L170,160 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Coahuila -->
+                                <path 
+                                    :class="getStateClass('coahuila')" 
+                                    @click="selectState('coahuila')"
+                                    @mouseenter="hoverState('coahuila')"
+                                    @mouseleave="unhoverState()"
+                                    d="M310,130 L400,130 L420,160 L400,190 L290,180 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Nuevo León -->
+                                <path 
+                                    :class="getStateClass('nuevo-leon')" 
+                                    @click="selectState('nuevo-leon')"
+                                    @mouseenter="hoverState('nuevo-leon')"
+                                    @mouseleave="unhoverState()"
+                                    d="M420,160 L470,160 L480,190 L460,210 L400,190 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Tamaulipas -->
+                                <path 
+                                    :class="getStateClass('tamaulipas')" 
+                                    @click="selectState('tamaulipas')"
+                                    @mouseenter="hoverState('tamaulipas')"
+                                    @mouseleave="unhoverState()"
+                                    d="M480,190 L530,190 L540,230 L520,260 L460,210 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Central-Western States -->
+                                
+                                <!-- Sinaloa -->
+                                <path 
+                                    :class="getStateClass('sinaloa')" 
+                                    @click="selectState('sinaloa')"
+                                    @mouseenter="hoverState('sinaloa')"
+                                    @mouseleave="unhoverState()"
+                                    d="M70,280 L170,160 L170,240 L120,280 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Durango -->
+                                <path 
+                                    :class="getStateClass('durango')" 
+                                    @click="selectState('durango')"
+                                    @mouseenter="hoverState('durango')"
+                                    @mouseleave="unhoverState()"
+                                    d="M170,240 L290,180 L310,220 L270,260 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Zacatecas -->
+                                <path 
+                                    :class="getStateClass('zacatecas')" 
+                                    @click="selectState('zacatecas')"
+                                    @mouseenter="hoverState('zacatecas')"
+                                    @mouseleave="unhoverState()"
+                                    d="M270,260 L310,220 L350,240 L330,280 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- San Luis Potosí -->
+                                <path 
+                                    :class="getStateClass('san-luis-potosi')" 
+                                    @click="selectState('san-luis-potosi')"
+                                    @mouseenter="hoverState('san-luis-potosi')"
+                                    @mouseleave="unhoverState()"
+                                    d="M350,240 L400,190 L440,220 L420,260 L330,280 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Aguascalientes -->
+                                <path 
+                                    :class="getStateClass('aguascalientes')" 
+                                    @click="selectState('aguascalientes')"
+                                    @mouseenter="hoverState('aguascalientes')"
+                                    @mouseleave="unhoverState()"
+                                    d="M300,280 L330,280 L330,300 L300,300 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Nayarit -->
+                                <path 
+                                    :class="getStateClass('nayarit')" 
+                                    @click="selectState('nayarit')"
+                                    @mouseenter="hoverState('nayarit')"
+                                    @mouseleave="unhoverState()"
+                                    d="M220,300 L270,260 L290,290 L240,320 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Jalisco -->
+                                <path 
+                                    :class="getStateClass('jalisco')" 
+                                    @click="selectState('jalisco')"
+                                    @mouseenter="hoverState('jalisco')"
+                                    @mouseleave="unhoverState()"
+                                    d="M240,320 L290,290 L330,300 L350,330 L300,360 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Colima -->
+                                <path 
+                                    :class="getStateClass('colima')" 
+                                    @click="selectState('colima')"
+                                    @mouseenter="hoverState('colima')"
+                                    @mouseleave="unhoverState()"
+                                    d="M240,340 L280,340 L280,360 L240,360 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Michoacán -->
+                                <path 
+                                    :class="getStateClass('michoacan')" 
+                                    @click="selectState('michoacan')"
+                                    @mouseenter="hoverState('michoacan')"
+                                    @mouseleave="unhoverState()"
+                                    d="M300,360 L350,330 L380,350 L360,380 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Central States -->
+                                
+                                <!-- Guanajuato -->
+                                <path 
+                                    :class="getStateClass('guanajuato')" 
+                                    @click="selectState('guanajuato')"
+                                    @mouseenter="hoverState('guanajuato')"
+                                    @mouseleave="unhoverState()"
+                                    d="M330,300 L380,280 L400,310 L350,330 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Querétaro -->
+                                <path 
+                                    :class="getStateClass('queretaro')" 
+                                    @click="selectState('queretaro')"
+                                    @mouseenter="hoverState('queretaro')"
+                                    @mouseleave="unhoverState()"
+                                    d="M400,310 L430,300 L440,320 L410,330 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Hidalgo -->
+                                <path 
+                                    :class="getStateClass('hidalgo')" 
+                                    @click="selectState('hidalgo')"
+                                    @mouseenter="hoverState('hidalgo')"
+                                    @mouseleave="unhoverState()"
+                                    d="M430,300 L470,280 L480,310 L450,330 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Estado de México -->
+                                <path 
+                                    :class="getStateClass('estado-mexico')" 
+                                    @click="selectState('estado-mexico')"
+                                    @mouseenter="hoverState('estado-mexico')"
+                                    @mouseleave="unhoverState()"
+                                    d="M410,330 L450,330 L460,350 L420,360 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Ciudad de México (CDMX) -->
+                                <path 
+                                    :class="getStateClass('cdmx')" 
+                                    @click="selectState('cdmx')"
+                                    @mouseenter="hoverState('cdmx')"
+                                    @mouseleave="unhoverState()"
+                                    d="M430,340 L440,340 L440,350 L430,350 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Morelos -->
+                                <path 
+                                    :class="getStateClass('morelos')" 
+                                    @click="selectState('morelos')"
+                                    @mouseenter="hoverState('morelos')"
+                                    @mouseleave="unhoverState()"
+                                    d="M430,360 L450,360 L450,380 L430,380 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Tlaxcala -->
+                                <path 
+                                    :class="getStateClass('tlaxcala')" 
+                                    @click="selectState('tlaxcala')"
+                                    @mouseenter="hoverState('tlaxcala')"
+                                    @mouseleave="unhoverState()"
+                                    d="M460,330 L475,330 L475,345 L460,345 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Puebla -->
+                                <path 
+                                    :class="getStateClass('puebla')" 
+                                    @click="selectState('puebla')"
+                                    @mouseenter="hoverState('puebla')"
+                                    @mouseleave="unhoverState()"
+                                    d="M450,360 L490,340 L500,370 L470,380 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Guerrero -->
+                                <path 
+                                    :class="getStateClass('guerrero')" 
+                                    @click="selectState('guerrero')"
+                                    @mouseenter="hoverState('guerrero')"
+                                    @mouseleave="unhoverState()"
+                                    d="M360,380 L430,380 L450,410 L340,420 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Eastern States -->
+                                
+                                <!-- Veracruz -->
+                                <path 
+                                    :class="getStateClass('veracruz')" 
+                                    @click="selectState('veracruz')"
+                                    @mouseenter="hoverState('veracruz')"
+                                    @mouseleave="unhoverState()"
+                                    d="M480,280 L520,260 L530,320 L490,370 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Oaxaca -->
+                                <path 
+                                    :class="getStateClass('oaxaca')" 
+                                    @click="selectState('oaxaca')"
+                                    @mouseenter="hoverState('oaxaca')"
+                                    @mouseleave="unhoverState()"
+                                    d="M450,410 L530,380 L550,430 L480,460 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Southern States -->
+                                
+                                <!-- Chiapas -->
+                                <path 
+                                    :class="getStateClass('chiapas')" 
+                                    @click="selectState('chiapas')"
+                                    @mouseenter="hoverState('chiapas')"
+                                    @mouseleave="unhoverState()"
+                                    d="M550,430 L600,420 L620,470 L570,490 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Tabasco -->
+                                <path 
+                                    :class="getStateClass('tabasco')" 
+                                    @click="selectState('tabasco')"
+                                    @mouseenter="hoverState('tabasco')"
+                                    @mouseleave="unhoverState()"
+                                    d="M600,420 L650,410 L660,440 L620,450 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Campeche -->
+                                <path 
+                                    :class="getStateClass('campeche')" 
+                                    @click="selectState('campeche')"
+                                    @mouseenter="hoverState('campeche')"
+                                    @mouseleave="unhoverState()"
+                                    d="M650,410 L710,400 L720,440 L670,450 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Yucatán -->
+                                <path 
+                                    :class="getStateClass('yucatan')" 
+                                    @click="selectState('yucatan')"
+                                    @mouseenter="hoverState('yucatan')"
+                                    @mouseleave="unhoverState()"
+                                    d="M720,380 L780,370 L790,410 L730,420 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- Quintana Roo -->
+                                <path 
+                                    :class="getStateClass('quintana-roo')" 
+                                    @click="selectState('quintana-roo')"
+                                    @mouseenter="hoverState('quintana-roo')"
+                                    @mouseleave="unhoverState()"
+                                    d="M790,370 L830,360 L840,420 L800,430 Z"
+                                    class="state-path">
+                                </path>
+                                
+                                <!-- State Labels -->
+                                <text x="45" y="115" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">BC</text>
+                                <text x="50" y="240" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">BCS</text>
+                                <text x="130" y="115" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">SON</text>
+                                <text x="250" y="135" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">CHIH</text>
+                                <text x="355" y="155" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">COAH</text>
+                                <text x="445" y="175" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">NL</text>
+                                <text x="505" y="215" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">TAMPS</text>
+                                <text x="95" y="230" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">SIN</text>
+                                <text x="230" y="250" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">DGO</text>
+                                <text x="300" y="250" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">ZAC</text>
+                                <text x="375" y="230" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">SLP</text>
+                                <text x="315" y="290" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">AGS</text>
+                                <text x="255" y="310" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">NAY</text>
+                                <text x="270" y="340" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">JAL</text>
+                                <text x="260" y="350" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">COL</text>
+                                <text x="330" y="370" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">MICH</text>
+                                <text x="365" y="315" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">GTO</text>
+                                <text x="425" y="315" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">QRO</text>
+                                <text x="455" y="295" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">HGO</text>
+                                <text x="435" y="345" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">EDOMEX</text>
+                                <text x="435" y="345" text-anchor="middle" class="text-[6px] fill-gray-700 pointer-events-none font-semibold">CDMX</text>
+                                <text x="440" y="370" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">MOR</text>
+                                <text x="467" y="337" text-anchor="middle" class="text-[7px] fill-gray-700 pointer-events-none font-semibold">TLAX</text>
+                                <text x="470" y="360" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">PUE</text>
+                                <text x="395" y="400" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">GRO</text>
+                                <text x="505" y="315" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">VER</text>
+                                <text x="515" y="435" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">OAX</text>
+                                <text x="585" y="455" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">CHIS</text>
+                                <text x="635" y="430" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">TAB</text>
+                                <text x="690" y="425" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">CAMP</text>
+                                <text x="755" y="395" text-anchor="middle" class="text-[10px] fill-gray-700 pointer-events-none font-semibold">YUC</text>
+                                <text x="815" y="395" text-anchor="middle" class="text-[8px] fill-gray-700 pointer-events-none font-semibold">QR</text>
+                            </svg>
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                                <span>Estados con parques y anfitriones</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-gray-300 rounded mr-2"></div>
+                                <span>Sin anfitriones registrados</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Panel -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Información del Estado</h3>
+                        
+                        <!-- Default State -->
+                        <div v-if="!selectedState" class="text-center">
+                            <div class="mb-6">
+                                <div class="text-6xl mb-4">🥏</div>
+                                <h4 class="text-xl font-bold text-green-600 mb-3">¡Bienvenido a Disc Golf México!</h4>
+                            </div>
+                            
+                            <div class="text-left space-y-4 bg-green-50 p-4 rounded-lg">
+                                <h5 class="font-semibold text-green-700 text-center mb-3">¿Por qué disc golf?</h5>
+                                
+                                <div class="space-y-3 text-sm text-gray-700">
+                                    <div class="flex items-start">
+                                        <span class="text-green-500 mr-2">🎯</span>
+                                        <span><strong>Fácil de empezar:</strong> No necesitas experiencia previa ni ser deportista</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-green-500 mr-2">💰</span>
+                                        <span><strong>Sin costo:</strong> Los anfitriones te prestan discos y te enseñan gratis</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-green-500 mr-2">👥</span>
+                                        <span><strong>Para todos:</strong> Inclusivo para todas las edades y niveles</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-green-500 mr-2">🌟</span>
+                                        <span><strong>Ambiente amigable:</strong> Comunidad súper acogedora y divertida</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-green-500 mr-2">🏞️</span>
+                                        <span><strong>En la naturaleza:</strong> Disfruta parques y espacios al aire libre</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-3 bg-blue-50 rounded-lg">
+                                <p class="text-sm text-blue-800">
+                                    <strong>👈 Selecciona un estado en el mapa</strong> para encontrar parques y anfitriones cerca de ti
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Selected State Info -->
+                        <div v-if="selectedState && selectedStateInfo">
+                            <h4 class="text-lg font-bold text-green-600 mb-3">{{ selectedStateInfo.name }}</h4>
+                            
+                            <!-- Parks Count -->
+                            <div class="mb-4 p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <span class="font-semibold">{{ selectedStateInfo.parks.length }} parque(s) de disc golf</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Parks List -->
+                            <div class="space-y-4">
+                                <h5 class="font-semibold text-gray-700">Parques disponibles:</h5>
+                                <div v-for="park in selectedStateInfo.parks" :key="park.name" 
+                                     class="border border-gray-200 rounded-lg p-4">
+                                    <!-- Park Info -->
+                                    <div class="mb-3">
+                                        <div class="flex items-start justify-between mb-2">
+                                            <h6 class="font-semibold text-gray-800 text-lg">{{ park.name }}</h6>
+                                            <div v-if="park.rating" class="flex items-center bg-yellow-100 px-2 py-1 rounded">
+                                                <svg class="w-3 h-3 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <span class="text-xs font-semibold text-yellow-800">{{ park.rating }}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-sm text-gray-600 mb-1">📍 {{ park.location }}</p>
+                                        <p class="text-sm text-gray-500 mb-2">{{ park.description }}</p>
+                                        
+                                        <div class="flex flex-wrap gap-2 mb-2">
+                                            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                                {{ park.type }}
+                                            </span>
+                                            <span v-if="park.difficulty" class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+                                                {{ park.difficulty }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Hosts Section -->
+                                    <div class="mt-3 pt-3 border-t border-gray-100">
+                                        <!-- Hosts Header - Always Visible -->
+                                        <div 
+                                            @click="toggleHosts(park.name)" 
+                                            class="cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center">
+                                                    <svg class="w-4 h-4 mr-2 text-green-700" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                                                    </svg>
+                                                    <span class="font-semibold text-green-700 text-sm">
+                                                        Ver anfitriones ({{ park.hosts.length }})
+                                                    </span>
+                                                </div>
+                                                <!-- Expand/Collapse Icon -->
+                                                <svg 
+                                                    :class="{ 'rotate-180': isHostsExpanded(park.name) }"
+                                                    class="w-4 h-4 text-green-600 transition-transform duration-200" 
+                                                    fill="currentColor" 
+                                                    viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Hosts List - Expandible -->
+                                        <div v-show="isHostsExpanded(park.name)" class="mt-3 space-y-2 animate-fade-in">
+                                            <div v-for="host in park.hosts" :key="host.name" 
+                                                 class="bg-gray-50 rounded-lg p-3 border-l-4 border-green-500">
+                                                <div class="flex items-start justify-between mb-2">
+                                                    <h8 class="font-semibold text-gray-800">{{ host.name }}</h8>
+                                                    <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                                                        {{ host.experience }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <p class="text-xs text-gray-600 mb-2 italic">{{ host.bio }}</p>
+                                                
+                                                <div class="text-xs text-gray-500 space-y-1">
+                                                    <div class="flex items-center">
+                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                        </svg>
+                                                        <strong>Disponible:</strong> {{ host.availability }}
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                                                        </svg>
+                                                        <strong>Contacto:</strong> 
+                                                        <a :href="'mailto:' + host.contact" class="text-blue-600 ml-1 hover:underline">
+                                                            {{ host.contact }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- No Disc Golf State -->
+                        <div v-if="selectedState && !selectedStateInfo" class="text-center text-gray-500">
+                            <div class="mb-4">
+                                <svg class="mx-auto w-16 h-16 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <h4 class="text-lg font-bold text-gray-600 mb-2">{{ selectedStateName }}</h4>
+                            <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="font-semibold text-gray-600">Sin información de disc golf</span>
+                                </div>
+                            </div>
+                            <div class="mb-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                <div class="flex items-center justify-center mb-2">
+                                    <svg class="w-5 h-5 text-yellow-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="font-semibold text-yellow-800">¡Oportunidad de crecimiento!</span>
+                                </div>
+                                <p class="text-sm text-yellow-800">Aún no tenemos anfitriones registrados en este estado</p>
+                            </div>
+                            
+                            <div class="text-left space-y-3 bg-blue-50 p-4 rounded-lg">
+                                <h5 class="font-semibold text-blue-700 text-center mb-3">¡Sé el primero en {{ selectedStateName }}!</h5>
+                                
+                                <div class="space-y-2 text-sm text-blue-800">
+                                    <div class="flex items-start">
+                                        <span class="text-blue-500 mr-2">🚀</span>
+                                        <span><strong>Inicia la comunidad:</strong> Sé el pionero del disc golf en tu estado</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-blue-500 mr-2">🎯</span>
+                                        <span><strong>Solo necesitas:</strong> Ganas de compartir y hacer amigos</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-blue-500 mr-2">💪</span>
+                                        <span><strong>Apoyo total:</strong> Te ayudamos a conseguir discos y organizar</span>
+                                    </div>
+                                    
+                                    <div class="flex items-start">
+                                        <span class="text-blue-500 mr-2">🌟</span>
+                                        <span><strong>Impacto real:</strong> Crea espacios inclusivos para tu comunidad</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-green-50 rounded-lg">
+                                <p class="text-sm text-green-800">
+                                    <strong>✉️ ¿Te interesa ser anfitrión?</strong><br>
+                                    Contáctanos para agregar tu estado y ser parte de esta red inclusiva
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12 mt-12">
+            <div class="container mx-auto px-4">
+                <!-- Main Footer Content -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <!-- About Section -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-green-400">Disc Golf México</h3>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Conectamos personas a través del disc golf, eliminando barreras y creando 
+                            comunidades inclusivas en todo México. Un deporte para todos, sin importar 
+                            edad, experiencia o nivel socioeconómico.
+                        </p>
+                    </div>
+                    
+                    <!-- Benefits Section -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 text-green-400">¿Por qué Disc Golf?</h4>
+                        <ul class="space-y-2 text-gray-300 text-sm">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2">•</span>
+                                <span>Deporte inclusivo y accesible</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2">•</span>
+                                <span>Ejercicio al aire libre y naturaleza</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2">•</span>
+                                <span>Comunidad acogedora y amigable</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2">•</span>
+                                <span>Bajo costo de entrada</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2">•</span>
+                                <span>Beneficios físicos y mentales</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Mission Section -->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 text-green-400">Nuestra Misión</h4>
+                        <div class="space-y-3 text-gray-300 text-sm">
+                            <p>
+                                <span class="font-semibold text-white">Eliminar barreras:</span> 
+                                Que nadie se quede fuera por falta de equipo o conocimiento
+                            </p>
+                            <p>
+                                <span class="font-semibold text-white">Crear comunidad:</span> 
+                                Conectar personas que comparten la pasión por el deporte
+                            </p>
+                            <p>
+                                <span class="font-semibold text-white">Promover inclusión:</span> 
+                                Un espacio seguro y welcoming para todas las personas
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="border-t border-gray-700 pt-6 mb-6">
+                    <div class="text-center bg-green-900 bg-opacity-50 p-4 rounded-lg">
+                        <h4 class="text-lg font-bold text-green-300 mb-2">¡Únete a la Comunidad!</h4>
+                        <p class="text-gray-300 text-sm mb-3">
+                            No importa si nunca has jugado disc golf. Nuestros anfitriones te enseñarán, 
+                            te prestarán discos y te darán la bienvenida con una sonrisa.
+                        </p>
+                        <p class="text-green-200 font-semibold text-sm">
+                            🎯 El disc golf te está esperando - ¡Solo da el primer paso!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Copyright -->
+                <div class="text-center border-t border-gray-700 pt-6">
+                    <p class="text-gray-400 text-sm">
+                        &copy; 2025 Disc Golf México. Promoviendo el disc golf inclusivo en todo México. 
+                        <span class="text-green-400">Hecho con ❤️ para la comunidad</span>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    selectedState: null,
+                    hoveredState: null,
+                    expandedHosts: {}, // Para controlar qué secciones de anfitriones están expandidas
+                    // All Mexican States - Complete list of 32 states
+                    allStates: {
+                        'aguascalientes': { name: 'Aguascalientes' },
+                        'baja-california': { name: 'Baja California' },
+                        'baja-california-sur': { name: 'Baja California Sur' },
+                        'campeche': { name: 'Campeche' },
+                        'cdmx': { name: 'Ciudad de México' },
+                        'chiapas': { name: 'Chiapas' },
+                        'chihuahua': { name: 'Chihuahua' },
+                        'coahuila': { name: 'Coahuila' },
+                        'colima': { name: 'Colima' },
+                        'durango': { name: 'Durango' },
+                        'estado-mexico': { name: 'Estado de México' },
+                        'guanajuato': { name: 'Guanajuato' },
+                        'guerrero': { name: 'Guerrero' },
+                        'hidalgo': { name: 'Hidalgo' },
+                        'jalisco': { name: 'Jalisco' },
+                        'michoacan': { name: 'Michoacán' },
+                        'morelos': { name: 'Morelos' },
+                        'nayarit': { name: 'Nayarit' },
+                        'nuevo-leon': { name: 'Nuevo León' },
+                        'oaxaca': { name: 'Oaxaca' },
+                        'puebla': { name: 'Puebla' },
+                        'queretaro': { name: 'Querétaro' },
+                        'quintana-roo': { name: 'Quintana Roo' },
+                        'san-luis-potosi': { name: 'San Luis Potosí' },
+                        'sinaloa': { name: 'Sinaloa' },
+                        'sonora': { name: 'Sonora' },
+                        'tabasco': { name: 'Tabasco' },
+                        'tamaulipas': { name: 'Tamaulipas' },
+                        'tlaxcala': { name: 'Tlaxcala' },
+                        'veracruz': { name: 'Veracruz' },
+                        'yucatan': { name: 'Yucatán' },
+                        'zacatecas': { name: 'Zacatecas' }
+                    },
+                    // States with disc golf parks (Real data from UDisc)
+                    discGolfStates: {
+                        'jalisco': {
+                            name: 'Jalisco',
+                            parks: [
+                                {
+                                    name: 'Los Colomos',
+                                    location: 'Guadalajara, Jalisco',
+                                    description: 'Parque urbano popular con curso moderado de 1h 19m',
+                                    type: 'Parque público',
+                                    rating: 4.3,
+                                    difficulty: 'Moderado',
+                                    hosts: [
+                                        {
+                                            name: 'Carlos Mendoza',
+                                            contact: 'carlos.colomos@gmail.com',
+                                            experience: '5 años jugando',
+                                            availability: 'Sábados y domingos 8:00 AM',
+                                            bio: 'Jugador experimentado en Los Colomos, conozco cada hoyo perfectamente'
+                                        },
+                                        {
+                                            name: 'María González',
+                                            contact: '+52 33 1234-5678',
+                                            experience: '3 años jugando',
+                                            availability: 'Martes y jueves 5:00 PM',
+                                            bio: 'Organizadora del grupo de Facebook "Disc Golf Guadalajara"'
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: 'Parque CRISTIANIA',
+                                    location: 'Chapala, Jalisco',
+                                    description: 'Campo difícil junto al lago con vistas espectaculares (1h 40m)',
+                                    type: 'Parque lakeside',
+                                    rating: 4.3,
+                                    difficulty: 'Difícil',
+                                    hosts: [
+                                        {
+                                            name: 'Roberto Silva',
+                                            contact: 'rob.chapala.dg@hotmail.com',
+                                            experience: '7 años jugando',
+                                            availability: 'Fines de semana 7:00 AM',
+                                            bio: 'Local de Chapala, fundador del campo Cristiania'
+                                        },
+                                        {
+                                            name: 'Sandra Jiménez',
+                                            contact: '+52 376 765-4321',
+                                            experience: '4 años jugando',
+                                            availability: 'Domingos por la tarde',
+                                            bio: 'Conoce todos los secretos del lago, me encanta recibir visitantes'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'nuevo-leon': {
+                            name: 'Nuevo León',
+                            parks: [
+                                {
+                                    name: 'Rufino Tamayo',
+                                    location: 'Garza García, Nuevo León',
+                                    description: 'Campo #1 en México, moderado con duración estimada de 1h 56m',
+                                    type: 'Parque urbano premium',
+                                    rating: 4.4,
+                                    difficulty: 'Moderado',
+                                    hosts: [
+                                        {
+                                            name: 'Luis Hernández',
+                                            contact: 'luis.rufino.dg@gmail.com',
+                                            experience: '6 años jugando',
+                                            availability: 'Lunes a viernes después de 6 PM',
+                                            bio: 'Ingeniero y campeón local, siempre dispuesto a compartir técnicas'
+                                        },
+                                        {
+                                            name: 'Ana Patricia Garza',
+                                            contact: 'ana.mty.discgolf@outlook.com',
+                                            experience: '3 años jugando',
+                                            availability: 'Sábados temprano',
+                                            bio: 'Organizadora de torneos en el mejor campo de México'
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: 'Montemorelos DiscGolf',
+                                    location: 'Montemorelos, Nuevo León',
+                                    description: 'Campo familiar, fácil-moderado con duración de 1h 48m',
+                                    type: 'Campo familiar',
+                                    rating: 4.6,
+                                    difficulty: 'Fácil - Moderado',
+                                    hosts: [
+                                        {
+                                            name: 'Rodrigo Elizondo',
+                                            contact: '+52 826 123-4567',
+                                            experience: '8 años jugando',
+                                            availability: 'Todos los días',
+                                            bio: 'Dueño del campo, me encanta enseñar a familias completas'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'estado-mexico': {
+                            name: 'Estado de México',
+                            parks: [
+                                {
+                                    name: 'Naucalli Circuito Israel Negrete "Shine"',
+                                    location: 'Naucalpan de Juárez, Estado de México',
+                                    description: 'Campo técnico moderado-difícil con duración de 3h 17m',
+                                    type: 'Circuito técnico',
+                                    rating: 4.1,
+                                    difficulty: 'Moderado - Difícil',
+                                    hosts: [
+                                        {
+                                            name: 'Miguel Ángel Torres',
+                                            contact: 'miguel.naucalli@gmail.com',
+                                            experience: '9 años jugando',
+                                            availability: 'Domingos por la mañana',
+                                            bio: 'Fundador del circuito, especialista en técnicas avanzadas'
+                                        },
+                                        {
+                                            name: 'Elena Martínez',
+                                            contact: '+52 55 9876-5432',
+                                            experience: '4 años jugando',
+                                            availability: 'Sábados por la tarde',
+                                            bio: 'Instructora certificada, me especializo en principiantes'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'cdmx': {
+                            name: 'Ciudad de México',
+                            parks: [
+                                {
+                                    name: 'Alma Mater',
+                                    location: 'Ciudad de México, CDMX',
+                                    description: 'Campo urbano en el corazón de la capital',
+                                    type: 'Parque urbano',
+                                    rating: 4.0,
+                                    difficulty: 'Moderado',
+                                    hosts: [
+                                        {
+                                            name: 'Fernanda López',
+                                            contact: 'fer.almamater.dg@gmail.com',
+                                            experience: '5 años jugando',
+                                            availability: 'Sábados y domingos 9:00 AM',
+                                            bio: 'Profesora de educación física, fundadora del grupo CDMX Disc Golf'
+                                        },
+                                        {
+                                            name: 'Diego Ramírez',
+                                            contact: '+52 55 4567-8901',
+                                            experience: '12 años jugando',
+                                            availability: 'Cualquier día después de 7 PM',
+                                            bio: 'Veterano del disc golf en CDMX, tengo discos extra para prestar'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'san-luis-potosi': {
+                            name: 'San Luis Potosí',
+                            parks: [
+                                {
+                                    name: 'Caracara (Tangamanga DGC)',
+                                    location: 'San Luis Potosí, San Luis Potosí',
+                                    description: 'Campo escénico moderado-muy difícil con duración de 2h 2m',
+                                    type: 'Parque natural',
+                                    rating: 4.6,
+                                    difficulty: 'Moderado - Muy Difícil',
+                                    hosts: [
+                                        {
+                                            name: 'Javier Medina',
+                                            contact: 'javi.tangamanga@yahoo.com',
+                                            experience: '10 años jugando',
+                                            availability: 'Fines de semana',
+                                            bio: 'Guardaparques y jugador experto, conozco cada árbol del Tangamanga'
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: 'Jaguar (Tangamanga DGC)',
+                                    location: 'San Luis Potosí, San Luis Potosí',
+                                    description: 'Campo escénico difícil con duración de 2h 36m',
+                                    type: 'Parque natural',
+                                    rating: 4.3,
+                                    difficulty: 'Difícil',
+                                    hosts: [
+                                        {
+                                            name: 'Claudia Reyes',
+                                            contact: '+52 444 887-6554',
+                                            experience: '6 años jugando',
+                                            availability: 'Jueves y viernes por la tarde',
+                                            bio: 'Bióloga y jugadora, me encanta mostrar la fauna del parque'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'queretaro': {
+                            name: 'Querétaro',
+                            parks: [
+                                {
+                                    name: 'Parque La Queretana',
+                                    location: 'Santiago de Querétaro, Querétaro',
+                                    description: 'Campo moderado-difícil con duración de 2h 37m',
+                                    type: 'Parque metropolitano',
+                                    rating: 4.4,
+                                    difficulty: 'Moderado - Difícil',
+                                    hosts: [
+                                        {
+                                            name: 'Arturo Delgado',
+                                            contact: 'arturo.queretana@gmail.com',
+                                            experience: '7 años jugando',
+                                            availability: 'Sábados por la mañana',
+                                            bio: 'Arquitecto del diseño del campo, me emociona enseñar las rutas'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'sonora': {
+                            name: 'Sonora',
+                            parks: [
+                                {
+                                    name: 'San Carlos DGC',
+                                    location: 'Guaymas, Sonora',
+                                    description: 'Campo escénico con vistas al mar, duración estimada de 2h 8m',
+                                    type: 'Campo costero',
+                                    rating: 4.3,
+                                    difficulty: 'Moderado',
+                                    hosts: [
+                                        {
+                                            name: 'Ricardo Morales',
+                                            contact: 'ricardo.sancarlos@hotmail.com',
+                                            experience: '8 años jugando',
+                                            availability: 'Temprano por la mañana o al atardecer',
+                                            bio: 'Pescador y jugador, conozco los mejores horarios para evitar el calor'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'guanajuato': {
+                            name: 'Guanajuato',
+                            parks: [
+                                {
+                                    name: 'El Hormiguero - Guanajuato',
+                                    location: 'Guanajuato, Guanajuato',
+                                    description: 'Campo escénico moderado con duración de 2h 18m',
+                                    type: 'Parque colonial',
+                                    rating: 4.5,
+                                    difficulty: 'Moderado',
+                                    hosts: [
+                                        {
+                                            name: 'Sebastián Ruiz',
+                                            contact: 'seb.hormiguero@gmail.com',
+                                            experience: '5 años jugando',
+                                            availability: 'Domingos por la tarde',
+                                            bio: 'Estudiante universitario, me gusta jugar después de estudiar'
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'morelos': {
+                            name: 'Morelos',
+                            parks: [
+                                {
+                                    name: 'Cocoyoc Disc Golf',
+                                    location: 'Lomas de Cocoyoc, Morelos',
+                                    description: 'Campo escénico moderado-difícil con duración de 3h 6m',
+                                    type: 'Resort privado',
+                                    rating: 4.7,
+                                    difficulty: 'Moderado - Difícil',
+                                    hosts: [
+                                        {
+                                            name: 'Patricia Vázquez',
+                                            contact: 'paty.cocoyoc@resort.mx',
+                                            experience: '4 años jugando',
+                                            availability: 'Fines de semana',
+                                            bio: 'Coordinadora del resort, organizo torneos y clínicas'
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            computed: {
+                selectedStateInfo() {
+                    return this.selectedState ? this.discGolfStates[this.selectedState] : null;
+                },
+                selectedStateName() {
+                    return this.selectedState ? this.allStates[this.selectedState]?.name : null;
+                }
+            },
+            methods: {
+                selectState(stateId) {
+                    this.selectedState = stateId;
+                    // Limpiar expansiones de anfitriones al cambiar de estado
+                    this.expandedHosts = {};
+                },
+                toggleHosts(parkName) {
+                    // Crear una clave única para cada parque
+                    const key = `${this.selectedState}_${parkName}`;
+                    this.expandedHosts[key] = !this.expandedHosts[key];
+                },
+                isHostsExpanded(parkName) {
+                    const key = `${this.selectedState}_${parkName}`;
+                    return !!this.expandedHosts[key];
+                },
+                hoverState(stateId) {
+                    this.hoveredState = stateId;
+                },
+                unhoverState() {
+                    this.hoveredState = null;
+                },
+                getStateClass(stateId) {
+                    const hasDiscGolf = this.discGolfStates[stateId];
+                    const isHovered = this.hoveredState === stateId;
+                    
+                    let classes = 'state-path ';
+                    
+                    if (hasDiscGolf) {
+                        classes += 'state-active ';
+                    } else {
+                        classes += 'state-inactive ';
+                    }
+                    
+                    if (isHovered) {
+                        classes += 'state-hover ';
+                    }
+                    
+                    return classes;
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
