@@ -103,7 +103,7 @@
 <body class="bg-gray-50">
     <div id="app">
         <!-- Header -->
-        <header class="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-40">
+        <header class="bg-white border-b border-gray-100 shadow-sm relative">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div class="flex items-center justify-center">
                     <div class="text-center">
@@ -448,7 +448,7 @@
                 </div>
 
                 <!-- Anfitriones Destacados Section -->
-                <section class="mt-12 pt-12 border-t border-gray-200">
+                <section class="mt-12 pt-12 border-t border-gray-200 lg:px-32 sm:px-16 px-6">
                     <!-- Section Header -->
                     <div class="max-w-3xl mx-auto mb-8">
                         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Anfitriones Destacados</h2>
@@ -1043,7 +1043,7 @@
                     });
                 
                 // Iniciar el cambio automático del carrusel
-                this.startCarouselAutoplay();
+                // this.startCarouselAutoplay();
                 
                 // Detectar cambios de tamaño de pantalla
                 window.addEventListener('resize', () => {
