@@ -12,14 +12,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
     <!-- Google Maps JavaScript API -->
-        <script async defer src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
-    <script>
-        // Función global para inicializar el mapa - será llamada por la API de Google Maps
-        function initMap() {
-            // Esta función será sobrescrita por el componente Vue cuando esté listo
-            console.log('Google Maps API loaded');
-        }
-    </script>
+
     
     <style>
         .state-path {
@@ -149,9 +142,22 @@
                         
                         <p class="text-gray-600 mb-6">Haz clic en los estados verdes para ver información sobre disc golf</p>
                         
-                        <!-- Google Maps -->
+                        <!-- Mexico SVG Map -->
                         <div class="w-full">
-                            <div id="map" class="w-full h-[500px] border border-gray-200 rounded"></div>
+                            <svg id="mexico-map" viewBox="0 0 1000 630" class="w-full h-96 border border-gray-200 rounded" xmlns="http://www.w3.org/2000/svg">
+                                <template v-for="state in svgPaths">
+                                    <path
+                                        :id="state.id"
+                                        :d="state.d"
+                                        :name="state.name"
+                                        :class="getStateClass(state.id)"
+                                        @click="handleStateClick(state.id)"
+                                        @mouseenter="handleStateMouseEnter(state.id)"
+                                        @mouseleave="handleStateMouseLeave"
+                                        
+                                    />
+                                </template>
+                            </svg>
                         </div>
                         
                         <!-- Legend -->
@@ -293,7 +299,7 @@
                                             <div v-for="host in park.hosts" :key="host.name" 
                                                  class="bg-gray-50 rounded-lg p-3 border-l-4 border-green-500">
                                                 <div class="flex items-start justify-between mb-2">
-                                                    <h8 class="font-semibold text-gray-800">{{ host.name }}</h8>
+                                                    <h6 class="font-semibold text-gray-800">{{ host.name }}</h6>
                                                     <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
                                                         {{ host.experience }}
                                                     </span>
@@ -480,7 +486,43 @@
     <script>
         const { createApp } = Vue;
 
-        createApp({
+        // Centralized mapping for SVG state IDs to internal state IDs
+        const stateMapping = {
+            'MXJAL': 'jalisco',
+            'MXNLE': 'nuevo-leon',
+            'MXMEX': 'estado-mexico',
+            'MXDIF': 'cdmx',
+            'MXSLP': 'san-luis-potosi',
+            'MXQUE': 'queretaro',
+            'MXSON': 'sonora',
+            'MXGUA': 'guanajuato',
+            'MXMOR': 'morelos',
+            'MXBCN': 'baja-california',
+            'MXBCS': 'baja-california-sur',
+            'MXCHH': 'chihuahua',
+            'MXCOA': 'coahuila',
+            'MXTAM': 'tamaulipas',
+            'MXROO': 'quintana-roo',
+            'MXCAM': 'campeche',
+            'MXTAB': 'tabasco',
+            'MXCHP': 'chiapas',
+            'MXCOL': 'colima',
+            'MXNAY': 'nayarit',
+            'MXSIN': 'sinaloa',
+            'MXYUC': 'yucatan',
+            'MXVER': 'veracruz',
+            'MXMIC': 'michoacan',
+            'MXGRO': 'guerrero',
+            'MXOAX': 'oaxaca',
+            'MXHID': 'hidalgo',
+            'MXPUE': 'puebla',
+            'MXTLA': 'tlaxcala',
+            'MXAGU': 'aguascalientes',
+            'MXDUR': 'durango',
+            'MXZAC': 'zacatecas'
+        };
+
+        const app = createApp({
             data() {
                 return {
                     selectedState: null,
@@ -489,7 +531,7 @@
                     searchQuery: '', // Para el campo de búsqueda
                     showDropdown: false, // Para mostrar/ocultar el dropdown
                     filteredStates: [], // Estados filtrados según la búsqueda
-                    map: null, // Instancia del mapa de Google Maps
+                    svgPaths: [], // SVG path data for each state
                     // All Mexican States - Complete list of 32 states
                     allStates: {
                         'aguascalientes': { name: 'Aguascalientes' },
@@ -814,6 +856,14 @@
                     }
                 }
             },
+            mounted() {
+                // Load SVG path data from mx.json
+                fetch('mx.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.svgPaths = data;
+                    });
+            },
             computed: {
                 selectedStateInfo() {
                     return this.selectedState ? this.discGolfStates[this.selectedState] : null;
@@ -882,98 +932,80 @@
                     this.hoveredState = null;
                 },
                 getStateClass(stateId) {
-                    const hasDiscGolf = this.discGolfStates[stateId];
+                    // Get the internal state ID
+                    const internalStateId = stateMapping[stateId] || stateId.toLowerCase();
+                    const hasDiscGolf = this.discGolfStates[internalStateId];
                     const isHovered = this.hoveredState === stateId;
-                    
-                    let classes = 'state-path ';
-                    
+                    let classes = 'state-path cursor-pointer transition-colors duration-300 ';
                     if (hasDiscGolf) {
                         classes += 'state-active ';
                     } else {
                         classes += 'state-inactive ';
                     }
-                    
                     if (isHovered) {
                         classes += 'state-hover ';
                     }
-                    
                     return classes;
                 },
-                initMap() {
-                    // Configuración del mapa centrado en México
-                    const mexicoCenter = { lat: 23.6345, lng: -102.5528 };
-                    
-                    // Crear el mapa
-                    this.map = new google.maps.Map(document.getElementById('map'), {
-                        zoom: 5,
-                        center: mexicoCenter,
-                        mapTypeId: 'roadmap',
-                        styles: [
-                            {
-                                featureType: 'administrative.country',
-                                elementType: 'geometry.stroke',
-                                stylers: [{ color: '#2d3748' }, { weight: 2 }]
-                            }
-                        ]
-                    });
-                    
-                    // Coordenadas aproximadas de los estados con disc golf
-                    const stateCoordinates = {
-                        'baja-california': { lat: 30.8406, lng: -115.2838 },
-                        'chihuahua': { lat: 28.6329, lng: -106.0691 },
-                        'nuevo-leon': { lat: 25.5922, lng: -99.9962 },
-                        'jalisco': { lat: 20.6767, lng: -103.3475 },
-                        'queretaro': { lat: 20.5888, lng: -100.3899 },
-                        'cdmx': { lat: 19.4326, lng: -99.1332 },
-                        'estado-mexico': { lat: 19.3554, lng: -99.6563 },
-                        'yucatan': { lat: 20.7099, lng: -89.0943 },
-                        'quintana-roo': { lat: 19.1817, lng: -87.4653 }
-                    };
-                    
-                    // Crear marcadores para los estados con disc golf
-                    Object.entries(this.discGolfStates).forEach(([stateId, stateData]) => {
-                        const coords = stateCoordinates[stateId];
-                        if (coords) {
-                            const marker = new google.maps.Marker({
-                                position: coords,
-                                map: this.map,
-                                title: this.allStates[stateId]?.name,
-                                icon: {
-                                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                                        <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="15" cy="15" r="12" fill="#10b981" stroke="#065f46" stroke-width="2"/>
-                                            <circle cx="15" cy="15" r="6" fill="#ffffff"/>
-                                            <text x="15" y="19" text-anchor="middle" fill="#065f46" font-size="8" font-weight="bold">DG</text>
-                                        </svg>
-                                    `),
-                                    scaledSize: new google.maps.Size(30, 30),
-                                    anchor: new google.maps.Point(15, 15)
-                                }
-                            });
-                            
-                            // Agregar evento click al marcador
-                            marker.addListener('click', () => {
-                                this.selectState(stateId);
-                            });
-                        }
-                    });
-                }
-            },
-            mounted() {
-                // Inicializar el mapa cuando el componente esté montado
-                const self = this;
-                window.initMap = function() {
-                    self.initMap();
-                };
-                
-                // Si Google Maps ya está cargado, inicializar inmediatamente
-                if (window.google && window.google.maps) {
-                    this.$nextTick(() => {
-                        this.initMap();
-                    });
-                }
+                handleStateClick(stateId) {
+                    // Use shared stateMapping
+                    const internalStateId = stateMapping[stateId];
+                    if (internalStateId) {
+                        this.selectState(internalStateId);
+                    }
+                },
+                handleStateMouseEnter(stateId) {
+                    this.hoveredState = stateId;
+                },
+                handleStateMouseLeave() {
+                    this.hoveredState = null;
+                },
             }
-        }).mount('#app');
+        });
+        
+        // Montar la aplicación Vue y hacer accesible globalmente
+        window.vueApp = app.mount('#app');
+    </script>
+
+    <!-- SVG Native Map Scripts -->
+    <script>
+        // Configuración para el mapa SVG nativo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar eventos de clic para los estados
+            const statePaths = document.querySelectorAll('.state-path');
+            
+            statePaths.forEach(path => {
+                path.addEventListener('click', function() {
+                    const stateId = this.id;
+                    const stateName = this.getAttribute('name');
+                    
+                    // // Mapear IDs del SVG a nuestros IDs internos
+                    // const stateMapping = {
+                    //     'MXQUE': 'queretaro',
+                    //     'MXHID': 'hidalgo', 
+                    //     'MXGUA': 'guanajuato',
+                    //     'MXSLP': 'san-luis-potosi',
+                    //     'MXCMX': 'cdmx',
+                    //     'MXMOR': 'morelos',
+                    //     'MXPUE': 'puebla',
+                    //     'MXAGU': 'aguascalientes',
+                    //     'MXTLA': 'tlaxcala'
+                    // };
+                    
+                    const mappedStateId = stateMapping[stateId];
+                    
+                    if (mappedStateId && window.vueApp) {
+                        window.vueApp.selectState(mappedStateId);
+                    }
+                });
+                
+                // Eventos de hover
+                path.addEventListener('mouseenter', function() {
+                    const stateName = this.getAttribute('name');
+                    this.setAttribute('title', stateName);
+                });
+            });
+        });
     </script>
 </body>
 </html>
