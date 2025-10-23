@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disc Golf México - Mapa Interactivo</title>
+    <title>Comunidad de Disc Golfers en México - Mapa Interactivo</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,17 +20,17 @@
             cursor: pointer;
         }
         .state-path:hover {
-            opacity: 0.8;
-            transform: scale(1.02);
+            opacity: 0.9;
+            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
         }
         .state-active {
             fill: #10b981;
         }
         .state-inactive {
-            fill: #d1d5db;
+            fill: #e5e7eb;
         }
         .state-hover {
-            stroke: #065f46;
+            stroke: #059669;
             stroke-width: 2;
         }
         .animate-fade-in {
@@ -59,240 +59,300 @@
                 transform: translateY(0);
             }
         }
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <div id="app">
         <!-- Header -->
-        <header class="bg-green-600 text-white shadow-lg">
-            <div class="container mx-auto px-4 py-6">
-                <h1 class="text-3xl font-bold text-center">Disc Golf México</h1>
-                <p class="text-center mt-2 text-green-100 text-lg">Conectando jugadores, eliminando barreras</p>
-                <div class="text-center mt-4 max-w-4xl mx-auto">
-                    <p class="text-green-50 text-sm leading-relaxed">
-                        <span class="font-semibold">🎯 Nuestra misión:</span> Promover el disc golf y eliminar las barreras para iniciar. 
-                        <span class="font-semibold">Sin costo, sin equipo necesario, sin importar tu nivel.</span> 
-                        Un deporte inclusivo para todas las edades en un ambiente amigable y divertido.
-                    </p>
+        <header class="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-40">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="flex items-center justify-center gap-2 mb-2">
+                            <span class="text-3xl">🥏</span>
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Comunidad DiscGolfers</h1>
+                        </div>
+                        <p class="text-sm text-gray-600">Encuentra anfitriones y parques en México</p>
+                    </div>
                 </div>
             </div>
         </header>
+        
+        <!-- Sección Hero - Bienvenida -->
+        <section class="bg-gradient-to-br from-green-50 to-blue-50 py-12 sm:py-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">¡Bienvenido!</h2>
+                        <p class="text-lg text-gray-700">Descubre por qué el disc golf es perfecto para ti</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md p-8 space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="flex gap-4">
+                                <span class="text-3xl flex-shrink-0">🎯</span>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 mb-1">Fácil de empezar</h3>
+                                    <p class="text-sm text-gray-600">Sin experiencia ni equipamiento necesario</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <span class="text-3xl flex-shrink-0">💰</span>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 mb-1">100% Gratis</h3>
+                                    <p class="text-sm text-gray-600">Discos y enseñanza incluida</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <span class="text-3xl flex-shrink-0">👥</span>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 mb-1">Para todos</h3>
+                                    <p class="text-sm text-gray-600">Todas las edades y niveles</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <span class="text-3xl flex-shrink-0">🏞️</span>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 mb-1">Naturaleza</h3>
+                                    <p class="text-sm text-gray-600">Al aire libre y saludable</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t pt-6">
+                            <p class="text-center text-gray-700 font-medium">
+                                � Selecciona un estado abajo para encontrar tu comunidad
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Main Content -->
-        <main class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <!-- Map Section -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Mapa de Estados</h2>
-                        
-                        <!-- State Search Dropdown -->
-                        <div class="mb-6 relative">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Buscar estado:
-                            </label>
-                            <div class="relative">
-                                <input
-                                    v-model="searchQuery"
-                                    @input="filterStates"
-                                    @focus="showDropdown = true"
-                                    @blur="hideDropdown"
-                                    type="text"
-                                    placeholder="Escribe el nombre del estado o selecciona en el mapa..."
-                                    class="w-full px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
-                                >
-                                <!-- Clear Button -->
-                                <button v-if="searchQuery" 
-                                        @click="clearSearch"
-                                        class="absolute right-10 top-2.5 w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors">
-                                    <svg fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                                <!-- Search Icon -->
-                                <svg class="absolute right-3 top-2.5 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            
-                            <!-- Dropdown List -->
-                            <div v-if="showDropdown && filteredStates.length > 0" 
-                                 class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto dropdown-enter">
-                                <div v-for="state in filteredStates" :key="state.id"
-                                     @mousedown="selectStateFromDropdown(state)"
-                                     class="px-4 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-gray-800">{{ state.name }}</span>
-                                        <div class="flex items-center">
-                                            <span v-if="discGolfStates[state.id]" class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                                {{ discGolfStates[state.id].parks.length }} parque(s)
-                                            </span>
-                                            <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
-                                                Sin info
-                                            </span>
+        <main class="bg-gray-50 py-12 sm:py-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Map Section -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="p-6 border-b border-gray-100">
+                                <h2 class="text-2xl font-bold text-gray-900 mb-4">Mapa de Estados</h2>
+                                
+                                <!-- State Search Dropdown -->
+                                <div class="relative">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                        Buscar estado:
+                                    </label>
+                                    <div class="relative">
+                                        <input
+                                            v-model="searchQuery"
+                                            @input="filterStates"
+                                            @focus="showDropdown = true"
+                                            @blur="hideDropdown"
+                                            type="text"
+                                            placeholder="Escribe el nombre del estado..."
+                                            class="w-full px-4 py-2.5 pr-20 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all"
+                                        >
+                                        <!-- Clear Button -->
+                                        <button v-if="searchQuery" 
+                                                @click="clearSearch"
+                                                class="absolute right-10 top-3 w-5 h-5 text-gray-400 hover:text-gray-600">
+                                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                        <!-- Search Icon -->
+                                        <svg class="absolute right-3 top-3 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    
+                                    <!-- Dropdown List -->
+                                    <div v-if="showDropdown && filteredStates.length > 0" 
+                                         class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                        <div v-for="state in filteredStates" :key="state.id"
+                                             @mousedown="selectStateFromDropdown(state)"
+                                             class="px-4 py-2.5 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-gray-800 font-medium">{{ state.name }}</span>
+                                                <div class="flex items-center">
+                                                    <span v-if="discGolfStates[state.id]" class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800 font-medium">
+                                                        {{ discGolfStates[state.id].parks.length }} parque(s)
+                                                    </span>
+                                                    <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                                                        Sin info
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <p class="text-gray-600 mb-6">Haz clic en los estados verdes para ver información sobre disc golf</p>
-                        
-                        <!-- Mexico SVG Map -->
-                        <div class="w-full">
-                            <svg id="mexico-map" viewBox="0 0 1000 630" class="w-full h-96 border border-gray-200 rounded" xmlns="http://www.w3.org/2000/svg">
-                                <template v-for="state in svgPaths">
-                                    <path
-                                        :id="state.id"
-                                        :d="state.d"
-                                        :name="state.name"
-                                        :class="getStateClass(state.id)"
-                                        @click="handleStateClick(state.id)"
-                                        @mouseenter="handleStateMouseEnter(state.id)"
-                                        @mouseleave="handleStateMouseLeave"
-                                        
-                                    />
-                                </template>
-                            </svg>
-                        </div>
-                        
-                        <!-- Legend -->
-                        <div class="mt-6 flex flex-wrap gap-4 text-sm">
-                            <div class="flex items-center">
-                                <div class="w-4 h-4 bg-green-500 rounded mr-2"></div>
-                                <span>Estados con parques y anfitriones</span>
+                            
+                            <!-- Mexico SVG Map -->
+                            <div class="p-6">
+                                <svg id="mexico-map" viewBox="0 0 1000 630" class="w-full h-96 border border-gray-200 rounded-lg" xmlns="http://www.w3.org/2000/svg">
+                                    <template v-for="state in svgPaths">
+                                        <path
+                                            :id="state.id"
+                                            :d="state.d"
+                                            :name="state.name"
+                                            :title="state.name"
+                                            :class="getStateClass(state.id)"
+                                            @click="handleStateClick(state.id)"
+                                            @mouseenter="handleStateMouseEnter(state.id)"
+                                            @mouseleave="handleStateMouseLeave"
+                                        />
+                                    </template>
+                                </svg>
                             </div>
-                            <div class="flex items-center">
-                                <div class="w-4 h-4 bg-gray-300 rounded mr-2"></div>
-                                <span>Sin anfitriones registrados</span>
+                            
+                            <!-- Legend -->
+                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+                                <h3 class="text-sm font-semibold text-gray-900 mb-3">Leyenda</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-green-500 rounded mr-2"></div>
+                                        <span class="text-sm text-gray-700">Con parques y anfitriones</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-gray-300 rounded mr-2"></div>
+                                        <span class="text-sm text-gray-700">Sin anfitriones registrados</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Details Panel -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Información del Estado</h3>
-                        
-                        <!-- Default State -->
-                        <div v-if="!selectedState" class="text-center">
-                            <div class="mb-6">
-                                <div class="text-6xl mb-4">🥏</div>
-                                <h4 class="text-xl font-bold text-green-600 mb-3">¡Bienvenido a Disc Golf México!</h4>
+                    <!-- Details Panel -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                            <div class="p-6 border-b border-gray-100">
+                                <h3 class="text-lg font-bold text-gray-900">Información</h3>
                             </div>
                             
-                            <div class="text-left space-y-4 bg-green-50 p-4 rounded-lg">
-                                <h5 class="font-semibold text-green-700 text-center mb-3">¿Por qué disc golf?</h5>
-                                
-                                <div class="space-y-3 text-sm text-gray-700">
+                            <div class="overflow-y-auto max-h-96">
+                        <!-- Default State -->
+                        <div v-if="!selectedState" class="space-y-6 p-6">
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">🗺️</div>
+                                <h4 class="text-lg font-bold text-gray-900 mb-2">Explora el Mapa</h4>
+                                <p class="text-sm text-gray-600">Selecciona un estado verde para descubrir parques y anfitriones cerca de ti</p>
+                            </div>
+                            
+                            <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                                <h5 class="font-semibold text-green-900 mb-3 flex items-center">
+                                    <span class="text-lg mr-2">✨</span> Qué encontrarás
+                                </h5>
+                                <div class="space-y-2 text-sm text-green-900">
                                     <div class="flex items-start">
-                                        <span class="text-green-500 mr-2">🎯</span>
-                                        <span><strong>Fácil de empezar:</strong> No necesitas experiencia previa ni ser deportista</span>
+                                        <span class="mr-2">🏌️</span>
+                                        <span>Parques de disc golf locales</span>
                                     </div>
-                                    
                                     <div class="flex items-start">
-                                        <span class="text-green-500 mr-2">💰</span>
-                                        <span><strong>Sin costo:</strong> Los anfitriones te prestan discos y te enseñan gratis</span>
+                                        <span class="mr-2">👥</span>
+                                        <span>Anfitriones que enseñan gratis</span>
                                     </div>
-                                    
                                     <div class="flex items-start">
-                                        <span class="text-green-500 mr-2">👥</span>
-                                        <span><strong>Para todos:</strong> Inclusivo para todas las edades y niveles</span>
+                                        <span class="mr-2">⏰</span>
+                                        <span>Horarios y disponibilidad</span>
                                     </div>
-                                    
                                     <div class="flex items-start">
-                                        <span class="text-green-500 mr-2">🌟</span>
-                                        <span><strong>Ambiente amigable:</strong> Comunidad súper acogedora y divertida</span>
-                                    </div>
-                                    
-                                    <div class="flex items-start">
-                                        <span class="text-green-500 mr-2">🏞️</span>
-                                        <span><strong>En la naturaleza:</strong> Disfruta parques y espacios al aire libre</span>
+                                        <span class="mr-2">📞</span>
+                                        <span>Información de contacto</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="mt-6 p-3 bg-blue-50 rounded-lg">
-                                <p class="text-sm text-blue-800">
-                                    <strong>👈 Selecciona un estado en el mapa</strong> para encontrar parques y anfitriones cerca de ti
+                            <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                <h5 class="font-semibold text-blue-900 mb-2 flex items-center">
+                                    <span class="text-lg mr-2">💡</span> Consejo
+                                </h5>
+                                <p class="text-sm text-blue-900">
+                                    También puedes buscar el estado usando el cuadro de búsqueda arriba
                                 </p>
                             </div>
                         </div>
-                        
-                        <!-- Selected State Info -->
-                        <div v-if="selectedState && selectedStateInfo">
-                            <h4 class="text-lg font-bold text-green-600 mb-3">{{ selectedStateInfo.name }}</h4>
+                            </div>
                             
-                            <!-- Parks Count -->
-                            <div class="mb-4 p-3 bg-green-50 rounded-lg">
-                                <div class="flex items-center">
-                                    <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <!-- Selected State Info -->
+                        <div v-if="selectedState && selectedStateInfo" class="space-y-4 p-6">
+                            <div class="border-b pb-3">
+                                <h4 class="text-xl font-bold text-gray-900">{{ selectedStateInfo.name }}</h4>
+                                <div class="flex items-center mt-2">
+                                    <svg class="w-4 h-4 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                     </svg>
-                                    <span class="font-semibold">{{ selectedStateInfo.parks.length }} parque(s) de disc golf</span>
+                                    <span class="text-sm font-medium text-gray-700">{{ selectedStateInfo.parks.length }} parque(s)</span>
                                 </div>
                             </div>
                             
                             <!-- Parks List -->
-                            <div class="space-y-4">
-                                <h5 class="font-semibold text-gray-700">Parques disponibles:</h5>
+                            <div class="space-y-3">
                                 <div v-for="park in selectedStateInfo.parks" :key="park.name" 
-                                     class="border border-gray-200 rounded-lg p-4">
+                                     class="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow">
                                     <!-- Park Info -->
-                                    <div class="mb-3">
+                                    <div>
                                         <div class="flex items-start justify-between mb-2">
-                                            <h6 class="font-semibold text-gray-800 text-lg">{{ park.name }}</h6>
-                                            <div v-if="park.rating" class="flex items-center bg-yellow-100 px-2 py-1 rounded">
-                                                <svg class="w-3 h-3 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                                </svg>
-                                                <span class="text-xs font-semibold text-yellow-800">{{ park.rating }}</span>
+                                            <h5 class="font-semibold text-gray-900 text-sm">{{ park.name }}</h5>
+                                            <div v-if="park.rating" class="flex items-center bg-yellow-100 px-2 py-1 rounded text-xs">
+                                                <span class="text-yellow-600 mr-1">★</span>
+                                                <span class="font-semibold text-yellow-800">{{ park.rating }}</span>
                                             </div>
                                         </div>
                                         
-                                        <p class="text-sm text-gray-600 mb-1">📍 {{ park.location }}</p>
-                                        <p class="text-sm text-gray-500 mb-2">{{ park.description }}</p>
+                                        <p class="text-xs text-gray-600 mb-1">📍 {{ park.location }}</p>
+                                        <p class="text-xs text-gray-500 mb-2 line-clamp-2">{{ park.description }}</p>
                                         
-                                        <div class="flex flex-wrap gap-2 mb-2">
-                                            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                        <div class="flex flex-wrap gap-1 mb-2">
+                                            <span class="inline-block px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">
                                                 {{ park.type }}
                                             </span>
-                                            <span v-if="park.difficulty" class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+                                            <span v-if="park.difficulty" class="inline-block px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">
                                                 {{ park.difficulty }}
                                             </span>
                                         </div>
                                     </div>
                                     
                                     <!-- Hosts Section -->
-                                    <div class="mt-3 pt-3 border-t border-gray-100">
+                                    <div class="mt-2 pt-2 border-t border-gray-100">
                                         <!-- Hosts Header - Always Visible -->
-                                        <div 
+                                        <button
                                             @click="toggleHosts(park.name)" 
-                                            class="cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                                            class="w-full cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors text-left">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center">
-                                                    <svg class="w-4 h-4 mr-2 text-green-700" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                                                    </svg>
-                                                    <span class="font-semibold text-green-700 text-sm">
-                                                        Ver anfitriones ({{ park.hosts.length }})
+                                                    <span class="text-lg mr-2">👥</span>
+                                                    <span class="font-semibold text-gray-900 text-sm">
+                                                        Anfitriones ({{ park.hosts.length }})
                                                     </span>
                                                 </div>
                                                 <!-- Expand/Collapse Icon -->
                                                 <svg 
                                                     :class="{ 'rotate-180': isHostsExpanded(park.name) }"
-                                                    class="w-4 h-4 text-green-600 transition-transform duration-200" 
+                                                    class="w-4 h-4 text-gray-600 transition-transform duration-200" 
                                                     fill="currentColor" 
                                                     viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                 </svg>
                                             </div>
-                                        </div>
+                                        </button>
                                         
                                         <!-- Hosts List - Expandible -->
                                         <div v-show="isHostsExpanded(park.name)" class="mt-3 space-y-2 animate-fade-in">
@@ -333,149 +393,83 @@
                         </div>
                         
                         <!-- No Disc Golf State -->
-                        <div v-if="selectedState && !selectedStateInfo" class="text-center text-gray-500">
-                            <div class="mb-4">
-                                <svg class="mx-auto w-16 h-16 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <h4 class="text-lg font-bold text-gray-600 mb-2">{{ selectedStateName }}</h4>
-                            <div class="mb-4 p-3 bg-gray-50 rounded-lg">
-                                <div class="flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span class="font-semibold text-gray-600">Sin información de disc golf</span>
-                                </div>
-                            </div>
-                            <div class="mb-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                                <div class="flex items-center justify-center mb-2">
-                                    <svg class="w-5 h-5 text-yellow-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span class="font-semibold text-yellow-800">¡Oportunidad de crecimiento!</span>
-                                </div>
-                                <p class="text-sm text-yellow-800">Aún no tenemos anfitriones registrados en este estado</p>
+                        <div v-else-if="selectedState && !selectedStateInfo" class="space-y-4 p-6">
+                            <div class="text-center mb-4">
+                                <div class="text-5xl mb-2">🚀</div>
+                                <h4 class="font-bold text-gray-900">{{ selectedStateName }}</h4>
+                                <p class="text-xs text-gray-600 mt-1">Aún sin comunidad registrada</p>
                             </div>
                             
-                            <div class="text-left space-y-3 bg-blue-50 p-4 rounded-lg">
-                                <h5 class="font-semibold text-blue-700 text-center mb-3">¡Sé el primero en {{ selectedStateName }}!</h5>
-                                
-                                <div class="space-y-2 text-sm text-blue-800">
-                                    <div class="flex items-start">
-                                        <span class="text-blue-500 mr-2">🚀</span>
-                                        <span><strong>Inicia la comunidad:</strong> Sé el pionero del disc golf en tu estado</span>
-                                    </div>
-                                    
-                                    <div class="flex items-start">
-                                        <span class="text-blue-500 mr-2">🎯</span>
-                                        <span><strong>Solo necesitas:</strong> Ganas de compartir y hacer amigos</span>
-                                    </div>
-                                    
-                                    <div class="flex items-start">
-                                        <span class="text-blue-500 mr-2">💪</span>
-                                        <span><strong>Apoyo total:</strong> Te ayudamos a conseguir discos y organizar</span>
-                                    </div>
-                                    
-                                    <div class="flex items-start">
-                                        <span class="text-blue-500 mr-2">🌟</span>
-                                        <span><strong>Impacto real:</strong> Crea espacios inclusivos para tu comunidad</span>
-                                    </div>
-                                </div>
+                            <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                <p class="text-sm text-blue-900">
+                                    <strong>💡 Oportunidad:</strong> Este estado aún no tiene anfitriones registrados
+                                </p>
                             </div>
                             
-                            <div class="mt-4 p-3 bg-green-50 rounded-lg">
-                                <p class="text-sm text-green-800">
-                                    <strong>✉️ ¿Te interesa ser anfitrión?</strong><br>
-                                    Contáctanos para agregar tu estado y ser parte de esta red inclusiva
+                            <div class="bg-green-50 rounded-lg p-3 border border-green-200">
+                                <h5 class="font-semibold text-green-900 text-sm mb-2">¿Quieres iniciar la comunidad?</h5>
+                                <p class="text-xs text-green-900">
+                                    Sé el primero en traer disc golf a {{ selectedStateName }}. Contáctanos para detalles.
                                 </p>
                             </div>
                         </div>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                 </div>
             </div>
         </main>
 
         <!-- Footer -->
-        <footer class="bg-gray-800 text-white py-12 mt-12">
-            <div class="container mx-auto px-4">
+        <footer class="bg-gray-900 text-white py-12 mt-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Main Footer Content -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
                     <!-- About Section -->
                     <div>
-                        <h3 class="text-xl font-bold mb-4 text-green-400">Disc Golf México</h3>
-                        <p class="text-gray-300 text-sm leading-relaxed">
+                        <h3 class="text-lg font-bold mb-4 text-white">Comunidad DiscGolfers</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
                             Conectamos personas a través del disc golf, eliminando barreras y creando 
-                            comunidades inclusivas en todo México. Un deporte para todos, sin importar 
-                            edad, experiencia o nivel socioeconómico.
+                            comunidades inclusivas en todo México.
                         </p>
                     </div>
                     
-                    <!-- Benefits Section -->
+                    <!-- Quick Links -->
                     <div>
-                        <h4 class="text-lg font-semibold mb-4 text-green-400">¿Por qué Disc Golf?</h4>
-                        <ul class="space-y-2 text-gray-300 text-sm">
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-2">•</span>
-                                <span>Deporte inclusivo y accesible</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-2">•</span>
-                                <span>Ejercicio al aire libre y naturaleza</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-2">•</span>
-                                <span>Comunidad acogedora y amigable</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-2">•</span>
-                                <span>Bajo costo de entrada</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-green-400 mr-2">•</span>
-                                <span>Beneficios físicos y mentales</span>
-                            </li>
+                        <h4 class="text-lg font-semibold mb-4 text-white">Información</h4>
+                        <ul class="space-y-2 text-gray-400 text-sm">
+                            <li class="hover:text-green-400 transition-colors cursor-pointer">Cómo jugar</li>
+                            <li class="hover:text-green-400 transition-colors cursor-pointer">Encuentra un parque</li>
+                            <li class="hover:text-green-400 transition-colors cursor-pointer">Sé anfitrión</li>
+                            <li class="hover:text-green-400 transition-colors cursor-pointer">Contacto</li>
                         </ul>
                     </div>
                     
                     <!-- Mission Section -->
                     <div>
-                        <h4 class="text-lg font-semibold mb-4 text-green-400">Nuestra Misión</h4>
-                        <div class="space-y-3 text-gray-300 text-sm">
-                            <p>
-                                <span class="font-semibold text-white">Eliminar barreras:</span> 
-                                Que nadie se quede fuera por falta de equipo o conocimiento
-                            </p>
-                            <p>
-                                <span class="font-semibold text-white">Crear comunidad:</span> 
-                                Conectar personas que comparten la pasión por el deporte
-                            </p>
-                            <p>
-                                <span class="font-semibold text-white">Promover inclusión:</span> 
-                                Un espacio seguro y welcoming para todas las personas
-                            </p>
-                        </div>
+                        <h4 class="text-lg font-semibold mb-4 text-white">Nuestra Misión</h4>
+                        <p class="text-gray-400 text-sm">
+                            Un deporte inclusivo para todos, sin importar edad, experiencia o nivel socioeconómico.
+                        </p>
                     </div>
                 </div>
                 
                 <!-- Call to Action -->
-                <div class="border-t border-gray-700 pt-6 mb-6">
-                    <div class="text-center bg-green-900 bg-opacity-50 p-4 rounded-lg">
-                        <h4 class="text-lg font-bold text-green-300 mb-2">¡Únete a la Comunidad!</h4>
-                        <p class="text-gray-300 text-sm mb-3">
-                            No importa si nunca has jugado disc golf. Nuestros anfitriones te enseñarán, 
-                            te prestarán discos y te darán la bienvenida con una sonrisa.
-                        </p>
-                        <p class="text-green-200 font-semibold text-sm">
-                            🎯 El disc golf te está esperando - ¡Solo da el primer paso!
+                <div class="border-t border-gray-800 pt-8 mb-8">
+                    <div class="text-center">
+                        <h4 class="text-lg font-bold text-white mb-2">¡Únete a la Comunidad!</h4>
+                        <p class="text-gray-400 text-sm">
+                            No importa si nunca has jugado. Nuestros anfitriones te enseñarán, te prestarán discos y te darán la bienvenida.
                         </p>
                     </div>
                 </div>
                 
                 <!-- Copyright -->
-                <div class="text-center border-t border-gray-700 pt-6">
-                    <p class="text-gray-400 text-sm">
-                        &copy; 2025 Disc Golf México. Promoviendo el disc golf inclusivo en todo México. 
+                <div class="text-center border-t border-gray-800 pt-8">
+                    <p class="text-gray-500 text-sm">
+                        &copy; 2025 Comunidad de Disc Golfers en México. 
                         <span class="text-green-400">Hecho con ❤️ para la comunidad</span>
                     </p>
                 </div>
