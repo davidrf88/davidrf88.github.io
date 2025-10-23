@@ -18,6 +18,8 @@
         .state-path {
             transition: all 0.3s ease;
             cursor: pointer;
+            stroke: #9ca3af;
+            stroke-width: 1.5;
         }
         .state-path:hover {
             opacity: 0.9;
@@ -25,13 +27,17 @@
         }
         .state-active {
             fill: #10b981;
+            stroke: #059669;
+            stroke-width: 2;
         }
         .state-inactive {
             fill: #e5e7eb;
+            stroke: #9ca3af;
+            stroke-width: 1.5;
         }
         .state-hover {
             stroke: #059669;
-            stroke-width: 2;
+            stroke-width: 2.5;
         }
         .animate-fade-in {
             animation: fadeIn 0.3s ease-in-out;
@@ -233,8 +239,36 @@
                             </div>
                             
                             <!-- Mexico SVG Map -->
-                            <div class="p-6">
-                                <svg id="mexico-map" viewBox="0 0 1000 630" class="w-full h-96 border border-gray-200 rounded-lg" xmlns="http://www.w3.org/2000/svg">
+                            <div class="p-6 relative overflow-hidden">
+                                <!-- Zoom Controls -->
+                                <div class="absolute top-8 right-8 flex flex-col gap-2 z-10">
+                                    <button @click="zoomIn"
+                                            class="bg-white border border-gray-300 rounded-lg p-2 hover:bg-gray-50 shadow-md transition-colors"
+                                            title="Zoom in">
+                                        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                    </button>
+                                    <button @click="zoomOut"
+                                            class="bg-white border border-gray-300 rounded-lg p-2 hover:bg-gray-50 shadow-md transition-colors"
+                                            title="Zoom out">
+                                        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                        </svg>
+                                    </button>
+                                    <button @click="resetZoom"
+                                            class="bg-white border border-gray-300 rounded-lg p-2 hover:bg-gray-50 shadow-md transition-colors text-xs font-semibold"
+                                            title="Reset zoom">
+                                        Restablecer
+                                    </button>
+                                </div>
+                                
+                                <svg id="mexico-map" viewBox="0 0 1000 630" class="w-full h-96 border border-gray-200 rounded-lg overflow-hidden cursor-grab active:cursor-grabbing" xmlns="http://www.w3.org/2000/svg"
+                                     :style="{ transform: `scale(${mapZoom}) translate(${mapPanX}px, ${mapPanY}px)`, transformOrigin: 'top center', transition: isDraggingMap ? 'none' : 'transform 0.3s ease' }"
+                                     @mousedown="startMapDrag"
+                                     @mousemove="dragMap"
+                                     @mouseup="endMapDrag"
+                                     @mouseleave="endMapDrag">
                                     <template v-for="state in svgPaths">
                                         <path
                                             :id="state.id"
@@ -247,7 +281,32 @@
                                             @mouseleave="handleStateMouseLeave"
                                         />
                                     </template>
+                                    
+                                    <!-- Hit area for CDMX (larger clickable zone) -->
+                                    <circle 
+                                        cx="540" 
+                                        cy="350" 
+                                        r="25" 
+                                        fill="transparent" 
+                                        stroke="none" 
+                                        style="cursor: pointer; pointer-events: all;"
+                                        @click="handleStateClick('MXCMX')"
+                                        @mouseenter="handleStateMouseEnter('MXCMX')"
+                                        @mouseleave="handleStateMouseLeave"
+                                        title="Ciudad de México">
+                                    </circle>
                                 </svg>
+                                
+                                <!-- Tooltip -->
+                                <div v-if="selectedState && selectedStateName && showTooltip" 
+                                     class="fixed bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-semibold whitespace-nowrap z-50 pointer-events-none"
+                                     :style="{ 
+                                        top: hoveredState ? '50%' : 'auto',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)'
+                                     }">
+                                    {{ selectedStateName }}
+                                </div>
                             </div>
                             
                             <!-- Legend -->
@@ -574,7 +633,7 @@
             'MXJAL': 'jalisco',
             'MXNLE': 'nuevo-leon',
             'MXMEX': 'estado-mexico',
-            'MXDIF': 'cdmx',
+            'MXCMX': 'cdmx',
             'MXSLP': 'san-luis-potosi',
             'MXQUE': 'queretaro',
             'MXSON': 'sonora',
@@ -610,6 +669,13 @@
                 return {
                     selectedState: null,
                     hoveredState: null,
+                    showTooltip: true, // Controlar visibilidad del tooltip
+                    mapZoom: 1, // Control de zoom del mapa
+                    mapPanX: 0, // Desplazamiento X del mapa
+                    mapPanY: 0, // Desplazamiento Y del mapa
+                    isDraggingMap: false, // Para detectar si está arrastrando el mapa
+                    mapDragStartX: 0, // Posición X inicial del arrastre
+                    mapDragStartY: 0, // Posición Y inicial del arrastre
                     isCarouselHovered: false, // Para pausar el carrusel
                     carouselIndex: 0, // Índice actual del carrusel (0 es primera tanda, 1 es segunda)
                     carouselInterval: null, // Intervalo del cambio automático
@@ -1050,6 +1116,11 @@
                     this.isMobile = window.innerWidth < 768;
                     this.updateItemsPerPage();
                 });
+                
+                // Ocultar tooltip al hacer scroll
+                window.addEventListener('scroll', () => {
+                    this.showTooltip = false;
+                });
             },
             computed: {
                 selectedStateInfo() {
@@ -1105,6 +1176,7 @@
                 selectStateFromDropdown(state) {
                     this.selectState(state.id);
                     this.showDropdown = false;
+                    this.showTooltip = true; // Mostrar tooltip al seleccionar desde dropdown
                 },
                 filterStates() {
                     if (!this.searchQuery.trim()) {
@@ -1174,6 +1246,7 @@
                     const internalStateId = stateMapping[stateId];
                     if (internalStateId) {
                         this.selectState(internalStateId);
+                        this.showTooltip = true; // Mostrar tooltip al seleccionar estado
                     }
                 },
                 handleStateMouseEnter(stateId) {
@@ -1189,6 +1262,42 @@
                 previousHost() {
                     const maxIndex = Math.ceil(this.featuredHosts.length / this.itemsPerPage) - 1;
                     this.carouselIndex = (this.carouselIndex - 1 + maxIndex + 1) % (maxIndex + 1);
+                },
+                zoomIn() {
+                    if (this.mapZoom < 3) {
+                        this.mapZoom += 0.5;
+                    }
+                },
+                zoomOut() {
+                    if (this.mapZoom > 1) {
+                        this.mapZoom -= 0.5;
+                    }
+                },
+                resetZoom() {
+                    this.mapZoom = 1;
+                    this.mapPanX = 0;
+                    this.mapPanY = 0;
+                },
+                startMapDrag(e) {
+                    if (this.mapZoom > 1) {
+                        this.isDraggingMap = true;
+                        this.mapDragStartX = e.clientX - this.mapPanX;
+                        this.mapDragStartY = e.clientY - this.mapPanY;
+                        e.preventDefault();
+                    }
+                },
+                dragMap(e) {
+                    if (!this.isDraggingMap || this.mapZoom <= 1) return;
+                    
+                    const newPanX = e.clientX - this.mapDragStartX;
+                    const newPanY = e.clientY - this.mapDragStartY;
+                    
+                    // Sin limites de pan - puedes desplazarte libremente
+                    this.mapPanX = newPanX;
+                    this.mapPanY = newPanY;
+                },
+                endMapDrag() {
+                    this.isDraggingMap = false;
                 },
                 updateItemsPerPage() {
                     if (window.innerWidth < 640) {
