@@ -121,46 +121,43 @@
         <section class="bg-gradient-to-br from-green-50 to-blue-50 py-12 sm:py-16">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">¡Bienvenido!</h2>
-                        <p class="text-lg text-gray-700">Descubre por qué el disc golf es perfecto para ti</p>
-                    </div>
+
                     
-                    <div class="bg-white rounded-xl shadow-md p-8 space-y-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-md p-6 space-y-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                             <div class="flex gap-4">
-                                <span class="text-3xl flex-shrink-0">🎯</span>
+                                <span class="text-2xl">🎯</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-1">Fácil de empezar</h3>
-                                    <p class="text-sm text-gray-600">Sin experiencia ni equipamiento necesario</p>
+                                    <h3 class="font-semibold text-gray-900 text-sm mb-1">Fácil empezar</h3>
+                                    <p class="text-xs text-gray-600">Sin experiencia</p>
                                 </div>
                             </div>
                             <div class="flex gap-4">
-                                <span class="text-3xl flex-shrink-0">💰</span>
+                                <span class="text-2xl">💰</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-1">100% Gratis</h3>
-                                    <p class="text-sm text-gray-600">Discos y enseñanza incluida</p>
+                                    <h3 class="font-semibold text-gray-900 text-sm mb-1">100% Gratis</h3>
+                                    <p class="text-xs text-gray-600">Todo incluido</p>
                                 </div>
                             </div>
                             <div class="flex gap-4">
-                                <span class="text-3xl flex-shrink-0">👥</span>
+                                <span class="text-2xl">👥</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-1">Para todos</h3>
-                                    <p class="text-sm text-gray-600">Todas las edades y niveles</p>
+                                    <h3 class="font-semibold text-gray-900 text-sm mb-1">Para todos</h3>
+                                    <p class="text-xs text-gray-600">Todos niveles</p>
                                 </div>
                             </div>
                             <div class="flex gap-4">
-                                <span class="text-3xl flex-shrink-0">🏞️</span>
+                                <span class="text-2xl">🏞️</span>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 mb-1">Naturaleza</h3>
-                                    <p class="text-sm text-gray-600">Al aire libre y saludable</p>
+                                    <h3 class="font-semibold text-gray-900 text-sm mb-1">Naturaleza</h3>
+                                    <p class="text-xs text-gray-600">Al aire libre</p>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="border-t pt-6">
+                        <div class="border-t pt-4">
                             <p class="text-center text-gray-700 font-medium">
-                                � Selecciona un estado abajo para encontrar tu comunidad
+                                Selecciona un estado abajo para encontrar tu comunidad
                             </p>
                         </div>
                     </div>
@@ -173,150 +170,7 @@
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <!-- Anfitriones Destacados - Tira Horizontal -->
-                <section class="mb-16">
-                    <div class="mb-6">
-                        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Anfitriones Destacados</h2>
-                        <p class="text-gray-600">Conoce a nuestros anfitriones apasionados que enseñan disc golf en toda México</p>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <div class="relative h-80 bg-gradient-to-r from-white via-gray-50 to-white overflow-hidden cursor-grab active:cursor-grabbing"
-                             @mouseenter="isCarouselHovered = true"
-                             @mouseleave="isCarouselHovered = false"
-                             @mousedown="carouselMouseDown"
-                             @mousemove="carouselMouseMove"
-                             @mouseup="carouselMouseUp"
-                             @touchstart="carouselMouseDown"
-                             @touchmove="carouselMouseMove"
-                             @touchend="carouselMouseUp">
-                            <!-- Contenedor de desplazamiento -->
-                            <div class="flex gap-4 md:gap-6 p-6 h-full hosts-scroll" 
-                                 :style="{ transform: carouselTransform }"
-                                 style="width: 400%;">
-                                <!-- Hosts - Primera tanda -->
-                                <div v-for="(host, index) in featuredHosts" :key="'first-' + index" :class="['flex-shrink-0', isMobile ? 'w-48' : 'w-64']">
-                                    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-                                        <!-- Host Photo - Circular -->
-                                        <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
-                                            <img :src="host.image" :alt="host.name" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
-                                        </div>
-                                        
-                                        <!-- Host Info -->
-                                        <div class="flex-1 p-4 flex flex-col">
-                                            <h3 class="text-lg font-bold text-gray-900">{{ host.name }}</h3>
-                                            <p class="text-xs text-green-600 font-medium">{{ host.experience }}</p>
-                                            
-                                            <div class="mt-2 text-xs text-gray-600">
-                                                <p>📍 {{ host.state }}</p>
-                                                <p>🎯 {{ host.park }}</p>
-                                            </div>
-                                            
-                                            <p class="text-sm text-gray-700 mt-auto mb-3 line-clamp-2">{{ host.bio }}</p>
-                                            
-                                            <a :href="'mailto:' + host.contact" class="w-full px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors font-medium text-center">
-                                                Contactar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Hosts - Segunda tanda (duplicado para loop continuo) -->
-                                <div v-for="(host, index) in featuredHosts" :key="'second-' + index" :class="['flex-shrink-0', isMobile ? 'w-48' : 'w-64']">
-                                    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-                                        <!-- Host Photo - Circular -->
-                                        <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
-                                            <img :src="host.image" :alt="host.name" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
-                                        </div>
-                                        
-                                        <!-- Host Info -->
-                                        <div class="flex-1 p-4 flex flex-col">
-                                            <h3 class="text-lg font-bold text-gray-900">{{ host.name }}</h3>
-                                            <p class="text-xs text-green-600 font-medium">{{ host.experience }}</p>
-                                            
-                                            <div class="mt-2 text-xs text-gray-600">
-                                                <p>📍 {{ host.state }}</p>
-                                                <p>🎯 {{ host.park }}</p>
-                                            </div>
-                                            
-                                            <p class="text-sm text-gray-700 mt-auto mb-3 line-clamp-2">{{ host.bio }}</p>
-                                            
-                                            <a :href="'mailto:' + host.contact" class="w-full px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors font-medium text-center">
-                                                Contactar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Hosts - Tercera tanda -->
-                                <div v-for="(host, index) in featuredHosts" :key="'third-' + index" :class="['flex-shrink-0', isMobile ? 'w-48' : 'w-64']">
-                                    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-                                        <!-- Host Photo - Circular -->
-                                        <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
-                                            <img :src="host.image" :alt="host.name" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
-                                        </div>
-                                        
-                                        <!-- Host Info -->
-                                        <div class="flex-1 p-4 flex flex-col">
-                                            <h3 class="text-lg font-bold text-gray-900">{{ host.name }}</h3>
-                                            <p class="text-xs text-green-600 font-medium">{{ host.experience }}</p>
-                                            
-                                            <div class="mt-2 text-xs text-gray-600">
-                                                <p>📍 {{ host.state }}</p>
-                                                <p>🎯 {{ host.park }}</p>
-                                            </div>
-                                            
-                                            <p class="text-sm text-gray-700 mt-auto mb-3 line-clamp-2">{{ host.bio }}</p>
-                                            
-                                            <a :href="'mailto:' + host.contact" class="w-full px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors font-medium text-center">
-                                                Contactar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Hosts - Cuarta tanda -->
-                                <div v-for="(host, index) in featuredHosts" :key="'fourth-' + index" :class="['flex-shrink-0', isMobile ? 'w-48' : 'w-64']">
-                                    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-                                        <!-- Host Photo - Circular -->
-                                        <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
-                                            <img :src="host.image" :alt="host.name" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
-                                        </div>
-                                        
-                                        <!-- Host Info -->
-                                        <div class="flex-1 p-4 flex flex-col">
-                                            <h3 class="text-lg font-bold text-gray-900">{{ host.name }}</h3>
-                                            <p class="text-xs text-green-600 font-medium">{{ host.experience }}</p>
-                                            
-                                            <div class="mt-2 text-xs text-gray-600">
-                                                <p>📍 {{ host.state }}</p>
-                                                <p>🎯 {{ host.park }}</p>
-                                            </div>
-                                            
-                                            <p class="text-sm text-gray-700 mt-auto mb-3 line-clamp-2">{{ host.bio }}</p>
-                                            
-                                            <a :href="'mailto:' + host.contact" class="w-full px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors font-medium text-center">
-                                                Contactar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Gradient Overlays -->
-                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
-                            
-                            <!-- Carousel Indicators (Dots) -->
-                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                                <button v-for="(dot, index) in 4" :key="index"
-                                        @click="carouselIndex = index"
-                                        :class="['w-3 h-3 rounded-full transition-all duration-300',
-                                                 index === carouselIndex ? 'bg-green-600 w-8' : 'bg-gray-400 hover:bg-gray-500']">
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
                 
                 <!-- Grid Principal -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -420,7 +274,7 @@
                                 <h3 class="text-lg font-bold text-gray-900">Información</h3>
                             </div>
                             
-                            <div class="overflow-y-auto max-h-96">
+                            <div class="overflow-y-auto max-h-[calc(100vh-200px)]">
                         <!-- Default State -->
                         <div v-if="!selectedState" class="space-y-6 p-6">
                             <div class="text-center">
@@ -592,6 +446,68 @@
                         
                     </div>
                 </div>
+
+                <!-- Anfitriones Destacados Section -->
+                <section class="mt-12 pt-12 border-t border-gray-200">
+                    <!-- Section Header -->
+                    <div class="max-w-3xl mx-auto mb-8">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Anfitriones Destacados</h2>
+                        <p class="text-base text-gray-600">Conoce a los apasionados instructores que enseñan disc golf en México</p>
+                    </div>
+
+                    <!-- Carousel -->
+                    <div class="relative px-6 sm:px-8">
+                        <!-- Carousel Container -->
+                        <div class="overflow-hidden">
+                            <div class="flex transition-transform duration-500 ease-out"
+                                 :style="{ transform: `translateX(-${carouselIndex * (100 / itemsPerPage)}%)` }">
+                                <!-- Carousel Items -->
+                                <div v-for="host in featuredHosts" :key="host.id"
+                                     :style="{ width: `${100 / itemsPerPage}%` }"
+                                     class="flex-shrink-0 px-1.5 sm:px-2 lg:px-3">
+                                    <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full">
+                                        <!-- Profile Image -->
+                                        <div class="w-full h-32 sm:h-40 bg-gray-200 overflow-hidden flex items-center justify-center">
+                                            <img :src="host.image" :alt="host.name" class="w-full h-full object-cover">
+                                        </div>
+                                        
+                                        <!-- Host Info -->
+                                        <div class="p-3 sm:p-4">
+                                            <h3 class="text-base font-bold text-gray-900 mb-1">{{ host.name }}</h3>
+                                            <p class="text-xs text-green-600 font-medium mb-2">📍 {{ host.state }}</p>
+                                            <p class="text-xs text-gray-600 line-clamp-2">{{ host.bio }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <button @click="previousHost"
+                                class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 bg-white rounded-full p-1.5 shadow-lg hover:bg-gray-50 transition-colors z-10">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        
+                        <button @click="nextHost"
+                                class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 bg-white rounded-full p-1.5 shadow-lg hover:bg-gray-50 transition-colors z-10">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+
+                        <!-- Indicators -->
+                        <div class="flex justify-center gap-1.5 mt-6">
+                            <button v-for="(_, index) in Math.ceil(featuredHosts.length / itemsPerPage)"
+                                    :key="index"
+                                    @click="carouselIndex = index"
+                                    :class="['w-1.5 h-1.5 rounded-full transition-all duration-300',
+                                            index === carouselIndex ? 'bg-green-600 w-4' : 'bg-gray-300 hover:bg-gray-400']">
+                            </button>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
 
@@ -1031,69 +947,77 @@
                     // Anfitriones destacados para el carrusel
                     featuredHosts: [
                         {
+                            id: 1,
                             name: 'Carlos Mendoza',
                             state: 'Jalisco',
                             park: 'Los Colomos',
                             experience: '5 años jugando',
                             bio: '¡Siempre traigo discos de sobra y me encanta enseñar!',
-                            image: 'https://i.pravatar.cc/400?u=carlos@example.com',
+                            image: 'https://i.pravatar.cc/400?u=cddgrfddgfglosff@example.com',
                             contact: 'carlos.colomos@gmail.com'
                         },
                         {
+                            id: 2,
                             name: 'Luis Hernández',
                             state: 'Nuevo León',
                             park: 'Rufino Tamayo',
                             experience: '6 años jugando',
                             bio: 'Me gusta jugar por diversión y enseñar trucos fáciles.',
-                            image: 'https://i.pravatar.cc/400?u=luis@example.com',
+                            image: 'https://i.pravatar.cc/400?u=ludddis@example.com',
                             contact: 'luis.rufino.dg@gmail.com'
                         },
                         {
+                            id: 3,
                             name: 'Fernanda López',
                             state: 'Ciudad de México',
                             park: 'Alma Mater',
                             experience: '5 años jugando',
                             bio: '¡Siempre hay espacio para alguien nuevo en el parque!',
-                            image: 'https://i.pravatar.cc/400?u=javier.medina@example.com',
+                            image: 'https://i.pravatar.cc/400?u=jademedina@example.com',
                             contact: 'fer.almamater.dg@gmail.com'
                         },
                         {
+                            id: 4,
                             name: 'Javier Medina',
                             state: 'San Luis Potosí',
                             park: 'Caracara',
                             experience: '10 años jugando',
                             bio: 'Me encanta ver gente nueva en el parque.',
-                            image: 'https://i.pravatar.cc/400?u=fernanda.lopez@example.com',
+                            image: 'https://i.pravatar.cc/400?u=fernanddfda.lopez@example.com',
                             contact: 'javi.tangamanga@yahoo.com'
                         },
                         {
+                            id: 5,
                             name: 'Patricia Vázquez',
                             state: 'Morelos',
                             park: 'Cocoyoc Disc Golf',
                             experience: '4 años jugando',
                             bio: 'Organizadora de juegos para todos los niveles.',
-                            image: 'https://i.pravatar.cc/400?u=patricia@example.com',
+                            image: 'https://i.pravatar.cc/400?u=paddtricia@example.com',
                             contact: 'paty.cocoyoc@resort.mx'
                         },
                         {
+                            id: 6,
                             name: 'Miguel Torres',
                             state: 'Guanajuato',
                             park: 'San Miguel',
                             experience: '7 años jugando',
                             bio: 'Experto en técnicas de lanzamiento avanzadas.',
-                            image: 'https://i.pravatar.cc/400?u=miguel@example.com',
+                            image: 'https://i.pravatar.cc/400?u=migddddduel@example.com',
                             contact: 'miguel.torres.dg@gmail.com'
                         },
                         {
+                            id: 7,
                             name: 'Ana García',
                             state: 'Baja California',
                             park: 'Oasis Park',
                             experience: '3 años jugando',
                             bio: 'Apasionada por promover el disc golf en la costa.',
-                            image: 'https://i.pravatar.cc/400?u=roberto@example.com',
+                            image: 'https://i.pravatar.cc/400?u=rddfdddedsdddddfdfddoberto@example.com',
                             contact: 'ana.oasis.dg@gmail.com'
                         },
                         {
+                            id: 8,
                             name: 'Roberto Sánchez',
                             state: 'Veracruz',
                             park: 'Xalapa Disc',
@@ -1102,10 +1026,15 @@
                             image: 'https://i.pravatar.cc/400?u=robeee@example.com',
                             contact: 'robert.xalapa@gmail.com'
                         }
-                    ]
+                    ],
+                    carouselIndex: 0,
+                    itemsPerPage: 1
                 }
             },
             mounted() {
+                // Set initial itemsPerPage based on screen size
+                this.updateItemsPerPage();
+                
                 // Load SVG path data from mx.json
                 fetch('mx.json')
                     .then(res => res.json())
@@ -1119,6 +1048,7 @@
                 // Detectar cambios de tamaño de pantalla
                 window.addEventListener('resize', () => {
                     this.isMobile = window.innerWidth < 768;
+                    this.updateItemsPerPage();
                 });
             },
             computed: {
@@ -1251,6 +1181,23 @@
                 },
                 handleStateMouseLeave() {
                     this.hoveredState = null;
+                },
+                nextHost() {
+                    const maxIndex = Math.ceil(this.featuredHosts.length / this.itemsPerPage) - 1;
+                    this.carouselIndex = (this.carouselIndex + 1) % (maxIndex + 1);
+                },
+                previousHost() {
+                    const maxIndex = Math.ceil(this.featuredHosts.length / this.itemsPerPage) - 1;
+                    this.carouselIndex = (this.carouselIndex - 1 + maxIndex + 1) % (maxIndex + 1);
+                },
+                updateItemsPerPage() {
+                    if (window.innerWidth < 640) {
+                        this.itemsPerPage = 1; // Mobile
+                    } else if (window.innerWidth < 1024) {
+                        this.itemsPerPage = 2; // Tablet
+                    } else {
+                        this.itemsPerPage = 4; // Desktop
+                    }
                 }
             }
         });
