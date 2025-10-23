@@ -59,6 +59,31 @@
                 transform: translateY(0);
             }
         }
+        /* Carousel animations */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .carousel-item {
+            animation: fadeInScale 0.3s ease-out;
+        }
+        @keyframes slide-transition {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-25% - 1.5rem));
+            }
+        }
+        .hosts-scroll {
+            transition: transform 0.8s ease-in-out;
+        }
         /* Scrollbar personalizado */
         ::-webkit-scrollbar {
             width: 6px;
@@ -146,6 +171,94 @@
         <!-- Main Content -->
         <main class="bg-gray-50 py-12 sm:py-16">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Anfitriones Destacados - Tira Horizontal -->
+                <section class="mb-16">
+                    <div class="mb-6">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Anfitriones Destacados</h2>
+                        <p class="text-gray-600">Conoce a nuestros anfitriones apasionados que enseñan disc golf en toda México</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="relative h-80 bg-gradient-to-r from-white via-gray-50 to-white overflow-hidden"
+                             @mouseenter="isCarouselHovered = true"
+                             @mouseleave="isCarouselHovered = false">
+                            <!-- Contenedor de desplazamiento -->
+                            <div class="flex gap-6 p-6 h-full hosts-scroll" 
+                                 :style="{ transform: carouselTransform }"
+                                 style="width: 200%;">
+                                <!-- Hosts - Primera tanda -->
+                                <div v-for="(host, index) in featuredHosts" :key="'first-' + index" class="flex-shrink-0 w-64">
+                                    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+                                        <!-- Host Photo - Circular -->
+                                        <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
+                                            <img :src="host.image" :alt="host.name" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
+                                        </div>
+                                        
+                                        <!-- Host Info -->
+                                        <div class="flex-1 p-4 flex flex-col">
+                                            <h3 class="text-lg font-bold text-gray-900">{{ host.name }}</h3>
+                                            <p class="text-xs text-green-600 font-medium">{{ host.experience }}</p>
+                                            
+                                            <div class="mt-2 text-xs text-gray-600">
+                                                <p>📍 {{ host.state }}</p>
+                                                <p>🎯 {{ host.park }}</p>
+                                            </div>
+                                            
+                                            <p class="text-sm text-gray-700 mt-auto mb-3 line-clamp-2">{{ host.bio }}</p>
+                                            
+                                            <a :href="'mailto:' + host.contact" class="w-full px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors font-medium text-center">
+                                                Contactar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Hosts - Segunda tanda (duplicado para loop continuo) -->
+                                <div v-for="(host, index) in featuredHosts" :key="'second-' + index" class="flex-shrink-0 w-64">
+                                    <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+                                        <!-- Host Photo - Circular -->
+                                        <div class="w-full h-40 bg-gray-100 flex items-center justify-center">
+                                            <img :src="host.image" :alt="host.name" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
+                                        </div>
+                                        
+                                        <!-- Host Info -->
+                                        <div class="flex-1 p-4 flex flex-col">
+                                            <h3 class="text-lg font-bold text-gray-900">{{ host.name }}</h3>
+                                            <p class="text-xs text-green-600 font-medium">{{ host.experience }}</p>
+                                            
+                                            <div class="mt-2 text-xs text-gray-600">
+                                                <p>📍 {{ host.state }}</p>
+                                                <p>🎯 {{ host.park }}</p>
+                                            </div>
+                                            
+                                            <p class="text-sm text-gray-700 mt-auto mb-3 line-clamp-2">{{ host.bio }}</p>
+                                            
+                                            <a :href="'mailto:' + host.contact" class="w-full px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors font-medium text-center">
+                                                Contactar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gradient Overlays -->
+                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+                            
+                            <!-- Carousel Indicators (Dots) -->
+                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                                <button v-for="(dot, index) in 2" :key="index"
+                                        @click="carouselIndex = index"
+                                        :class="['w-3 h-3 rounded-full transition-all duration-300',
+                                                 index === carouselIndex ? 'bg-green-600 w-8' : 'bg-gray-400 hover:bg-gray-500']">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Grid Principal -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
                     <!-- Map Section -->
@@ -521,6 +634,9 @@
                 return {
                     selectedState: null,
                     hoveredState: null,
+                    isCarouselHovered: false, // Para pausar el carrusel
+                    carouselIndex: 0, // Índice actual del carrusel (0 es primera tanda, 1 es segunda)
+                    carouselInterval: null, // Intervalo del cambio automático
                     expandedHosts: {}, // Para controlar qué secciones de anfitriones están expandidas
                     searchQuery: '', // Para el campo de búsqueda
                     showDropdown: false, // Para mostrar/ocultar el dropdown
@@ -847,7 +963,82 @@
                                 }
                             ]
                         }
-                    }
+                    },
+                    // Anfitriones destacados para el carrusel
+                    featuredHosts: [
+                        {
+                            name: 'Carlos Mendoza',
+                            state: 'Jalisco',
+                            park: 'Los Colomos',
+                            experience: '5 años jugando',
+                            bio: '¡Siempre traigo discos de sobra y me encanta enseñar!',
+                            image: 'https://i.pravatar.cc/400?u=carlos@example.com',
+                            contact: 'carlos.colomos@gmail.com'
+                        },
+                        {
+                            name: 'Luis Hernández',
+                            state: 'Nuevo León',
+                            park: 'Rufino Tamayo',
+                            experience: '6 años jugando',
+                            bio: 'Me gusta jugar por diversión y enseñar trucos fáciles.',
+                            image: 'https://i.pravatar.cc/400?u=luis@example.com',
+                            contact: 'luis.rufino.dg@gmail.com'
+                        },
+                        {
+                            name: 'Fernanda López',
+                            state: 'Ciudad de México',
+                            park: 'Alma Mater',
+                            experience: '5 años jugando',
+                            bio: '¡Siempre hay espacio para alguien nuevo en el parque!',
+                            image: 'https://i.pravatar.cc/400?u=javier.medina@example.com',
+                            contact: 'fer.almamater.dg@gmail.com'
+                        },
+                        {
+                            name: 'Javier Medina',
+                            state: 'San Luis Potosí',
+                            park: 'Caracara',
+                            experience: '10 años jugando',
+                            bio: 'Me encanta ver gente nueva en el parque.',
+                            image: 'https://i.pravatar.cc/400?u=fernanda.lopez@example.com',
+                            contact: 'javi.tangamanga@yahoo.com'
+                        },
+                        {
+                            name: 'Patricia Vázquez',
+                            state: 'Morelos',
+                            park: 'Cocoyoc Disc Golf',
+                            experience: '4 años jugando',
+                            bio: 'Organizadora de juegos para todos los niveles.',
+                            image: 'https://i.pravatar.cc/400?u=patricia@example.com',
+                            contact: 'paty.cocoyoc@resort.mx'
+                        },
+                        {
+                            name: 'Miguel Torres',
+                            state: 'Guanajuato',
+                            park: 'San Miguel',
+                            experience: '7 años jugando',
+                            bio: 'Experto en técnicas de lanzamiento avanzadas.',
+                            image: 'https://i.pravatar.cc/400?u=miguel@example.com',
+                            contact: 'miguel.torres.dg@gmail.com'
+                        },
+                        {
+                            name: 'Ana García',
+                            state: 'Baja California',
+                            park: 'Oasis Park',
+                            experience: '3 años jugando',
+                            bio: 'Apasionada por promover el disc golf en la costa.',
+                            image: 'https://i.pravatar.cc/400?u=roberto@example.com',
+                            contact: 'ana.oasis.dg@gmail.com'
+                        },
+                        {
+                            name: 'Roberto Sánchez',
+                            state: 'Veracruz',
+                            park: 'Xalapa Disc',
+                            experience: '8 años jugando',
+                            bio: 'Entrenador certificado de disc golf.',
+                            image: 'https://i.pravatar.cc/400?u=robeee@example.com',
+                            contact: 'robert.xalapa@gmail.com'
+                        }
+                    ]
                 }
             },
             mounted() {
@@ -857,6 +1048,9 @@
                     .then(data => {
                         this.svgPaths = data;
                     });
+                
+                // Iniciar el cambio automático del carrusel
+                this.startCarouselAutoplay();
             },
             computed: {
                 selectedStateInfo() {
@@ -864,9 +1058,19 @@
                 },
                 selectedStateName() {
                     return this.selectedState ? this.allStates[this.selectedState]?.name : null;
+                },
+                carouselTransform() {
+                    return `translateX(calc(${this.carouselIndex * -25}% - ${this.carouselIndex * 1.5}rem))`;
                 }
             },
             methods: {
+                startCarouselAutoplay() {
+                    this.carouselInterval = setInterval(() => {
+                        if (!this.isCarouselHovered) {
+                            this.carouselIndex = (this.carouselIndex + 1) % 2;
+                        }
+                    }, 4000); // Cambiar cada 4 segundos
+                },
                 selectState(stateId) {
                     this.selectedState = stateId;
                     // Limpiar expansiones de anfitriones al cambiar de estado
@@ -953,7 +1157,7 @@
                 },
                 handleStateMouseLeave() {
                     this.hoveredState = null;
-                },
+                }
             }
         });
         
