@@ -1,0 +1,27 @@
+/* Custom styles to complement Tailwind CSS */
+
+/* Set global font family */
+body {
+    font-family: 'Source Sans Pro', 'Verdana', 'Helvetica', sans-serif;
+}
+
+/* You can add any custom CSS here that extends Tailwind */
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Fade in on scroll animation */
+.fade-in-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom animations or transitions can go here */
