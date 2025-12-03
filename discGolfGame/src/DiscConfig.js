@@ -27,9 +27,9 @@ export const DiscConfig = {
         range: { min: -5, max: 3 },  // Turn range
         angleChangeRate: 0.5, // Base rate of angle change per frame
         phases: {
-            beginning: 0.3,   // Turn intensity at beginning phase (30%)
+            beginning: 0.6,   // Turn intensity at beginning phase (30%)
             mid: 1.0,         // Turn intensity at mid phase (100%)
-            end: 0.1          // Turn intensity at end phase (10%)
+            end: 0.3          // Turn intensity at end phase (10%)
         }
     },
     
@@ -37,7 +37,22 @@ export const DiscConfig = {
     fade: {
         base: 0,              // Base fade value (no fade)
         range: { min: 0, max: 4 },   // Fade range
-        angleDecreaseRate: 0.6  // Rate of angle decrease per frame
+        angleDecreaseRate: 1,  // Rate of angle decrease per frame
+        phases: {
+            early: 0.33333,   // First third of fade phase (33%)
+            mid: 0.33333,     // Second third of fade phase (33%)
+            late: 0.33333     // Final third of fade phase (33%)
+        },
+        forwardSpeedMultiplier: {
+            early: 0.5,       // Full forward speed in early fade
+            mid: 0.3,         // 50% forward speed in mid fade
+            late: 0.1         // 20% forward speed in late fade
+        },
+        aggressiveness: {
+            early: 6.0,       // Normal fade aggressiveness in early phase
+            mid: 9.5,         // 1.5x more aggressive in mid phase
+            late: 10.0         // 2x more aggressive in late phase
+        }
     },
     
     // Power configuration
@@ -67,8 +82,8 @@ export const DiscConfig = {
     
     // Flight phases (percentages of total flight time)
     phases: {
-        turning: 0.8,         // Turning phase is 80% of flight
-        fading: 0.2,          // Fading phase is 20% of flight
+        turning: 0.5,         // Turning phase is 80% of flight
+        fading: 0.5,          // Fading phase is 20% of flight
         turnPhases: {
             beginning: 0.33333,  // First third of turning phase
             mid: 0.33333,        // Second third of turning phase
