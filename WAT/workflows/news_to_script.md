@@ -1,0 +1,166 @@
+# Workflow: News to Script
+
+## Objective
+Given a topic, find the most relevant breaking news and produce a 30–60 second social media video script that is direct, easy to digest, and hooks viewers in the first few seconds.
+
+## Inputs
+- **Topic** (string): The subject to search for (e.g., "artificial intelligence", "climate change")
+
+## Pipeline
+
+### Step 1: Search for News
+**Tool:** `tools/search_news.py`
+**Command:** `python tools/search_news.py "<topic>"`
+**Output:** JSON array of top 5 news results (title, url, snippet, date)
+
+### Step 2: Agent Picks the Best Article
+**No tool — Agent decision.**
+
+Review the 5 results and select the one with the highest potential for a viral short-form video. Prioritize:
+1. **Breaking / very recent news** — anything from today or the last few hours wins
+2. **Trusted sources** — Reuters, AP, BBC, CNN, NYT, Bloomberg, The Guardian, WSJ, etc.
+3. **Strong emotional hook** — surprising, alarming, exciting, or controversial
+4. **Broad audience appeal** — would a regular person care about this?
+5. **Clarity** — the story should be explainable in under 60 seconds
+
+If two articles are equally strong, prefer the one from the more authoritative source.
+
+### Step 3: Scrape the Full Article
+**Tool:** `tools/scrape_article.py`
+**Command:** `python tools/scrape_article.py "<chosen_url>"`
+**Output:** JSON object with title, url, source, and full article text in markdown
+
+### Step 4: Agent Creates the Headline & Folder Slug
+**No tool — Agent decision.**
+
+Read the full article and create two things:
+
+**A) Headline (for the script):** A compelling, direct title of any length. This is the real headline that opens the video.
+- Direct and objective, like a news anchor would say it
+- No clickbait, no filler words
+- Examples: "AI System Outperforms Doctors in Cancer Detection", "Global Markets Crash After Fed Announcement"
+
+**B) Folder slug (max 3 words):** A short version used only for the output folder name.
+- Max 3 words, all caps, underscores
+- Examples: "AI_BEATS_DOCTORS", "MARKETS_CRASH_HARD", "WATER_FOUND_MARS"
+
+### Step 5: Agent Writes the Script (Draft)
+**No tool — Agent decision.**
+
+Write a 30–60 second social media script (approximately 75–150 words). Rules:
+- **Open with the headline** as the first line so viewers immediately know what the video is about
+- Follow with a simple, interesting summary of the story
+- Use short sentences. No complex words. Write like you're telling a friend
+- Make it engaging — the viewer should want to stay until the end
+- No hashtags, no emojis — just the story
+
+### Step 5b: "Bar Bet" Rewrite Pass
+**No tool — Agent decision. Reference:** `workflows/script_style_guide.md`
+
+Take the draft from Step 5 and run it through these checks (in order):
+
+1. **Hook check** — First line must use [Common Belief] + [Twist]. Rewrite if not.
+2. **Bar test** — Read every sentence. Would you say this to a friend at a bar? Replace formal words ("furthermore" → "turns out", "classified as" → "basically").
+3. **Sentence scan** — Any sentence over 15 words? Split it.
+4. **Jargon audit** — Max 1 technical term per 30 seconds. Anchor it to a common object immediately.
+5. **Voice flip** — Any passive voice? Flip to first-person active ("I found out" not "It was discovered").
+6. **Outro** — End with a value-linked CTA: "I post [Category] like this every day. Subscribe so you don't miss the next [Benefit]."
+7. **Breath test** — Read out loud. If you stumble, break the sentence.
+
+The rewritten script replaces the draft. Only the final version goes into the save file.
+
+### Step 5c: Generate Hashtags
+**No tool — Agent decision.**
+
+Create hashtags using the **Three-Tier 30-60-10 Strategy**:
+
+1. **Search Intent tier (60%)** — High-volume, evergreen tags that tell the algorithm what the video is about.
+   - Example: #Avocados, #FruitFacts, #ScienceFacts
+2. **Niche/Community tier (30%)** — Specific tags for sub-cultures or communities interested in the topic.
+   - Example: #PlantBiology, #AvocadoLover, #BotanicalScience
+3. **Broad Discovery tier (10%)** — Massive, general tags that signal the format or vibe.
+   - Example: #DidYouKnow, #Shorts, #HealthyLiving
+
+**Rules:**
+- Every tag must be strictly relevant — no spam tags (e.g., don't use #FYP on a science video).
+- Use **#CamelCase** (capitalize first letter of each word) for accessibility and readability.
+- Provide **two lines** — one for TikTok (conversational, trend-heavy, e.g., #ScienceTok) and one for YouTube (noun-based, search-friendly, e.g., #ScienceFacts).
+- Format as a single copy-paste line per platform, tags separated by spaces.
+
+**Output format (saved in the JSON as `hashtags`):**
+```
+TikTok: #Tag1 #Tag2 #Tag3 ...
+YouTube: #Tag1 #Tag2 #Tag3 ...
+```
+
+### Step 6: Save Output
+**Tool:** `tools/save_output.py`
+**Command:** Pipe JSON or use `--input` flag
+
+Prepare a JSON object with:
+```json
+{
+    "topic": "<original topic>",
+    "headline": "<full headline for the script>",
+    "folder_slug": "<max 3 words for folder name>",
+    "source": "<source domain>",
+    "link": "<article URL>",
+    "full_article": "<full article text>",
+    "script": "<the 30-60 sec script>",
+    "hashtags": "TikTok: #Tag1 #Tag2 ...\nYouTube: #Tag1 #Tag2 ...",
+    "discarded_articles": [
+        {"title": "...", "url": "...", "snippet": "...", "date": "..."},
+        ...
+    ]
+}
+```
+
+**Output folder:** `.tmp/YYYY_MM_DD_TOPIC_FOLDERSLUG_v1/output.txt`
+
+The `save_output.py` script prints the output folder path to stdout. Capture it for the next step.
+
+### Step 7: Download Related Images
+**Tool:** `tools/download_images_firecrawl.py`
+**Command:** `python tools/download_images_firecrawl.py --prompt "<headline>" --output_dir "<output_folder_from_step_6>"`
+**Output:** 10 images saved to the same folder as the output.txt
+
+Use the **headline** from Step 4 as the search prompt. The `--output_dir` is the folder path returned by `save_output.py` in Step 6.
+
+## Regeneration
+
+When the user asks to regenerate:
+- **"Regenerate the script"** → Rewrite Step 5 only, using the same article. Increment version.
+- **"Pick a different article"** → Go back to the discarded candidates from the saved output, pick a new one, then run Steps 3–6. Increment version.
+- **"Search again"** → Re-run the entire pipeline from Step 1.
+
+## Output Format (output.txt)
+
+Each section is clearly separated with `====` dividers:
+- TOPIC
+- SOURCE
+- LINK
+- HEADLINE
+- SCRIPT (30-60 seconds)
+- HASHTAGS (TikTok + YouTube lines)
+- FULL ARTICLE
+- OTHER CANDIDATES (discarded) — titles, URLs, dates, and snippets
+
+## Edge Cases
+
+- **Firecrawl returns fewer than 5 results:** Work with what's available. Note it in the output.
+- **Article is paywalled / empty after scraping:** Try the next best candidate from the list.
+- **No relevant news found:** Tell the user and suggest a broader or related topic.
+- **Rate limiting:** Wait and retry once. If it persists, inform the user.
+
+## Credits Cost
+- Search: ~2 Firecrawl credits
+- Scrape: ~1 Firecrawl credit
+- Image search: ~1 Firecrawl credit
+- **Total per run: ~4 credits**
+
+## Technical Notes
+
+- The `input.json` temp file in `.tmp/` must be deleted before each new run (tools create it fresh).
+- When regenerating from a discarded candidate, skip Step 1 (search) — go directly to Step 3 with the candidate's URL.
+- The folder slug is separate from the headline. Changing the article changes the slug, which means the version counter resets to v1 for a new slug. Version only auto-increments for the *same* date + topic + slug combination.
+- The discarded articles list should swap: the previously chosen article goes into discarded, the newly chosen one comes out.
