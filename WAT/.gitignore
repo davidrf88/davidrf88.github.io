@@ -1,0 +1,17 @@
+# Python venv
+.venv/
+
+# Environment variables
+.env
+
+# Google OAuth
+credentials.json
+token.json
+
+# Temporary files
+.tmp/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
