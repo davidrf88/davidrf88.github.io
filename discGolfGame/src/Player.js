@@ -1,4 +1,5 @@
-import { Disc } from './Disc.js';
+import { ThrowEngine3 } from './ThrowEngine3.js';
+import { DiscSelector } from './DiscSelector.js';
 
 export class Player {
     constructor(scene, x, y) {
@@ -18,7 +19,14 @@ export class Player {
         this.sprite = scene.add.sprite(x, y, 'playerSprite', 0);
 
         // Create disc for throwing
-        this.disc = new Disc(scene, x, y);
+        this.disc = new ThrowEngine3(scene, x, y);
+
+        // Create disc selector
+        this.discSelector = new DiscSelector(scene);
+        this.selectedDisc = this.discSelector.getCurrentDisc(); // Get initial disc
+        
+        // Throwing hand: 'F' for forehand, 'B' for backhand
+        this.throwingHand = 'B'; // Default to backhand
 
         // Create throwing mode text indicator
         this.throwingModeText = scene.add.text(
@@ -39,6 +47,9 @@ export class Player {
         this.throwingModeText.setDepth(1000);
         this.throwingModeText.setVisible(false);
 
+        // Create disc info display
+        this.createDiscInfoDisplay();
+
         // Setup animations
         this.createAnimations();
 
@@ -47,6 +58,59 @@ export class Player {
 
         // Start with idle animation
         this.sprite.play('idle-down');
+    }
+
+    createDiscInfoDisplay() {
+        // Create a small UI in the top-left showing current disc
+        this.discInfoText = this.scene.add.text(
+            10,
+            10,
+            '',
+            {
+                fontFamily: 'Retro Gaming',
+                fontSize: '16px',
+                color: '#ffffff',
+                stroke: '#000000',
+                strokeThickness: 3,
+                align: 'left'
+            }
+        );
+        this.discInfoText.setScrollFactor(0);
+        this.discInfoText.setDepth(1000);
+        this.updateDiscInfoDisplay();
+    }
+
+    updateDiscInfoDisplay() {
+        if (this.selectedDisc && this.discInfoText) {
+            const disc = this.selectedDisc;
+            const handName = this.throwingHand === 'F' ? 'Forehand' : 'Backhand';
+            const handColor = this.throwingHand === 'F' ? '#ff8844' : '#44aaff';
+            this.discInfoText.setText(
+                `${disc.name}\n${disc.speed} | ${disc.glide} | ${disc.turn} | ${disc.fade}\n[D] Change Disc`
+            );
+            
+            // Create or update throwing hand indicator
+            if (!this.throwingHandText) {
+                this.throwingHandText = this.scene.add.text(
+                    10,
+                    this.scene.scale.height - 80,
+                    '',
+                    {
+                        fontFamily: 'Retro Gaming',
+                        fontSize: '18px',
+                        color: '#ffffff',
+                        stroke: '#000000',
+                        strokeThickness: 3,
+                        align: 'left'
+                    }
+                );
+                this.throwingHandText.setScrollFactor(0);
+                this.throwingHandText.setDepth(1000);
+            }
+            
+            this.throwingHandText.setText(`Hand: ${handName}\n[F] Forehand [B] Backhand`);
+            this.throwingHandText.setColor(handColor);
+        }
     }
 
     static preload(scene) {
@@ -136,7 +200,10 @@ export class Player {
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
-            throw: Phaser.Input.Keyboard.KeyCodes.T
+            throw: Phaser.Input.Keyboard.KeyCodes.T,
+            discSelector: Phaser.Input.Keyboard.KeyCodes.D,
+            forehand: Phaser.Input.Keyboard.KeyCodes.F,
+            backhand: Phaser.Input.Keyboard.KeyCodes.B
         });
 
         // ESC key - handle specially since cursors already has it
@@ -145,14 +212,62 @@ export class Player {
         // SPACE key for executing throw
         this.spaceKey = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        // Number keys 1-9 for disc selection
+        this.numberKeys = {};
+        for (let i = 1; i <= 9; i++) {
+            const keyCode = Phaser.Input.Keyboard.KeyCodes['ONE'] + (i - 1);
+            this.numberKeys[i] = this.scene.input.keyboard.addKey(keyCode);
+        }
+
         // Set up key listeners for throwing mode
         this.wasd.throw.on('down', () => {
             this.enterThrowingMode();
         });
 
+        // D key for disc selector
+        this.wasd.discSelector.on('down', () => {
+            if (!this.isThrowingMode && !this.discSelector.isVisible) {
+                this.discSelector.toggle();
+            }
+        });
+
+        // F key for forehand
+        this.wasd.forehand.on('down', () => {
+            if (!this.discSelector.isVisible) {
+                this.throwingHand = 'F';
+                this.updateDiscInfoDisplay();
+                console.log('Switched to Forehand');
+            }
+        });
+
+        // B key for backhand
+        this.wasd.backhand.on('down', () => {
+            if (!this.discSelector.isVisible) {
+                this.throwingHand = 'B';
+                this.updateDiscInfoDisplay();
+                console.log('Switched to Backhand');
+            }
+        });
+
+        // Number keys for disc selection
+        for (let i = 1; i <= 9; i++) {
+            this.numberKeys[i].on('down', () => {
+                if (this.discSelector.isVisible) {
+                    const selectedDisc = this.discSelector.selectDiscByNumber(i);
+                    if (selectedDisc) {
+                        this.selectedDisc = selectedDisc;
+                        this.updateDiscInfoDisplay();
+                        console.log(`Selected disc: ${selectedDisc.name} (${selectedDisc.speed}|${selectedDisc.glide}|${selectedDisc.turn}|${selectedDisc.fade})`);
+                    }
+                }
+            });
+        }
+
         this.escKey.on('down', () => {
             console.log('ESC pressed, throwing mode:', this.isThrowingMode);
-            if (this.isThrowingMode) {
+            if (this.discSelector.isVisible) {
+                this.discSelector.hide();
+            } else if (this.isThrowingMode) {
                 this.exitThrowingMode();
             }
         });
@@ -193,13 +308,14 @@ export class Player {
         const direction = directionMap[this.currentDirection] || 0;
 
         // Hardcoded values for testing
-        const power = 70;    // Increased power for testing flight
-        const pitch = 10;    // 10 degree launch angle
+        const power = 100;    // Increased power for testing flight
+        const pitch = 0;    // 10 degree launch angle
 
-        // Set parameters and throw
-        var selectedDisc = {speed: 6, glide:3, turn:-5, fade:1}
+        // Set parameters and throw using selected disc and throwing hand
         this.disc.setThrowParameters(direction, power, pitch);
-        this.disc.throw(this.body.position.x, this.body.position.y,selectedDisc,'F');
+        this.disc.throw(this.body.position.x, this.body.position.y, this.selectedDisc, this.throwingHand);
+
+        console.log(`Threw ${this.selectedDisc.name} with ${this.throwingHand === 'F' ? 'Forehand' : 'Backhand'}`);
 
         // Keep throwing mode active, camera will follow disc
     }
@@ -215,8 +331,8 @@ export class Player {
         // Handle camera following based on throwing mode and disc status
         if (this.isThrowingMode) {
             // If disc is flying, follow disc; otherwise follow player
-            if (this.disc.sprite && this.disc.flyingStatus !== 'not thrown') {
-                // Follow disc while it's in the air or landed
+            if (this.disc.sprite && this.disc.isFlying) {
+                // Follow disc while it's in the air
                 this.scene.cameras.main.startFollow(this.disc.sprite, true, 0.1, 0.1);
             } else {
                 // Follow player when disc is not thrown
@@ -241,24 +357,27 @@ export class Player {
         let isMoving = false;
         let newDirection = this.currentDirection;
 
-        if (this.cursors.left.isDown || this.wasd.left.isDown) {
-            velocityX = -this.moveForce;
-            newDirection = 'left';
-            isMoving = true;
-        } else if (this.cursors.right.isDown || this.wasd.right.isDown) {
-            velocityX = this.moveForce;
-            newDirection = 'right';
-            isMoving = true;
-        }
+        // Only allow movement when disc selector is not visible
+        if (!this.discSelector.isVisible) {
+            if (this.cursors.left.isDown || this.wasd.left.isDown) {
+                velocityX = -this.moveForce;
+                newDirection = 'left';
+                isMoving = true;
+            } else if (this.cursors.right.isDown) {
+                velocityX = this.moveForce;
+                newDirection = 'right';
+                isMoving = true;
+            }
 
-        if (this.cursors.up.isDown || this.wasd.up.isDown) {
-            velocityY = -this.moveForce;
-            newDirection = 'up';
-            isMoving = true;
-        } else if (this.cursors.down.isDown || this.wasd.down.isDown) {
-            velocityY = this.moveForce;
-            newDirection = 'down';
-            isMoving = true;
+            if (this.cursors.up.isDown || this.wasd.up.isDown) {
+                velocityY = -this.moveForce;
+                newDirection = 'up';
+                isMoving = true;
+            } else if (this.cursors.down.isDown || this.wasd.down.isDown) {
+                velocityY = this.moveForce;
+                newDirection = 'down';
+                isMoving = true;
+            }
         }
 
         // Update direction if changed

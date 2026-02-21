@@ -1,6 +1,6 @@
 import { DiscConfig } from './DiscConfig.js';
 
-export class Disc {
+export class Throw {
     constructor(scene, x, y) {
         this.scene = scene;
         
@@ -105,7 +105,8 @@ export class Disc {
                 this.sprite.setVisible(false);
             } else if (this.flyingStatus === 'started' || this.flyingStatus === 'turn_beginning' || 
                        this.flyingStatus === 'turn_mid' || this.flyingStatus === 'turn_end' || 
-                       this.flyingStatus === 'fading') {
+                       this.flyingStatus === 'fade_early' || this.flyingStatus === 'fade_mid' || 
+                       this.flyingStatus === 'fade_late') {
                this.updateDiscPosition()
             } else if (this.flyingStatus === 'ended') {
                 // Disc is visible but stopped moving
@@ -173,9 +174,23 @@ export class Disc {
         } else if (this.flyingStatus === 'turn_end') {
             const turningDuration = this.flyingTime * DiscConfig.phases.turning;
             if (this.elapsedTime >= turningDuration) {
-                this.flyingStatus = 'fading';
+                this.flyingStatus = 'fade_early';
             }
-        } else if (this.flyingStatus === 'fading') {
+        } else if (this.flyingStatus === 'fade_early') {
+            const turningDuration = this.flyingTime * DiscConfig.phases.turning;
+            const fadingDuration = this.flyingTime * DiscConfig.phases.fading;
+            const fadeEarlyEnd = turningDuration + (fadingDuration * DiscConfig.fade.phases.early);
+            if (this.elapsedTime >= fadeEarlyEnd) {
+                this.flyingStatus = 'fade_mid';
+            }
+        } else if (this.flyingStatus === 'fade_mid') {
+            const turningDuration = this.flyingTime * DiscConfig.phases.turning;
+            const fadingDuration = this.flyingTime * DiscConfig.phases.fading;
+            const fadeMidEnd = turningDuration + (fadingDuration * (DiscConfig.fade.phases.early + DiscConfig.fade.phases.mid));
+            if (this.elapsedTime >= fadeMidEnd) {
+                this.flyingStatus = 'fade_late';
+            }
+        } else if (this.flyingStatus === 'fade_late') {
             if (this.elapsedTime >= this.flyingTime) {
                 this.flyingStatus = 'ended';
                 this.isFlying = false;
@@ -249,18 +264,48 @@ export class Disc {
             moveY += Math.sin(perpAngle) * angleTurnForce * moveSpeed;
         }
         
-        // Apply fade during turn_end and fading phases
-        if (this.flyingStatus === 'turn_end' || this.flyingStatus === 'fading') {
+        // Apply fade during fade phases (early, mid, late)
+        if (this.flyingStatus === 'fade_early' || this.flyingStatus === 'fade_mid' || 
+            this.flyingStatus === 'fade_late' || this.flyingStatus === 'turn_end') {
             const baseFade = DiscConfig.fade.base;
             const fade = this.discCharacteristics.fade || baseFade;
+            const speed = this.discCharacteristics.speed || DiscConfig.speed.base;
+            
+            // Determine fade phase multipliers
+            let fadeAggressiveness = 1.0;
+            let forwardSpeedMultiplier = 1.0;
+            
+            if (this.flyingStatus === 'turn_end') {
+                // Transition phase - start applying fade
+                fadeAggressiveness = 0.5;
+                forwardSpeedMultiplier = 1.0;
+            } else if (this.flyingStatus === 'fade_early') {
+                fadeAggressiveness = DiscConfig.fade.aggressiveness.early;
+                forwardSpeedMultiplier = DiscConfig.fade.forwardSpeedMultiplier.early;
+            } else if (this.flyingStatus === 'fade_mid') {
+                fadeAggressiveness = DiscConfig.fade.aggressiveness.mid;
+                forwardSpeedMultiplier = DiscConfig.fade.forwardSpeedMultiplier.mid;
+            } else if (this.flyingStatus === 'fade_late') {
+                fadeAggressiveness = DiscConfig.fade.aggressiveness.late;
+                forwardSpeedMultiplier = DiscConfig.fade.forwardSpeedMultiplier.late;
+            }
             
             // Fade always reduces angle gradually
             const fadeStrength = fade / DiscConfig.fade.range.max;
             
-            // Decrease angle based on fade strength
-            const angleDecreaseRate = fadeStrength * DiscConfig.fade.angleDecreaseRate;
+            // Speed multiplier: higher speed = more fade effect
+            // Normalize speed (1-15 range) to a multiplier (0.5 to 2.0)
+            const speedNormalized = (speed - DiscConfig.speed.range.min) / (DiscConfig.speed.range.max - DiscConfig.speed.range.min);
+            const speedMultiplier = 0.5 + (speedNormalized * 1.5); // Range: 0.5x to 2.0x
+            
+            // Decrease angle based on fade strength, speed, and phase aggressiveness
+            const angleDecreaseRate = fadeStrength * DiscConfig.fade.angleDecreaseRate * speedMultiplier * fadeAggressiveness;
             this.currentAngle -= angleDecreaseRate;
             this.currentAngle = Math.max(DiscConfig.angle.range.min, this.currentAngle);
+            
+            // Apply forward speed reduction
+            moveX *= forwardSpeedMultiplier;
+            moveY *= forwardSpeedMultiplier;
             
             // Move disc based on current angle after fade adjustment
             const angleTurnStrength = this.currentAngle / DiscConfig.angle.range.max;
