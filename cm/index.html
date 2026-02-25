@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Wedding</title>
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com"
+		/>
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Playfair+Display:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<style>
+			:root {
+				--soft-gray: #353b2a;
+			}
+
+			@keyframes fadeInSlow {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			.fade-in-5s {
+				animation: fadeInSlow 5s ease-in-out forwards;
+			}
+
+			.fade-in-title {
+				opacity: 0;
+				animation: fadeInSlow 3s ease-in-out forwards;
+				animation-delay: 1s;
+			}
+
+			.fade-in-name {
+				opacity: 0;
+				animation: fadeInSlow 3s ease-in-out forwards;
+				animation-delay: 5s;
+			}
+
+			.font-imperial {
+				font-family: "Imperial Script", cursive;
+			}
+
+			.font-formal {
+				font-family: "Playfair Display", serif;
+			}
+
+			.bg-soft-gray {
+				background-color: var(--soft-gray);
+			}
+
+			.fade-to-soft-gray {
+				background: linear-gradient(to bottom, transparent, var(--soft-gray));
+			}
+		</style>
+	</head>
+	<body class="bg-black min-h-screen overflow-x-hidden">
+		<main class="relative w-screen h-[110svh] overflow-hidden">
+			<img
+				src="images/splash.webp"
+				alt="Wedding splash"
+				class="block w-screen h-[110svh] object-cover lg:object-center fade-in-5s"
+			/>
+			<div class="absolute inset-0 bg-black/40"></div>
+			<div class="pointer-events-none absolute bottom-0 left-0 h-12 w-full fade-to-soft-gray"></div>
+			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[190%] sm:-translate-y-[190%] md:-translate-y-[240%] lg:-translate-y-[220%] text-center text-white fade-in-title">
+				<p class="text-xl sm:text-2xl md:text-3xl tracking-[0.2em] uppercase font-formal">
+					Save <span class="font-imperial normal-case tracking-normal text-3xl sm:text-4xl md:text-4xl">the</span> Date
+				</p>
+				<h1 class="mt-6 text-5xl sm:text-5xl md:text-6xl lg:text-7xl tracking-wide font-imperial fade-in-name">
+					Chelsea &amp; Maximiliano
+				</h1>
+			</div>
+		</main>
+
+	</body>
+</html>
