@@ -45,7 +45,14 @@
 			.fade-in-name {
 				opacity: 0;
 				animation: fadeInSlow 3s ease-in-out forwards;
-				animation-delay: 5s;
+				animation-delay: 1s;
+			}
+
+			.fade-in-date {
+				opacity: 0;
+				animation: fadeInSlow 3s ease-in-out forwards;
+				animation-delay: 1s;
+				font-family: "Playfair Display", serif;
 			}
 
 			.font-imperial {
@@ -63,25 +70,39 @@
 			.fade-to-soft-gray {
 				background: linear-gradient(to bottom, transparent, var(--soft-gray));
 			}
+
+			.letters {
+				position: absolute;
+				top: 20%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 90%;
+			}
 		</style>
 	</head>
 	<body class="bg-black min-h-screen overflow-x-hidden">
-		<main class="relative w-screen h-[110svh] overflow-hidden">
+		<main class="relative w-screen h-[100svh] overflow-hidden">
 			<img
-				src="images/splash.webp"
+				src="images/spalshy.jpg"
 				alt="Wedding splash"
 				class="block w-screen h-[110svh] object-cover lg:object-center fade-in-5s"
 			/>
 			<div class="absolute inset-0 bg-black/40"></div>
-			<div class="pointer-events-none absolute bottom-0 left-0 h-12 w-full fade-to-soft-gray"></div>
-			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[190%] sm:-translate-y-[190%] md:-translate-y-[240%] lg:-translate-y-[220%] text-center text-white fade-in-title">
-				<p class="text-xl sm:text-2xl md:text-3xl tracking-[0.2em] uppercase font-formal">
-					Save <span class="font-imperial normal-case tracking-normal text-3xl sm:text-4xl md:text-4xl">the</span> Date
+			<div class="pointer-events-none absolute bottom-0 left-0 h-12 w-full"></div>
+			<div class="letters text-center text-white fade-in-title">
+				<p class="text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-[0.2em] uppercase font-formal">
+					Save <span class="font-imperial normal-case tracking-normal text-2xl sm:text-3xl md:text-4xl lg:text-4xl">the</span> Date
 				</p>
-				<h1 class="mt-6 text-5xl sm:text-5xl md:text-6xl lg:text-7xl tracking-wide font-imperial fade-in-name">
+				<h1 class="mt-4 sm:mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-wide font-imperial fade-in-name">
 					Chelsea &amp; Maximiliano
 				</h1>
+				<br/>
+				<p class="text-sm sm:text-base md:text-lg lg:text-xl tracking-[0.15em] font-formal fade-in-date">
+					Diciembre 05, 2026
+				</p>
 			</div>
+
+
 		</main>
 
 	</body>
