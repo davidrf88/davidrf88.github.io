@@ -790,6 +790,25 @@
   </div>
 </section>
 
+<!-- ——— RSVP ——— -->
+<section class="rsvp" id="rsvp" data-screen-label="07 RSVP">
+  <div class="wrap wrap--narrow">
+    <div class="eyebrow"><span class="bar"></span> Confirma tu asistencia <span class="bar"></span></div>
+    <h2 class="headline">¿Nos <em>acompañas?</em></h2>
+    <p class="prose">
+      Queremos celebrar contigo. Por favor confirma tu asistencia antes del
+      <em>15 de noviembre de 2026</em> para poder apartar tu lugar entre los árboles.
+    </p>
+
+    <a class="btn" href="#" id="rsvp-btn">
+      <span>Confirmar asistencia</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <div class="rsvp__deadline">Hasta el 15 · noviembre · 2026</div>
+  </div>
+</section>
+
 <!-- ——— NOSOTROS ——— -->
 <section class="us" id="nosotros" data-screen-label="03 Nosotros">
   <div class="wrap">
@@ -995,24 +1014,7 @@
   </div>
 </section>
 
-<!-- ——— RSVP ——— -->
-<section class="rsvp" id="rsvp" data-screen-label="07 RSVP">
-  <div class="wrap wrap--narrow">
-    <div class="eyebrow"><span class="bar"></span> Confirma tu asistencia <span class="bar"></span></div>
-    <h2 class="headline">¿Nos <em>acompañas?</em></h2>
-    <p class="prose">
-      Queremos celebrar contigo. Por favor confirma tu asistencia antes del
-      <em>15 de noviembre de 2026</em> para poder apartar tu lugar entre los árboles.
-    </p>
 
-    <a class="btn" href="#" id="rsvp-btn">
-      <span>Confirmar asistencia</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <div class="rsvp__deadline">Hasta el 15 · noviembre · 2026</div>
-  </div>
-</section>
 
 <!-- ——— GALLERY ——— -->
 <section class="gallery" id="galeria" data-screen-label="08 Galería">
@@ -1050,6 +1052,25 @@
   // ——— Countdown ———
   const target = new Date('2026-12-05T16:00:00-06:00').getTime();
   const $ = id => document.getElementById(id);
+
+  // ——— RSVP link ———
+  const rsvpButton = document.getElementById('rsvp-btn');
+  const invitationParams = new URLSearchParams(window.location.search);
+  const token = invitationParams.get('token');
+  const lang = invitationParams.get('lang');
+
+  if (rsvpButton) {
+    if (token && lang) {
+      const rsvpUrl = new URL(`https://rsvponline.app/invite/${encodeURIComponent(token)}`);
+      rsvpUrl.searchParams.set('lang', lang);
+      rsvpButton.href = rsvpUrl.toString();
+    } else {
+      rsvpButton.removeAttribute('href');
+      rsvpButton.setAttribute('aria-disabled', 'true');
+      rsvpButton.addEventListener('click', (event) => event.preventDefault());
+    }
+  }
+
   function tick(){
     const now = Date.now();
     let diff = Math.max(0, target - now);
