@@ -1,0 +1,8 @@
+{
+  "id": "parque_central",
+  "name": "Parque Central",
+  "holes": 1,
+  "par": 3,
+  "distance_ft": 320,
+  "layouts": ["default"]
+}

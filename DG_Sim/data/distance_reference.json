@@ -1,0 +1,17 @@
+{
+    "description": "Average max distance by disc speed at full power for a pro-level throw. Used to calibrate the flight model.",
+    "unit": "feet",
+    "data": [
+        { "speed": 2,  "category": "Putter",          "avgDistanceFt": 200 },
+        { "speed": 3,  "category": "Putter",          "avgDistanceFt": 250 },
+        { "speed": 4,  "category": "Midrange",        "avgDistanceFt": 280 },
+        { "speed": 5,  "category": "Midrange",        "avgDistanceFt": 300 },
+        { "speed": 6,  "category": "Fairway",         "avgDistanceFt": 320 },
+        { "speed": 7,  "category": "Fairway",         "avgDistanceFt": 350 },
+        { "speed": 9,  "category": "Control driver",  "avgDistanceFt": 380 },
+        { "speed": 11, "category": "Distance",        "avgDistanceFt": 400 },
+        { "speed": 12, "category": "Distance",        "avgDistanceFt": 420 },
+        { "speed": 13, "category": "Distance",        "avgDistanceFt": 450 },
+        { "speed": 14, "category": "Distance",        "avgDistanceFt": 500 }
+    ]
+}

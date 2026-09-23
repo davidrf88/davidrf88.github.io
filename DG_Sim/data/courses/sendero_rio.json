@@ -1,0 +1,8 @@
+{
+  "id": "sendero_rio",
+  "name": "Sendero del Río",
+  "holes": 1,
+  "par": 3,
+  "distance_ft": 320,
+  "layouts": ["default"]
+}

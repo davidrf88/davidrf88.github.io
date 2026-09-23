@@ -1,0 +1,8 @@
+{
+  "id": "curso_pinos",
+  "name": "Pinos DGC",
+  "holes": 1,
+  "par": 3,
+  "distance_ft": 320,
+  "layouts": ["default"]
+}
