@@ -8,16 +8,36 @@ html, body {
 
 canvas { display: block; }
 
+/* Controls list, shown on the left of the full map (M). */
 #hud {
-  position: fixed;
-  left: 12px;
-  bottom: 12px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.45);
+  width: 250px;
+  max-height: min(78vmin, calc(100vh - 80px));
+  overflow-y: auto;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.55);
   color: #fff;
   font-size: 13px;
-  pointer-events: none;
+}
+#hud h3 {
+  margin: 10px 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffd27a;
+}
+#hud h3:first-child { margin-top: 0; }
+#hud ul { margin: 0; padding: 0; list-style: none; }
+#hud li { display: flex; align-items: baseline; gap: 10px; padding: 2px 0; }
+#hud kbd {
+  flex: 0 0 52px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.14);
+  font: 700 11px ui-monospace, monospace;
+  text-align: center;
+  white-space: nowrap;
 }
 
 #loading {
@@ -55,6 +75,7 @@ canvas { display: block; }
   position: fixed;
   right: 16px;
   bottom: 12px;
+  text-align: right;
   color: #fff;
   font: 600 22px system-ui, sans-serif;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
@@ -130,7 +151,7 @@ canvas { display: block; }
 #feed {
   position: fixed;
   right: 16px;
-  top: 12px;
+  top: 250px;
   display: grid;
   gap: 4px;
   justify-items: end;
@@ -150,15 +171,36 @@ canvas { display: block; }
   position: fixed;
   right: 16px;
   bottom: 46px;
-  width: 180px;
-  height: 10px;
-  border-radius: 5px;
+  width: 240px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.55);
   background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
   pointer-events: none;
 }
 #health[hidden] { display: none; }
-#health-fill { height: 100%; width: 100%; background: #8fd16a; transition: width 0.2s, background 0.2s; }
+#health-fill, #health-trail { position: absolute; left: 0; top: 0; height: 100%; width: 100%; }
+#health-fill { background: #8fd16a; transition: width 0.12s, background 0.2s; }
+/* The chunk just lost lingers, then drains away. */
+#health-trail { background: rgba(255, 235, 220, 0.85); transition: width 0.5s ease-in 0.45s; }
+/* One segment per body shot (5 × 20 hp). */
+#health-ticks {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 calc(20% - 2px), rgba(0, 0, 0, 0.55) calc(20% - 2px) 20%);
+}
+#health-text {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font: 700 12px system-ui, sans-serif;
+  text-shadow: 0 1px 2px #000;
+}
+#health.low { animation: health-pulse 0.9s ease-in-out infinite; }
+@keyframes health-pulse { 50% { border-color: rgba(229, 83, 61, 0.9); } }
 
 #damage {
   position: fixed;
@@ -169,6 +211,7 @@ canvas { display: block; }
   transition: opacity 0.4s;
 }
 #damage.on { opacity: 1; transition: none; }
+#damage.head { box-shadow: inset 0 0 200px rgba(220, 0, 0, 0.95); }
 
 #overlay {
   position: fixed;
@@ -200,6 +243,14 @@ canvas { display: block; }
   transition: opacity 0.25s;
 }
 #hitmarker.on { opacity: 1; transition: none; }
+#hitmarker.head {
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  background:
+    linear-gradient(45deg, transparent 45%, #ffd23a 45%, #ffd23a 55%, transparent 55%),
+    linear-gradient(-45deg, transparent 45%, #ffd23a 45%, #ffd23a 55%, transparent 55%);
+}
 
 #banner {
   position: fixed;
@@ -229,3 +280,388 @@ canvas { display: block; }
 }
 #banner-btn:disabled { opacity: 0.5; cursor: default; }
 #overlay { white-space: pre-line; }
+
+/* --- Map ---------------------------------------------------------------- */
+#minimap {
+  position: fixed;
+  right: 16px;
+  top: 12px;
+  width: 180px;
+  pointer-events: none;
+}
+#minimap[hidden] { display: none; }
+#minimap-canvas {
+  display: block;
+  width: 180px;
+  height: 180px;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+#region-name {
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+#map-hint {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 0 1px 2px #000;
+}
+#map-hint b { color: #ffd27a; }
+#region-toast {
+  position: fixed;
+  left: 50%;
+  top: 22%;
+  transform: translateX(-50%);
+  color: #fff;
+  font: 700 30px system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+#region-toast::before {
+  content: 'Entering';
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0.8;
+}
+#region-toast.on { opacity: 1; transition: opacity 0.3s; }
+#bigmap {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  background: rgba(10, 16, 10, 0.6);
+  color: #dfe9d8;
+  font-size: 13px;
+  pointer-events: none;
+  z-index: 4;
+}
+#bigmap[hidden] { display: none; }
+#bigmap p { margin: 0; }
+.bigmap-row { display: flex; gap: 16px; align-items: center; }
+@media (max-width: 760px) {
+  .bigmap-row { flex-direction: column; }
+  #hud { width: calc(100vw - 32px); max-height: 30vh; box-sizing: border-box; }
+}
+#bigmap-canvas {
+  width: min(78vmin, calc(100vw - 32px - 266px));
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.6);
+}
+
+/* --- Blue zone ---------------------------------------------------------- */
+#zone-tint {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(40, 90, 220, 0.25) 30%, rgba(30, 70, 200, 0.75) 100%);
+}
+#zone-info {
+  position: fixed;
+  right: 16px;
+  bottom: 74px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font: 600 13px system-ui, sans-serif;
+  pointer-events: none;
+}
+#zone-info[hidden] { display: none; }
+#zone-info::before { content: ''; display: inline-block; width: 9px; height: 9px; margin-right: 7px; border-radius: 50%; background: #5b8cff; }
+#zone-info.urgent { background: rgba(40, 70, 170, 0.75); }
+#zone-info.urgent::before { animation: zone-blink 0.8s steps(2) infinite; }
+@keyframes zone-blink { 50% { opacity: 0.2; } }
+#alert {
+  position: fixed;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  color: #fff;
+  font: 700 24px system-ui, sans-serif;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+#alert.on { opacity: 1; transition: opacity 0.2s; }
+
+#ammo small { display: block; font-size: 11px; font-weight: 600; opacity: 0.8; }
+#health { bottom: 60px; }
+#zone-info { bottom: 88px; }
+#pickup-prompt {
+  position: fixed;
+  left: 50%;
+  top: 62%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 15px;
+  pointer-events: none;
+}
+#pickup-prompt[hidden] { display: none; }
+#pickup-prompt b {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 0 7px;
+  border-radius: 4px;
+  background: #ffd27a;
+  color: #1d1d1d;
+}
+
+#ammo small b { color: #ffd27a; }
+
+/* --- Sniper scope --------------------------------------------------------- */
+#scope {
+  position: fixed;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+  /* Round lens, black around it, with a thin reticle and range ticks. */
+  background:
+    linear-gradient(#000, #000) center / 1px 100% no-repeat,
+    linear-gradient(#000, #000) center / 100% 1px no-repeat,
+    repeating-linear-gradient(0deg, transparent 0 calc(4vmin - 1px), #000 calc(4vmin - 1px) 4vmin) center 50% / 9px 32vmin no-repeat,
+    radial-gradient(circle at center, transparent 0 calc(42vmin - 2px), rgba(0, 0, 0, 0.6) calc(42vmin - 2px) 42vmin, #000 42vmin);
+}
+body.scoped #scope { display: block; }
+body.scoped #crosshair { display: none; }
+
+/* --- Throwables quick inventory (G) --------------------------------------- */
+#throw-menu {
+  position: fixed;
+  left: 50%;
+  bottom: 70px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+}
+#throw-menu[hidden] { display: none; }
+#throw-menu div {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 74px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+#throw-menu div.on { border-color: #ffd27a; background: rgba(40, 34, 18, 0.75); }
+#throw-menu div.empty { opacity: 0.4; }
+#throw-menu small { font-size: 11px; font-weight: 500; opacity: 0.85; }
+#throw-menu p { flex-basis: 100%; margin: 2px 0 0; text-align: center; color: #fff; font-size: 12px; text-shadow: 0 1px 2px #000; }
+#throw-menu i { width: 18px; height: 26px; border-radius: 4px; }
+#throw-menu .ico-smoke { background: linear-gradient(#bdbdb5 0 20%, #56634a 20% 100%); }
+#throw-menu .ico-frag { border-radius: 50%; width: 22px; height: 24px; background: #4b5a33; }
+#throw-menu .ico-bluezone { background: linear-gradient(#bdbdb5 0 20%, #2f5fd0 20% 100%); box-shadow: 0 0 8px #4f86ff; }
+
+/* Frag fuse countdown while cooking (R). */
+#cook {
+  position: fixed;
+  left: 50%;
+  top: calc(50% + 26px);
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: rgba(150, 30, 20, 0.8);
+  color: #fff;
+  font: 700 15px ui-monospace, monospace;
+  pointer-events: none;
+  animation: cook-pulse 0.5s ease-in-out infinite alternate;
+}
+#cook[hidden] { display: none; }
+@keyframes cook-pulse { to { background: rgba(220, 50, 30, 0.9); } }
+#throw-menu .ico-frag { width: 22px; height: 26px; border-radius: 45% 45% 50% 50%; background: radial-gradient(circle at 35% 30%, #6b7a4a, #3f4a2c 70%); }
+@media (max-width: 760px) {
+  #bigmap-canvas { width: min(60vh, calc(100vw - 32px)); }
+}
+
+/* --- Bandages (H) ---------------------------------------------------------- */
+#bandage {
+  position: fixed;
+  left: 50%;
+  top: calc(50% + 60px);
+  transform: translateX(-50%);
+  display: grid;
+  gap: 5px;
+  justify-items: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+}
+#bandage[hidden] { display: none; }
+#bandage div { width: 180px; height: 6px; border-radius: 3px; background: rgba(0, 0, 0, 0.55); overflow: hidden; }
+#bandage i { display: block; height: 100%; width: 0; background: #8fd16a; }
+#meds {
+  position: fixed;
+  right: 266px;
+  bottom: 60px;
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 12px;
+  line-height: 18px;
+  pointer-events: none;
+}
+#meds[hidden] { display: none; }
+#meds b { margin-right: 4px; color: #ffd27a; }
+#health.healing { animation: health-heal 0.8s ease-in-out infinite alternate; }
+@keyframes health-heal { to { border-color: rgba(143, 209, 106, 0.95); box-shadow: 0 0 10px rgba(143, 209, 106, 0.6); } }
+
+#scope-zoom {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 42vmin + 10px);
+  transform: translateX(-50%);
+  color: #cfd8c8;
+  font: 600 13px ui-monospace, monospace;
+}
+
+#ammo .empty { color: #ff6b57; }
+
+/* --- Inventory (hold Tab) --------------------------------------------------- */
+#inventory {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+#inventory[hidden] { display: none; }
+#inventory .guns { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+#inventory .gun {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  align-items: baseline;
+  width: 150px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+}
+#inventory .gun.on { border-color: #ffd27a; background: rgba(40, 34, 18, 0.8); }
+#inventory .gun b { font-size: 15px; }
+#inventory .gun small { grid-column: 2; font-size: 11px; opacity: 0.7; }
+#inventory .gun .ammo { grid-column: 1 / -1; margin-top: 6px; font: 700 22px system-ui, sans-serif; }
+#inventory .gun .ammo i { font-style: normal; font-size: 14px; font-weight: 500; opacity: 0.75; }
+#inventory .gun.empty .ammo { color: #ff6b57; }
+#inventory kbd {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffd27a;
+  font: 700 12px ui-monospace, monospace;
+}
+#inventory .items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+}
+#inventory .items span.on { color: #ffd27a; font-weight: 700; }
+#inventory .items span.none { opacity: 0.4; }
+
+/* --- End of match ------------------------------------------------------------ */
+#match-end {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8, 12, 8, 0.6);
+  z-index: 6;
+  pointer-events: none;
+}
+#match-end[hidden] { display: none; }
+#match-end .card {
+  width: min(560px, 100%);
+  box-sizing: border-box;
+  padding: 22px 24px;
+  border-radius: 14px;
+  background: rgba(20, 28, 20, 0.92);
+  color: #e8efe2;
+  text-align: center;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.5);
+}
+#match-end h1 { margin: 0; font-size: clamp(24px, 5vw, 38px); letter-spacing: 0.02em; text-transform: uppercase; }
+#match-end.won h1 {
+  color: #ffd27a;
+  text-shadow: 0 0 18px rgba(255, 190, 70, 0.55);
+  animation: chicken-pop 0.6s cubic-bezier(.2, 1.6, .4, 1) both;
+}
+@keyframes chicken-pop { from { transform: scale(0.6); opacity: 0; } }
+#match-end .sub { margin: 6px 0 16px; color: #b9c7b1; font-size: 14px; }
+#match-end .mine { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+#match-end .mine div { padding: 10px 4px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); }
+#match-end .mine b { display: block; font-size: 24px; color: #fff; }
+#match-end .mine b small { font-size: 13px; font-weight: 500; opacity: 0.7; }
+#match-end .mine span { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #9fb097; }
+#match-end.won .mine div:first-child { background: rgba(255, 210, 122, 0.16); }
+#match-end table { width: 100%; border-collapse: collapse; font-size: 13px; }
+#match-end th { padding: 4px 6px; color: #9fb097; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; text-align: left; }
+#match-end td { padding: 5px 6px; border-top: 1px solid rgba(255, 255, 255, 0.07); text-align: left; }
+#match-end th:nth-child(n+3), #match-end td:nth-child(n+3) { text-align: right; }
+#match-end tr.me td { color: #ffd27a; font-weight: 700; }
+#match-end td small { opacity: 0.6; font-weight: 400; }
+#match-end .spectated { color: #b9c7b1; }
+#match-end .next { margin: 14px 0 0; font-size: 13px; color: #9fb097; }
+@media (max-width: 480px) { #match-end .mine { grid-template-columns: repeat(2, 1fr); } }
+
+/* --- Uniform color picker (start menu) --------------------------------------- */
+#menu .colors-field { display: grid; gap: 6px; font-size: 13px; color: #b8c6b0; }
+#menu .colors-field b { color: #fff; font-weight: 600; margin-left: 4px; }
+#colors { display: flex; flex-wrap: wrap; gap: 6px; }
+#menu .swatch {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+#menu .swatch[aria-checked="true"] { border-color: #fff; box-shadow: 0 0 0 2px #5d7a32; }

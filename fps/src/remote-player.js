@@ -4,7 +4,7 @@ import { Soldier, ONCE_CLIPS } from './soldier.js';
 const INTERP_DELAY = 100; // ms behind the newest state, so there are always two states to blend
 const BUFFER_MS = 1000;
 
-// Slightly different uniform shades so players can tell each other apart.
+// Fallback shades for players whose color we don't know yet.
 const UNIFORMS = ['#5b4a32', '#3f5560', '#604040', '#4d5a2c', '#545454', '#3c4a6a'];
 let nextUniform = 0;
 
@@ -37,9 +37,18 @@ function makeNameTag(name) {
 
 /** Another player's soldier, driven by network snapshots with ~100 ms interpolation. */
 export class RemotePlayer {
-  static async create(id, name) {
-    const color = UNIFORMS[nextUniform++ % UNIFORMS.length];
-    return new RemotePlayer(id, name, await Soldier.create({ color }));
+  static async create(id, name, color = null) {
+    const soldier = await Soldier.create({ color: color ?? UNIFORMS[nextUniform++ % UNIFORMS.length] });
+    const remote = new RemotePlayer(id, name, soldier);
+    remote.color = color;
+    return remote;
+  }
+
+  /** The player's chosen uniform color (from the host). */
+  setColor(hex) {
+    if (!hex || hex === this.color) return;
+    this.color = hex;
+    this.soldier.setColor(hex);
   }
 
   constructor(id, name, soldier) {
@@ -106,6 +115,8 @@ export class RemotePlayer {
     // Base clip comes from the newer state; directional loops keep their foot phase.
     const cur = t < 0.5 ? sa : sb;
     if (cur.b !== this.soldier.baseName) this.soldier.fadeTo(cur.b, 0.2, { sync: !ONCE_CLIPS.has(cur.b) });
+    this.soldier.setWeapon(sb.w ?? 'pistol');
+    this.soldier.bandaging = !!sb.h && this.alive;
     if (sb.r && !this.lastReload) this.soldier.playReload();
     this.lastReload = sb.r;
 

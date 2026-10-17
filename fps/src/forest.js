@@ -85,6 +85,48 @@ function toPrototype(gltf) {
   };
 }
 
+/**
+ * Where the model's surface crosses the horizontal plane at height `y` (model units, base at 0):
+ * the outline of its cross-section there, as [x, z] points.
+ */
+function sectionAt(proto, y) {
+  const pts = [];
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+  const cut = (p, q) => {
+    if ((p.y - y) * (q.y - y) > 0 || p.y === q.y) return;
+    const t = (y - p.y) / (q.y - p.y);
+    pts.push([p.x + (q.x - p.x) * t, p.z + (q.z - p.z) * t]);
+  };
+  for (const { geometry } of proto.parts) {
+    const pos = geometry.attributes.position, idx = geometry.index;
+    const n = idx ? idx.count : pos.count;
+    for (let i = 0; i < n; i += 3) {
+      const [i0, i1, i2] = idx ? [idx.getX(i), idx.getX(i + 1), idx.getX(i + 2)] : [i, i + 1, i + 2];
+      a.fromBufferAttribute(pos, i0); b.fromBufferAttribute(pos, i1); c.fromBufferAttribute(pos, i2);
+      const lo = Math.min(a.y, b.y, c.y), hi = Math.max(a.y, b.y, c.y);
+      if (y < lo || y > hi) continue;
+      cut(a, b); cut(b, c); cut(c, a);
+    }
+  }
+  return pts;
+}
+
+/**
+ * Solid trunk circle for a tree scaled by `scale`: centered on the trunk (not the canopy), wide
+ * enough to cover the tree's cross-section anywhere a body can touch it (0.1–1.9 m up). Low
+ * branches count too, so you can't walk into them either. Returned in model units.
+ */
+function trunkCollider(proto, scale) {
+  const heights = [0.1, 0.4, 0.7, 1.0, 1.3, 1.6, 1.9].map((m) => m / scale);
+  const base = sectionAt(proto, heights[0]);
+  if (!base.length) return null;
+  const cx = base.reduce((s, p) => s + p[0], 0) / base.length;
+  const cz = base.reduce((s, p) => s + p[1], 0) / base.length;
+  let r = 0;
+  for (const h of heights) for (const [x, z] of sectionAt(proto, h)) r = Math.max(r, Math.hypot(x - cx, z - cz));
+  return { cx, cz, r };
+}
+
 const HIT_MATERIAL = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
 const _ray = new THREE.Raycaster();
 const _down = new THREE.Vector3(0, -1, 0);
@@ -180,11 +222,14 @@ export async function createForest(onProgress) {
   };
   const addRock = (def, x, z) => {
     const { scale, proto, y, matrix } = place(def, x, z, 0.1);
+    markers.rocks.push({ x, z, r: proto.footprint * scale });
     colliders.add({
       kind: 'rock', x, z, r: proto.footprint * scale, top: y + proto.height * scale, matrix, meshes: proto.hitMeshes,
     });
   };
   const nearSpawn = (x, z, r) => Math.hypot(x, z) < r;
+  const areaK = (WORLD_SIZE / 500) ** 2; // counts below were tuned for a 500 m world
+  const markers = { trees: [], rocks: [] }; // for the map
 
   // Trees: jittered grid, density modulated by noise to form groves and clearings.
   const treeCell = 7;
@@ -195,14 +240,17 @@ export async function createForest(onProgress) {
       const density = 0.55 + densityNoise(x, z) * 0.9;
       if (rand() > density || slopeAt(x, z) > 0.7) continue;
       const def = TREES[Math.floor(rand() * TREES.length)];
-      const { scale, proto } = place(def, x, z, 0.01);
-      // Trunks are thin relative to the canopy; approximate with a fraction of the footprint.
-      colliders.add({ kind: 'tree', x, z, r: Math.max(0.35, proto.radius * scale * 0.12) });
+      const { scale, proto, matrix } = place(def, x, z, 0.01);
+      // Solid circle measured from the model's real cross-section at body height.
+      const trunk = trunkCollider(proto, scale);
+      const at = new THREE.Vector3(trunk?.cx ?? 0, 0, trunk?.cz ?? 0).applyMatrix4(matrix);
+      colliders.add({ kind: 'tree', x: at.x, z: at.z, r: Math.min(3, Math.max(0.3, (trunk?.r ?? 0.3 / scale) * scale)) });
+      markers.trees.push({ x, z, r: proto.radius * scale });
     }
   }
 
   // Rocks, stumps and logs (solid; low ones can be vaulted, and you can stand on them).
-  for (let i = 0; i < 700; i++) {
+  for (let i = 0; i < 700 * areaK; i++) {
     const x = (rand() * 2 - 1) * half, z = (rand() * 2 - 1) * half;
     if (nearSpawn(x, z, 8)) continue;
     addRock(ROCKS[Math.floor(rand() * ROCKS.length)], x, z);
@@ -214,7 +262,7 @@ export async function createForest(onProgress) {
   addRock({ ...byFile.rock_largeA, h: [1.6, 1.6] }, -1, 17);
 
   // Undergrowth: dense, no collisions.
-  for (let i = 0; i < 14000; i++) {
+  for (let i = 0; i < 14000 * areaK; i++) {
     const x = (rand() * 2 - 1) * half, z = (rand() * 2 - 1) * half;
     if (slopeAt(x, z) > 0.8) continue;
     const def = UNDERGROWTH[Math.floor(rand() * UNDERGROWTH.length)];
@@ -228,5 +276,5 @@ export async function createForest(onProgress) {
     forest.add(group);
   }
 
-  return { forest, colliders };
+  return { forest, colliders, markers };
 }

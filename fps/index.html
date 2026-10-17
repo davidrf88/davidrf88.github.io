@@ -21,6 +21,7 @@
     <div class="card">
       <h1>Forest Walk</h1>
       <label>Your name <input id="name" maxlength="16" autocomplete="off" spellcheck="false" /></label>
+      <div class="colors-field"><span>Uniform <b id="color-name"></b></span><div id="colors" role="radiogroup" aria-label="Uniform color"></div></div>
       <button id="btn-host" class="primary">Host a game</button>
       <div class="row">
         <input id="code" placeholder="Room code" maxlength="5" autocomplete="off" spellcheck="false" />
@@ -35,17 +36,74 @@
     <span id="player-count"></span>
   </div>
   <div id="banner" hidden><span id="banner-text"></span><button id="banner-btn" hidden></button></div>
+  <div id="minimap" hidden>
+    <canvas id="minimap-canvas"></canvas>
+    <div id="region-name"></div>
+    <div id="map-hint"><b>M</b> map &amp; controls</div>
+  </div>
+  <div id="region-toast"></div>
+  <div id="alert"></div>
+  <div id="zone-tint"></div>
+  <div id="zone-info" hidden></div>
+  <div id="bigmap" hidden>
+    <div class="bigmap-row">
+      <div id="hud">
+        <h3>Move</h3>
+        <ul>
+          <li><kbd>WASD</kbd><span>Move</span></li>
+          <li><kbd>Shift</kbd><span>Sprint</span></li>
+          <li><kbd>Space</kbd><span>Jump / vault / stand up</span></li>
+          <li><kbd>C</kbd><span>Crouch</span></li>
+          <li><kbd>Z</kbd><span>Prone</span></li>
+          <li><kbd>Alt</kbd><span>Free look</span></li>
+        </ul>
+        <h3>Fight</h3>
+        <ul>
+          <li><kbd>LMB</kbd><span>Shoot</span></li>
+          <li><kbd>RMB</kbd><span>Aim · sniper: scope</span></li>
+          <li><kbd>Wheel</kbd><span>Sniper scope zoom</span></li>
+          <li><kbd>Q / E</kbd><span>Lean while aiming</span></li>
+          <li><kbd>R</kbd><span>Reload</span></li>
+          <li><kbd>1 – 4</kbd><span>Switch guns</span></li>
+          <li><kbd>Tab</kbd><span>Hold: guns, ammo &amp; items</span></li>
+        </ul>
+        <h3>Items</h3>
+        <ul>
+          <li><kbd>F</kbd><span>Pick up</span></li>
+          <li><kbd>G</kbd><span>Grenades: pick / cycle</span></li>
+          <li><kbd>LMB</kbd><span>Hold to aim, release to throw</span></li>
+          <li><kbd>+ RMB</kbd><span>Underhand toss</span></li>
+          <li><kbd>R</kbd><span>Cook a frag</span></li>
+          <li><kbd>Esc</kbd><span>Cancel throw / bandage</span></li>
+          <li><kbd>H</kbd><span>Bandage (+1 health bar)</span></li>
+        </ul>
+        <h3>Other</h3>
+        <ul>
+          <li><kbd>M</kbd><span>This map</span></li>
+          <li><kbd>Enter</kbd><span>Start match (host)</span></li>
+          <li><kbd>Click</kbd><span>Lock mouse</span></li>
+          <li><kbd>F</kbd><span>Out: free camera / follow</span></li>
+        </ul>
+      </div>
+      <canvas id="bigmap-canvas"></canvas>
+    </div>
+    <p>Press <b>M</b> to close</p>
+  </div>
   <div id="feed"></div>
-  <div id="health" hidden><div id="health-fill"></div></div>
+  <div id="health" hidden><div id="health-trail"></div><div id="health-fill"></div><div id="health-ticks"></div><span id="health-text">100</span></div>
   <div id="damage"></div>
   <div id="overlay" hidden></div>
+  <div id="match-end" hidden></div>
+  <div id="scope"><span id="scope-zoom"></span></div>
   <div id="crosshair"></div>
   <div id="hitmarker"></div>
   <div id="ammo"></div>
-  <div id="hud">
-    <b>WASD</b> move · <b>Shift</b> sprint · <b>Space</b> jump / vault / stand up · <b>C</b> crouch · <b>Z</b> prone ·
-    <b>RMB</b> aim · <b>LMB</b> shoot · <b>Q/E</b> lean (aiming) · <b>R</b> reload · <b>Alt</b> free look · <b>Wheel</b> zoom · click to lock mouse
-  </div>
+  <div id="pickup-prompt" hidden></div>
+  <div id="throw-menu" hidden></div>
+  <div id="cook" hidden></div>
+  <div id="bandage" hidden><span></span><div><i></i></div></div>
+  <div id="meds" hidden></div>
+  <div id="inventory" hidden></div>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

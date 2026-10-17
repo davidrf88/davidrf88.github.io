@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { ImprovedNoise } from 'three/addons/math/ImprovedNoise.js';
 
-export const WORLD_SIZE = 500;          // meters, square world centered on origin
-const SEGMENTS = 250;                   // grid cells per side (2m cells)
+export const WORLD_SIZE = 250;          // meters, square world centered on origin
+const SEGMENTS = 125;                   // grid cells per side (2m cells)
 const HALF = WORLD_SIZE / 2;
 const CELL = WORLD_SIZE / SEGMENTS;
 
@@ -29,10 +29,10 @@ const smoothstep = (a, b, x) => {
 function rawHeight(x, z) {
   let h = fbm(x * 0.006, z * 0.006) * 22 + fbm(x * 0.035, z * 0.035, 3) * 2.5;
   // Flatten a clearing around the spawn point.
-  h *= smoothstep(8, 45, Math.hypot(x, z));
+  h *= smoothstep(6, 32, Math.hypot(x, z));
   // Raise hills at the border so the world feels enclosed.
   const edge = Math.max(Math.abs(x), Math.abs(z)) / HALF;
-  h += smoothstep(0.82, 1.0, edge) * 45;
+  h += smoothstep(0.74, 1.0, edge) * 38;
   return h;
 }
 

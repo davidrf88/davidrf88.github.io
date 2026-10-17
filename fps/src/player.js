@@ -1,14 +1,17 @@
 import * as THREE from 'three';
 import { WORLD_SIZE, heightAt } from './terrain.js';
 import { Soldier, SOLDIER_HEIGHT } from './soldier.js';
+import { WEAPONS } from './weapons.js';
+import { THROWABLES, THROW_SLOTS } from './throwables.js';
 
 const HEIGHT = SOLDIER_HEIGHT;
 const RADIUS = 0.4;
 const JUMP_SPEED = 6;
 const GRAVITY = 20;
-const MAG_SIZE = 12;
-const FIRE_INTERVAL = 0.18;
 export const MAX_HP = 100;
+
+/** Bandages: 5 s to apply, then one health-bar segment (20 hp) fills back in over 5 s. */
+export const BANDAGE = { apply: 5, heal: 20, healTime: 5, perPickup: 2, max: 10 };
 
 const STEP = 0.45;                // walk straight onto anything lower than this
 const VAULT_OVER_MAX = 1.3;        // tallest thin obstacle you can vault over (taller ones: vault up, up to HEIGHT)
@@ -55,7 +58,9 @@ export class Player {
     this.hipFireTimer = 0;
     this.fireCooldown = 0;
     this.reloadUntil = 0;
-    this.ammo = MAG_SIZE;
+    this.reloadTimer = 0;
+    this.bloom = 0;                 // extra spread from sustained fire
+    this.#resetWeapons();
     this.hp = MAX_HP;
     this.alive = true;
     this.object.position.set(0, heightAt(0, 0), 0);
@@ -63,7 +68,136 @@ export class Player {
 
   get position() { return this.object.position; }
   get reloading() { return this.time < this.reloadUntil; }
-  get magSize() { return MAG_SIZE; }
+  /** The gun in hand (while holding a grenade: the gun you'll switch back to). */
+  get gun() { return WEAPONS[this.holdingThrowable ? this.lastGun : this.weapon]; }
+  get holdingThrowable() { return !!THROWABLES[this.weapon]; }
+  get ammo() { return this.weapons[this.holdingThrowable ? this.lastGun : this.weapon].ammo; }
+  set ammo(v) { this.weapons[this.weapon].ammo = v; }
+  get reserve() { return this.weapons[this.holdingThrowable ? this.lastGun : this.weapon].reserve; }
+  get magSize() { return this.gun.mag; }
+  /** Looking through the scope: scoped gun, right mouse held, gun fully raised. */
+  get scoped() { return !!this.gun.scope && !this.holdingThrowable && this.aimHeld && this.aiming && this.aimFrac > 0.8; }
+  /** Current accuracy cone half-angle (radians). */
+  get spread() {
+    const aimed = this.gun.scope ? this.scoped : this.aiming && this.aimFrac > 0.6;
+    return (aimed ? this.gun.spread.aim : this.gun.spread.hip) + this.bloom;
+  }
+  has(type) { return !!this.weapons[type]; }
+
+  #resetWeapons() {
+    this.weapons = { pistol: { ammo: WEAPONS.pistol.mag, reserve: WEAPONS.pistol.reserve } };
+    this.throwables = Object.fromEntries(Object.keys(THROWABLES).map((t) => [t, 0]));
+    this.bandages = 0;
+    this.bandageUntil = null; // applying: time it finishes
+    this.weapon = this.lastGun = 'pistol';
+    this.soldier.setWeapon('pistol');
+  }
+
+  /** Can this pickup be taken? (Grenades and bandages are capped.) */
+  canTake(type) {
+    if (type === 'bandage') return this.bandages < BANDAGE.max;
+    return !THROWABLES[type] || this.throwables[type] < THROWABLES[type].max;
+  }
+
+  /** Picked up something from the ground: a gun, a grenade or bandages. */
+  pickUp(type) {
+    if (type === 'bandage') this.bandages = Math.min(BANDAGE.max, this.bandages + BANDAGE.perPickup);
+    else if (THROWABLES[type]) this.giveThrowable(type);
+    else this.giveWeapon(type);
+  }
+
+  /** Picked up a grenade (capped per type). */
+  giveThrowable(type) {
+    this.throwables[type] = Math.min(THROWABLES[type].max, this.throwables[type] + 1);
+  }
+
+  /**
+   * G: take out a grenade, or cycle to the next type you have. Returns the selected type (or null).
+   */
+  cycleThrowable() {
+    const owned = THROW_SLOTS.filter((s) => !s.locked && this.throwables[s.type] > 0).map((s) => s.type);
+    if (!owned.length || !this.alive) return null;
+    const i = owned.indexOf(this.weapon);
+    const next = owned[(i + 1) % owned.length];
+    this.equip(next);
+    return next;
+  }
+
+  // --- Bandages ---------------------------------------------------------------
+
+  get applyingBandage() { return this.bandageUntil != null; }
+  /** 0..1 progress of the bandage being applied. */
+  get bandageProgress() { return this.applyingBandage ? 1 - (this.bandageUntil - this.time) / BANDAGE.apply : 0; }
+
+  /** H: start wrapping a bandage (needs one, and missing health). Returns false if you can't. */
+  startBandage() {
+    if (!this.alive || this.applyingBandage || this.bandages <= 0 || this.hp >= MAX_HP || this.vault || this.cooking) return false;
+    this.bandageUntil = this.time + BANDAGE.apply;
+    this.reloadUntil = 0;
+    clearTimeout(this.reloadTimer);
+    this.soldier.bandaging = true;
+    return true;
+  }
+
+  /** Stopped before it was done: you keep the bandage. */
+  cancelBandage() {
+    if (!this.applyingBandage) return false;
+    this.bandageUntil = null;
+    this.soldier.bandaging = false;
+    return true;
+  }
+
+  /** R with a frag in hand: pull the pin; the fuse starts now (PUBG "cooking"). */
+  startCook() {
+    if (!this.holdingThrowable || !THROWABLES[this.weapon].cook || this.cookStart != null) return false;
+    this.cookStart = this.time;
+    return true;
+  }
+  get cooking() { return this.cookStart != null; }
+  /** Throw cancelled: the pin goes back in. */
+  uncook() { this.cookStart = null; }
+  /** Seconds left on the fuse of the grenade in hand (full fuse if the pin is still in). */
+  get fuseLeft() {
+    const def = THROWABLES[this.weapon];
+    if (!def) return 0;
+    return this.cooking ? def.fuse - (this.time - this.cookStart) : def.fuse;
+  }
+
+  /** Released a grenade: one fewer; back to the gun when you run out. Returns false if you can't. */
+  consumeThrowable() {
+    const type = this.weapon;
+    if (!THROWABLES[type] || this.throwables[type] <= 0) return false;
+    this.cookStart = null;
+    this.throwables[type]--;
+    this.throwCooldown = 0.9;
+    this.soldier.playThrow();
+    this.hipFireTimer = 0;
+    if (this.throwables[type] === 0) setTimeout(() => { if (this.weapon === type) this.equip(this.lastGun); }, 700);
+    return true;
+  }
+
+  /** Picked up a gun: a full magazine plus reserve ammo, and switch to it. */
+  giveWeapon(type) {
+    const w = WEAPONS[type];
+    const slot = this.weapons[type];
+    if (slot) slot.reserve += w.mag + w.reserve; // already have one: take its ammo
+    else this.weapons[type] = { ammo: w.mag, reserve: w.reserve };
+    this.equip(type);
+  }
+
+  equip(type) {
+    if (this.cooking) return; // the pin is out: throw it first
+    if (type !== this.weapon) this.cancelBandage();
+    const throwable = !!THROWABLES[type];
+    if (!this.alive || type === this.weapon || (throwable ? !(this.throwables[type] > 0) : !this.weapons[type])) return;
+    if (!throwable) this.lastGun = type;
+    clearTimeout(this.reloadTimer);
+    this.reloadUntil = 0;
+    this.weapon = type;
+    this.bloom = 0;
+    this.fireCooldown = 0.35; // raise the new gun
+    this.soldier.setWeapon(type);
+  }
   get currentStance() { return this.transition?.then ?? this.stance; }
 
   /** Eye height the camera should orbit around for the current stance. */
@@ -74,36 +208,48 @@ export class Player {
 
   fadeTo(name, duration, opts) { this.soldier.fadeTo(name, duration, opts); }
 
-  #startTransition(name, then) {
-    this.fadeTo(name, 0.2, { once: true });
-    this.transition = { name, then, until: this.time + this.soldier.clipDuration(name) * 0.95 };
+  /** Plays part of a stance clip (`from`..`to` as fractions of it), then settles into `then`. */
+  #startTransition(name, then, { from = 0, to = 1 } = {}) {
+    const dur = this.soldier.clipDuration(name);
+    this.fadeTo(name, 0.2, { once: true, from: dur * from });
+    this.transition = { name, then, until: this.time + dur * (to - from) * 0.95 };
   }
 
   setStance(target) {
     if (!this.alive || this.vault || this.transition || target === this.stance || !this.onGround) return;
-    if (target === 'prone') this.#startTransition('Crawl_Enter', 'prone');
-    else if (this.stance === 'prone') this.#startTransition('Crawl_Exit', target);
+    // The library's prone clips go to/from full standing. From a crouch, start Crawl_Enter once the
+    // hips are at crouch height (~15%); to a crouch, stop Crawl_Exit there (~42%) instead of standing up.
+    if (target === 'prone') this.#startTransition('Crawl_Enter', 'prone', { from: this.stance === 'crouch' ? 0.15 : 0 });
+    else if (this.stance === 'prone') this.#startTransition('Crawl_Exit', target, { to: target === 'crouch' ? 0.42 : 1 });
     else this.stance = target;
   }
 
   /** Returns true if a shot was fired. */
   tryShoot() {
+    if (this.holdingThrowable || this.applyingBandage) return false;
     if (!this.alive || this.vault || this.stance === 'prone' || this.transition || this.reloading || this.fireCooldown > 0) return false;
-    if (this.ammo <= 0) { this.reload(); return false; }
+    if (this.ammo <= 0) return false; // empty: no auto-reload, press R
     this.ammo--;
-    this.fireCooldown = FIRE_INTERVAL;
+    this.fireCooldown = this.gun.interval;
+    this.bloom = Math.min(this.gun.bloomMax, this.bloom + this.gun.bloom);
     this.hipFireTimer = 0.8;
     this.soldier.playShoot();
-    if (this.ammo === 0) setTimeout(() => this.reload(), 250);
     return true;
   }
 
   reload() {
-    if (!this.alive || this.vault || this.reloading || this.ammo === MAG_SIZE || this.stance === 'prone') return;
+    if (this.holdingThrowable || this.applyingBandage) return;
+    const slot = this.weapons[this.weapon];
+    if (!this.alive || this.vault || this.reloading || slot.ammo === this.magSize || slot.reserve <= 0 || this.stance === 'prone') return;
     this.soldier.playReload();
-    const dur = this.soldier.clipDuration('Pistol_Reload');
+    const dur = this.soldier.clipDuration('Pistol_Reload') * (this.gun.reloadK ?? 1);
     this.reloadUntil = this.time + dur;
-    setTimeout(() => { this.ammo = MAG_SIZE; }, dur * 800);
+    const mag = this.magSize;
+    this.reloadTimer = setTimeout(() => {
+      const take = Math.min(mag - slot.ammo, slot.reserve);
+      slot.ammo += take;
+      slot.reserve -= take;
+    }, dur * 800);
   }
 
   getMuzzlePosition(target) { return this.soldier.getMuzzlePosition(target); }
@@ -114,6 +260,8 @@ export class Player {
     if (!this.alive) return;
     this.alive = false;
     this.hp = 0;
+    this.cookStart = null;
+    this.cancelBandage();
     this.vault = null;
     this.transition = null;
     this.aiming = false;
@@ -132,7 +280,11 @@ export class Player {
     this.object.visible = true;
     this.alive = true;
     this.hp = MAX_HP;
-    this.ammo = MAG_SIZE;
+    clearTimeout(this.reloadTimer);
+    this.reloadUntil = 0;
+    this.cancelBandage();
+    this.#resetWeapons();
+    this.cookStart = null;
     this.stance = 'stand';
     this.velocity.set(0, 0, 0);
     this.onGround = true;
@@ -153,6 +305,8 @@ export class Player {
       st: this.currentStance,
       r: this.reloading ? 1 : 0,
       v: this.object.visible ? 1 : 0,
+      w: this.weapon,
+      h: this.applyingBandage ? 1 : 0,
     };
   }
 
@@ -165,12 +319,44 @@ export class Player {
     return rock <= feetY + STEP ? Math.max(terrain, rock) : terrain;
   }
 
-  /** True if a rock face too tall to step onto is at (x, z) or just ahead of it. */
+  /**
+   * True if a rock face too tall to step onto is anywhere under the body at (x, z): its center
+   * plus a ring at the body's radius (so you can't slide into a rock at an angle either).
+   */
   #blocked(x, z, dir, feetY, colliders) {
-    for (const k of [0, RADIUS]) {
-      if (colliders.surfaceAt(x + dir.x * k, z + dir.z * k) - feetY > STEP) return true;
+    if (colliders.surfaceAt(x, z) - feetY > STEP) return true;
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      if (colliders.surfaceAt(x + Math.cos(a) * RADIUS, z + Math.sin(a) * RADIUS) - feetY > STEP) return true;
     }
     return false;
+  }
+
+  /** Only the center point: used to free a player who is already overlapping a rock. */
+  #inside(x, z, feetY, colliders) { return colliders.surfaceAt(x, z) - feetY > STEP; }
+
+  /** How much of the body ring at (x, z) is inside rock, and which way the rock is. */
+  #overlap(x, z, feetY, colliders) {
+    let count = 0;
+    const toward = new THREE.Vector3();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2, dx = Math.cos(a), dz = Math.sin(a);
+      if (colliders.surfaceAt(x + dx * RADIUS, z + dz * RADIUS) - feetY > STEP) { count++; toward.x += dx; toward.z += dz; }
+    }
+    return { count, toward };
+  }
+
+  /**
+   * A step from (ox, oz) to (nx, nz) is fine if it ends clear of rock, or — when the body already
+   * touches one — if it doesn't go deeper (so you can always back away or slide off).
+   */
+  #canStep(ox, oz, nx, nz, feetY, colliders) {
+    if (this.#inside(nx, nz, feetY, colliders)) return false;
+    const next = this.#overlap(nx, nz, feetY, colliders);
+    if (next.count === 0) return true;
+    const now = this.#overlap(ox, oz, feetY, colliders);
+    if (now.count === 0) return false;
+    return next.count < now.count || ((nx - ox) * now.toward.x + (nz - oz) * now.toward.z) <= 0;
   }
 
   #face(dir) {
@@ -210,6 +396,9 @@ export class Player {
         clip = lip < 0.8 ? 'StepUp' : lip < 1.4 ? 'ClimbUp_1m' : 'ClimbUp_2m';
       }
       if (this.#blocked(to.x, to.z, _zero, to.y, colliders)) return false; // nowhere to land
+      for (const c of colliders.near(to.x, to.z)) {
+        if (c.kind === 'tree' && Math.hypot(to.x - c.x, to.z - c.z) < c.r + RADIUS) return false; // a trunk is in the way
+      }
 
       this.#face(dir);
       this.velocity.set(0, 0, 0);
@@ -248,7 +437,17 @@ export class Player {
   update(dt, input, view, colliders) {
     this.time += dt;
     this.fireCooldown -= dt;
+    this.throwCooldown = (this.throwCooldown ?? 0) - dt;
     this.hipFireTimer -= dt;
+    this.bloom = Math.max(0, this.bloom - dt * 0.08);
+
+    // Bandage finished: use it up and tell the game to start healing (onBandaged).
+    if (this.applyingBandage && this.time >= this.bandageUntil) {
+      this.cancelBandage();
+      this.bandages--;
+      this.onBandaged?.();
+    }
+    if (this.vault) this.cancelBandage();
 
     if (this.transition && this.time >= this.transition.until) {
       this.stance = this.transition.then;
@@ -256,9 +455,9 @@ export class Player {
     }
 
     if (!this.alive) {
-      this.aiming = false;
+      this.aiming = this.aimHeld = false;
     } else if (this.vault) {
-      this.aiming = false;
+      this.aiming = this.aimHeld = false;
       this.#updateVault(dt);
     } else {
       this.#updateOnFoot(dt, input, view, colliders);
@@ -283,8 +482,9 @@ export class Player {
     const pos = this.object.position;
     const moving = (input.forward !== 0 || input.right !== 0) && !this.transition;
     if (moving && input.sprint && this.stance === 'crouch') this.stance = 'stand';
-    this.aiming = (input.aim || this.hipFireTimer > 0 || this.reloading) && this.stance !== 'prone' && !this.transition;
-    const sprinting = moving && input.sprint && input.forward > 0 && this.stance === 'stand' && !this.aiming;
+    this.aimHeld = input.aim;
+    this.aiming = (input.aim || this.hipFireTimer > 0 || this.reloading) && this.stance !== 'prone' && !this.transition && !this.applyingBandage;
+    const sprinting = moving && input.sprint && input.forward > 0 && this.stance === 'stand' && !this.aiming && !this.applyingBandage;
 
     // Shooter-style facing: body follows the camera while moving or aiming.
     if (moving || this.aiming) {
@@ -295,7 +495,7 @@ export class Player {
     }
 
     // Pick gait + direction, then move; rock faces block and we slide along them axis by axis.
-    let gait = { stand: this.aiming ? 'walk' : 'jog', crouch: 'crouch', prone: 'crawl' }[this.stance];
+    let gait = { stand: this.aiming || this.applyingBandage ? 'walk' : 'jog', crouch: 'crouch', prone: 'crawl' }[this.stance];
     if (sprinting) gait = 'sprint';
     let sector = 0;
     if (moving) {
@@ -305,10 +505,19 @@ export class Player {
         .applyAxisAngle(THREE.Object3D.DEFAULT_UP, view.yaw);
       const step = SPEED[gait] * (Math.abs(sector) >= 3 ? 0.85 : 1) * dt;
       const ox = pos.x, oz = pos.z, nx = ox + dir.x * step, nz = oz + dir.z * step;
-      const stuck = this.#blocked(ox, oz, _zero, pos.y, colliders); // never trap the player inside a rock
-      if (stuck || !this.#blocked(nx, nz, dir, pos.y, colliders)) { pos.x = nx; pos.z = nz; }
-      else if (!this.#blocked(nx, oz, new THREE.Vector3(Math.sign(dir.x), 0, 0), pos.y, colliders)) pos.x = nx;
-      else if (!this.#blocked(ox, nz, new THREE.Vector3(0, 0, Math.sign(dir.z)), pos.y, colliders)) pos.z = nz;
+      const stuck = this.#inside(ox, oz, pos.y, colliders); // never trap the player inside a rock
+      const y = pos.y;
+      if (stuck || this.#canStep(ox, oz, nx, nz, y, colliders)) { pos.x = nx; pos.z = nz; }
+      else {
+        // Blocked: slide along the rock face (the move minus its part pointing into the rock),
+        // then fall back to the world axes.
+        const into = this.#overlap(nx, nz, y, colliders).toward.normalize();
+        const k = dir.x * into.x + dir.z * into.z;
+        const sx = (dir.x - into.x * k) * step, sz = (dir.z - into.z * k) * step;
+        if (Math.hypot(sx, sz) > step * 0.15 && this.#canStep(ox, oz, ox + sx, oz + sz, y, colliders)) { pos.x = ox + sx; pos.z = oz + sz; }
+        else if (this.#canStep(ox, oz, nx, oz, y, colliders)) pos.x = nx;
+        else if (this.#canStep(ox, oz, ox, nz, y, colliders)) pos.z = nz;
+      }
     }
 
     for (const c of colliders.near(pos.x, pos.z)) {
