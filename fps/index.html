@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forest Walk</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+        "peerjs": "https://cdn.jsdelivr.net/npm/peerjs@1.5.4/+esm"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="loading">Loading forest…</div>
+  <div id="menu" hidden>
+    <div class="card">
+      <h1>Forest Walk</h1>
+      <label>Your name <input id="name" maxlength="16" autocomplete="off" spellcheck="false" /></label>
+      <button id="btn-host" class="primary">Host a game</button>
+      <div class="row">
+        <input id="code" placeholder="Room code" maxlength="5" autocomplete="off" spellcheck="false" />
+        <button id="btn-join">Join</button>
+      </div>
+      <button id="btn-solo" class="ghost">Play solo</button>
+      <p id="menu-status" role="status"></p>
+    </div>
+  </div>
+  <div id="net" hidden>
+    <span>Room <button id="room-code" title="Copy code"></button></span>
+    <span id="player-count"></span>
+  </div>
+  <div id="banner" hidden><span id="banner-text"></span><button id="banner-btn" hidden></button></div>
+  <div id="feed"></div>
+  <div id="health" hidden><div id="health-fill"></div></div>
+  <div id="damage"></div>
+  <div id="overlay" hidden></div>
+  <div id="crosshair"></div>
+  <div id="hitmarker"></div>
+  <div id="ammo"></div>
+  <div id="hud">
+    <b>WASD</b> move · <b>Shift</b> sprint · <b>Space</b> jump / vault / stand up · <b>C</b> crouch · <b>Z</b> prone ·
+    <b>RMB</b> aim · <b>LMB</b> shoot · <b>Q/E</b> lean (aiming) · <b>R</b> reload · <b>Alt</b> free look · <b>Wheel</b> zoom · click to lock mouse
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
