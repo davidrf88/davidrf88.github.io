@@ -10,6 +10,17 @@ const JUMP_SPEED = 6;
 const GRAVITY = 20;
 export const MAX_HP = 100;
 
+/**
+ * Plane drop: free fall (W dives steeper and travels further), then the parachute opens on its
+ * own `chuteAt` meters above the ground (or earlier with Space). Speeds in m/s.
+ */
+export const DROP = {
+  fall: { horiz: 9, dive: 14, down: 24, diveDown: 32 },
+  chute: { horiz: 6, fast: 8, down: 5, fastDown: 6.5 },
+  chuteAt: 35,
+  minChute: 8, // too close to the ground to open it by hand below this
+};
+
 /** Bandages: 5 s to apply, then one health-bar segment (20 hp) fills back in over 5 s. */
 export const BANDAGE = { apply: 5, heal: 20, healTime: 5, perPickup: 2, max: 10 };
 
@@ -67,6 +78,83 @@ export class Player {
   }
 
   get position() { return this.object.position; }
+  /** 'plane' | 'fall' | 'chute' while dropping into the match, else null. */
+  get airMode() { return this.air?.mode ?? null; }
+
+  // --- Plane drop ------------------------------------------------------------
+
+  /** Match start: everyone rides the plane (body hidden; main.js moves us along with it). */
+  boardPlane() {
+    this.air = { mode: 'plane' };
+    this.object.visible = false;
+    this.velocity.set(0, 0, 0);
+    this.onGround = false;
+    this.soldier.airPose({});
+  }
+
+  /** Jump out at the plane's position, carrying a little of its speed. */
+  jumpFromPlane(planeDir, planeSpeed) {
+    if (this.air?.mode !== 'plane') return false;
+    this.air = { mode: 'fall', tilt: 0 };
+    this.object.visible = true;
+    this.velocity.copy(planeDir).multiplyScalar(planeSpeed * 0.5);
+    this.velocity.y = -4;
+    this.fadeTo('Jump_Loop', 0.2);
+    return true;
+  }
+
+  /** Space while falling: open the parachute (not when about to hit the ground anyway). */
+  openChute(colliders) {
+    if (this.air?.mode !== 'fall') return false;
+    const ground = this.#groundAt(this.position.x, this.position.z, this.position.y, colliders);
+    if (this.position.y - ground < DROP.minChute) return false;
+    this.air.mode = 'chute';
+    return true;
+  }
+
+  /** Free fall / parachute steering, auto-opening the chute, landing. */
+  #updateAir(dt, input, view, colliders) {
+    const pos = this.object.position, v = this.velocity;
+    const chute = this.air.mode === 'chute';
+    const spec = chute ? DROP.chute : DROP.fall;
+    const forward = input.forward > 0;
+    // Steering is camera-relative, like walking.
+    const wish = new THREE.Vector3(input.right, 0, -input.forward);
+    if (wish.lengthSq() > 0) wish.normalize().applyAxisAngle(THREE.Object3D.DEFAULT_UP, view.yaw);
+    const horiz = chute ? (forward ? spec.fast : spec.horiz) : (forward ? spec.dive : spec.horiz);
+    const down = chute ? (forward ? spec.fastDown : spec.down) : (forward ? spec.diveDown : spec.down);
+    const k = 1 - Math.exp(-dt * (chute ? 1.5 : 1.0));
+    v.x += (wish.x * horiz - v.x) * k;
+    v.z += (wish.z * horiz - v.z) * k;
+    v.y += (-down - v.y) * (1 - Math.exp(-dt * (chute ? 2.5 : 1.5)));
+    pos.addScaledVector(v, dt);
+    const limit = WORLD_SIZE / 2 - 22; // drift no further out than the playable ground (border hills beyond)
+    pos.x = THREE.MathUtils.clamp(pos.x, -limit, limit);
+    pos.z = THREE.MathUtils.clamp(pos.z, -limit, limit);
+
+    // Face where we're heading (or the camera direction when not steering).
+    const target = wish.lengthSq() > 0 ? Math.atan2(wish.x, wish.z) : view.yaw + Math.PI;
+    this.facing += Math.atan2(Math.sin(target - this.facing), Math.cos(target - this.facing)) * Math.min(1, dt * 4);
+    this.object.rotation.y = this.facing;
+
+    const ground = this.#groundAt(pos.x, pos.z, pos.y, colliders); // terrain, or a rock top below us
+    if (!chute && pos.y - ground < DROP.chuteAt) this.air.mode = 'chute'; // opens on its own
+    // Body pitch: head-down dive in free fall, upright under the canopy.
+    this.air.tilt = THREE.MathUtils.damp(this.air.tilt ?? 0, chute ? 0 : forward ? 1.15 : 0.55, 4, dt);
+    this.soldier.airPose({ tilt: this.air.tilt, chute: this.air.mode === 'chute' });
+    this.fadeTo('Jump_Loop', 0.3);
+
+    if (pos.y <= ground) { // landed
+      pos.y = ground;
+      v.set(0, 0, 0);
+      this.air = null;
+      this.onGround = true;
+      this.stance = 'stand';
+      this.landTimer = 0.35;
+      this.soldier.airPose({});
+      this.fadeTo('Jump_Land', 0.1, { once: true });
+    }
+  }
   get reloading() { return this.time < this.reloadUntil; }
   /** The gun in hand (while holding a grenade: the gun you'll switch back to). */
   get gun() { return WEAPONS[this.holdingThrowable ? this.lastGun : this.weapon]; }
@@ -131,7 +219,7 @@ export class Player {
 
   /** H: start wrapping a bandage (needs one, and missing health). Returns false if you can't. */
   startBandage() {
-    if (!this.alive || this.applyingBandage || this.bandages <= 0 || this.hp >= MAX_HP || this.vault || this.cooking) return false;
+    if (!this.alive || this.air || this.applyingBandage || this.bandages <= 0 || this.hp >= MAX_HP || this.vault || this.cooking) return false;
     this.bandageUntil = this.time + BANDAGE.apply;
     this.reloadUntil = 0;
     clearTimeout(this.reloadTimer);
@@ -226,7 +314,7 @@ export class Player {
 
   /** Returns true if a shot was fired. */
   tryShoot() {
-    if (this.holdingThrowable || this.applyingBandage) return false;
+    if (this.holdingThrowable || this.applyingBandage || this.air) return false;
     if (!this.alive || this.vault || this.stance === 'prone' || this.transition || this.reloading || this.fireCooldown > 0) return false;
     if (this.ammo <= 0) return false; // empty: no auto-reload, press R
     this.ammo--;
@@ -262,6 +350,7 @@ export class Player {
     this.hp = 0;
     this.cookStart = null;
     this.cancelBandage();
+    if (this.air) { this.air = null; this.soldier.airPose({}); }
     this.vault = null;
     this.transition = null;
     this.aiming = false;
@@ -285,6 +374,8 @@ export class Player {
     this.cancelBandage();
     this.#resetWeapons();
     this.cookStart = null;
+    this.air = null;
+    this.soldier.airPose({});
     this.stance = 'stand';
     this.velocity.set(0, 0, 0);
     this.onGround = true;
@@ -307,6 +398,8 @@ export class Player {
       v: this.object.visible ? 1 : 0,
       w: this.weapon,
       h: this.applyingBandage ? 1 : 0,
+      m: { plane: 1, fall: 2, chute: 3 }[this.airMode] ?? 0, // air mode (see protocol.js)
+      ...(this.air?.tilt ? { tl: round2(this.air.tilt) } : {}),
     };
   }
 
@@ -456,6 +549,9 @@ export class Player {
 
     if (!this.alive) {
       this.aiming = this.aimHeld = false;
+    } else if (this.air) {
+      this.aiming = this.aimHeld = false;
+      if (this.air.mode !== 'plane') this.#updateAir(dt, input, view, colliders);
     } else if (this.vault) {
       this.aiming = this.aimHeld = false;
       this.#updateVault(dt);
@@ -474,7 +570,7 @@ export class Player {
       aimFrac: this.aimFrac,
       pitch: this.aimPitch,
       lean: this.lean,
-      handsBusy: this.stance === 'prone' || !!this.vault || !this.alive,
+      handsBusy: this.stance === 'prone' || !!this.vault || !this.alive || !!this.air,
     });
   }
 

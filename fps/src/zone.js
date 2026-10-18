@@ -16,38 +16,58 @@ const GRACE = 40; // s before the first white circle appears
 
 const PHASES = [
   // radius (m), wait (s), shrink (s), dps (hp/s; players have 100)
-  { r: 95, wait: 50, shrink: 55, dps: 1 },
-  { r: 62, wait: 40, shrink: 40, dps: 2 },
-  { r: 38, wait: 32, shrink: 35, dps: 3.5 },
-  { r: 20, wait: 25, shrink: 22, dps: 6 },
-  { r: 9, wait: 20, shrink: 18, dps: 9 },
+  { r: 80, wait: 50, shrink: 55, dps: 1 },
+  { r: 52, wait: 40, shrink: 40, dps: 2 },
+  { r: 32, wait: 32, shrink: 35, dps: 3.5 },
+  { r: 18, wait: 25, shrink: 22, dps: 6 },
+  { r: 8, wait: 20, shrink: 18, dps: 9 },
   { r: 0, wait: 15, shrink: 22, dps: 14 },
 ];
 export const ZONE_RAMP = 0.15;     // extra hp/s for every second spent outside, capped below
 export const ZONE_RAMP_MAX = 1.5;  // ×dps
 
+// Ground you can actually stand on: inside the border hills (they start ~92 m out, players are
+// stopped at 113 m). Circles are kept so most of each one lies on it.
+const PLAYABLE = 100;
+// How far the first circle's center may stray from the map center ("roughly central").
+const FIRST_SPREAD = 1.0;
+// > 0.5 biases each new center toward the far side of what's allowed, so the circle visibly
+// moves every wave instead of mostly shrinking in place (0.5 = uniform over the allowed disc).
+const JUMP_BIAS = 0.7;
+
 /**
- * Host: a new zone plan. Each circle lies fully inside the previous one and on the map.
- * `speed` > 1 compresses all timings (for testing, `?zone=fast`).
+ * Host: a new zone plan, PUBG-style. The first circle is big and roughly central but random;
+ * every later circle is placed at random fully inside the previous one, so where the match ends
+ * is unpredictable (it can be near the map edge). `speed` > 1 compresses all timings (`?zone=fast`).
  */
 export function makeZonePlan(rand = Math.random, speed = 1) {
   let cx = 0, cz = 0, r = START_RADIUS;
   const phases = [];
-  for (const ph of PHASES) {
+  const fits = (x, z, radius) => Math.max(Math.abs(x), Math.abs(z)) <= PLAYABLE - radius * 0.5;
+  PHASES.forEach((ph, i) => {
     let nx = cx, nz = cz;
-    const maxShift = Math.max(0, (r === START_RADIUS ? HALF : r) - ph.r);
-    const bound = HALF - 25 - ph.r * 0.5; // keep the circle mostly on the playable ground
-    for (let i = 0; i < 40; i++) {
-      const a = rand() * Math.PI * 2, d = Math.sqrt(rand()) * maxShift;
-      const x = cx + Math.cos(a) * d, z = cz + Math.sin(a) * d;
-      if (Math.abs(x) <= bound && Math.abs(z) <= bound) { nx = x; nz = z; break; }
+    if (i === 0) {
+      // Anywhere in the middle part of the map.
+      const spread = (PLAYABLE - ph.r * 0.5) * FIRST_SPREAD;
+      nx = (rand() * 2 - 1) * spread;
+      nz = (rand() * 2 - 1) * spread;
+    } else {
+      // Inside the previous circle (the whole new circle must fit), and on playable ground.
+      // If a pick doesn't fit, try again with a shorter jump — never snap back to the map center.
+      const maxShift = r - ph.r;
+      for (let k = 0; k < 60; k++) {
+        const a = rand() * Math.PI * 2;
+        const d = maxShift * Math.pow(rand(), 1 - JUMP_BIAS) * (1 - k / 60);
+        const x = cx + Math.cos(a) * d, z = cz + Math.sin(a) * d;
+        if (fits(x, z, ph.r)) { nx = x; nz = z; break; }
+      }
     }
     phases.push({
       x: Math.round(nx * 10) / 10, z: Math.round(nz * 10) / 10, r: ph.r,
       wait: ph.wait / speed, shrink: ph.shrink / speed, dps: ph.dps,
     });
     cx = nx; cz = nz; r = ph.r;
-  }
+  });
   return { grace: GRACE / speed, phases };
 }
 

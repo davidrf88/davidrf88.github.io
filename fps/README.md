@@ -30,6 +30,8 @@ Open http://localhost:5180. (A local server is required; opening `index.html` di
 | H | Bandage: 5 s to apply, then +20 hp (one health segment) over 5 s; H / Esc cancels |
 | 1 – 4 | Switch to your 1st / 2nd / 3rd / 4th gun (rifle, SMG, sniper, pistol order; shown above the ammo). Also puts a grenade away |
 | Tab (hold) | Inventory: your guns with magazine / reserve ammo (the one in hand highlighted), grenades and bandages |
+| Space / F (in the plane) | Jump out (only while over the map) |
+| Space (free fall) | Open the parachute early (it opens by itself at 35 m) |
 | F (eliminated) | Free spectator camera: fly with WASD / Space / C (Shift = fast); F or click goes back to following players |
 | Alt (hold) | Free look: orbit the camera while the soldier keeps his heading |
 | M | Full map (regions, A–E / 1–5 grid) and the controls list |
@@ -120,8 +122,11 @@ Round flow:
 
 1. **Lobby** — everyone gathers around the central clearing; shots do no damage. With 2+ players
    the host presses **Enter** (or clicks **Start match**; press Esc first to free the mouse).
-2. **Match** — players are dropped as far apart as possible across the map (farthest-point
-   sampling, ~200 m apart with two players on the 250 m map). 5 body shots or 2 headshots eliminate; **there is no respawn**.
+2. **Match** — everyone starts in a **drop plane** that crosses the map in a straight line, at a
+   different random angle every match (the dashed line on the minimap / M map). Press **Space** or
+   **F** to jump wherever you like while it's over the map; anyone still aboard at the far side
+   is dropped. Free-fall (WASD steers, **W** dives steeper and further), the parachute opens by
+   itself 35 m above the ground (or press **Space** earlier), then steer down and land. 5 body shots or 2 headshots eliminate; **there is no respawn**.
    Eliminated players spectate the survivors (click to switch) or press **F** to fly a free camera
    (WASD along the view, Space / C up / down, Shift faster; it passes through everything). The HUD shows players alive.
    The **blue zone** closes in waves (see below); being outside it drains health.
@@ -141,17 +146,20 @@ in on it. Later phases wait less, move at different speeds and hurt more:
 
 | Phase | Safe radius | Wait | Shrink | Damage outside |
 | --- | --- | --- | --- | --- |
-| 1 | 95 m | 50 s | 55 s | 1 hp/s |
-| 2 | 62 m | 40 s | 40 s | 2 hp/s |
-| 3 | 38 m | 32 s | 35 s | 3.5 hp/s |
-| 4 | 20 m | 25 s | 22 s | 6 hp/s |
-| 5 | 9 m | 20 s | 18 s | 9 hp/s |
+| 1 | 80 m | 50 s | 55 s | 1 hp/s |
+| 2 | 52 m | 40 s | 40 s | 2 hp/s |
+| 3 | 32 m | 32 s | 35 s | 3.5 hp/s |
+| 4 | 18 m | 25 s | 22 s | 6 hp/s |
+| 5 | 8 m | 20 s | 18 s | 9 hp/s |
 | 6 | 0 m | 15 s | 22 s | 14 hp/s |
 
 Damage applies once a second and ramps up the longer you stay out (+15% per second, up to 1.5×).
 Outside the wall the fog turns blue and thickens and the screen tints blue, more so in later phases.
 The HUD shows the countdown and the distance to safety; the maps draw the blue edge, the white
-circle and a dashed run line. Each new circle lies fully inside the previous one. The host picks the
+circle and a dashed run line. Like PUBG, the first circle is roughly central but random (its center
+anywhere within ~60 m of the middle), and each next circle is placed at random fully inside the
+previous one, biased toward bigger jumps, so the final circle can end up anywhere on the playable
+ground, near the edges included. The host picks the
 circles and applies the damage; tune the table in `src/zone.js`. Host with `?zone=fast` to run the
 whole schedule about 6× faster for testing.
 
@@ -197,6 +205,7 @@ world is seed-generated, so a server can rebuild it for hit checks.
 - `src/terrain.js` – procedural heightmap terrain (Perlin fBm), `heightAt()` for exact ground height
 - `src/weapons.js` – gun stats (damage, fire mode, scope) and loot counts; `src/pickups.js` – guns on the ground (visuals, F prompt, random scatter)
 - `src/throwables.js` – grenade types, shared bounce physics, smoke clouds, throw-arc preview
+- `src/plane.js` – drop plane: random flight line per match, plane position from the match clock, plane model
 - `src/zone.js` – blue zone plan (phases, circles) and its state at any time; `src/zone-view.js` draws the wall, fog/tint and timer
 - `src/colors.js` – fair uniform palette, saved pick, host-side unique assignment
 - `src/regions.js` – region names/centers (nearest-center borders) and grid references

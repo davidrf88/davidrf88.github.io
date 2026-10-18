@@ -131,6 +131,36 @@ function drawZone(ctx, zone, pos, toScreen, s, w, dpr) {
   ctx.restore();
 }
 
+/** Drop plane: its flight line (dashed) and a plane marker where it is now. */
+function drawRoute(ctx, route, toScreen, dpr) {
+  if (!route) return;
+  const [[ax, az], [bx, bz]] = route.line;
+  const [x1, y1] = toScreen(ax, az), [x2, y2] = toScreen(bx, bz);
+  ctx.save();
+  ctx.setLineDash([7 * dpr, 5 * dpr]);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.lineWidth = 2 * dpr;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  const [px, py] = toScreen(route.at[0], route.at[1]);
+  ctx.translate(px, py);
+  ctx.rotate(Math.atan2(y2 - y1, x2 - x1) + Math.PI / 2);
+  const k = 7 * dpr;
+  ctx.beginPath();                       // simple plane silhouette pointing "up"
+  ctx.moveTo(0, -k); ctx.lineTo(k * 0.25, -k * 0.2); ctx.lineTo(k, k * 0.15); ctx.lineTo(k * 0.25, k * 0.1);
+  ctx.lineTo(k * 0.2, k * 0.7); ctx.lineTo(k * 0.45, k); ctx.lineTo(-k * 0.45, k); ctx.lineTo(-k * 0.2, k * 0.7);
+  ctx.lineTo(-k * 0.25, k * 0.1); ctx.lineTo(-k, k * 0.15); ctx.lineTo(-k * 0.25, -k * 0.2); ctx.closePath();
+  ctx.fillStyle = '#fff';
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 1.2 * dpr;
+  ctx.stroke();
+  ctx.fill();
+  ctx.restore();
+}
+
 /** Arrow pointing "up" at angle 0, rotated clockwise by `angle`. */
 function arrow(ctx, x, y, angle, size) {
   ctx.save();
@@ -175,15 +205,15 @@ export class Minimap {
    * @param {number} angle  heading as a clockwise angle from north
    * @param {object|null} zone  blue zone state (zone.js zoneAt) during a match
    */
-  update(pos, angle, zone = null) {
+  update(pos, angle, zone = null, route = null) {
     const r = regionAt(pos.x, pos.z);
     this.regionEl.textContent = `${r.name} · ${gridRef(pos.x, pos.z)}`;
     if (r !== this.region) {
       if (this.region) this.#toast(r.name);
       this.region = r;
     }
-    this.#drawMini(pos, angle, zone);
-    if (this.bigOpen) this.#drawBig(pos, angle, zone);
+    this.#drawMini(pos, angle, zone, route);
+    if (this.bigOpen) this.#drawBig(pos, angle, zone, route);
   }
 
   #toast(name) {
@@ -193,7 +223,7 @@ export class Minimap {
     this.toastTimer = setTimeout(() => this.toastEl.classList.remove('on'), TOAST_MS);
   }
 
-  #drawMini(pos, angle, zone) {
+  #drawMini(pos, angle, zone, route) {
     const c = this.mini;
     const dpr = sizeCanvas(c);
     const ctx = c.getContext('2d');
@@ -207,6 +237,7 @@ export class Minimap {
       0, 0, w, w);
     const toScreen = (x, z) => [(x - pos.x) * pxPerM + w / 2, (z - pos.z) * pxPerM + w / 2];
     drawZone(ctx, zone, pos, toScreen, pxPerM, w, dpr);
+    drawRoute(ctx, route, toScreen, dpr);
     for (const reg of REGIONS) {
       const [sx, sy] = toScreen(reg.x, reg.z);
       const m = 34 * dpr; // skip labels that would be cut off at the edge
@@ -217,7 +248,7 @@ export class Minimap {
     arrow(ctx, w / 2, w / 2, angle, 7 * dpr);
   }
 
-  #drawBig(pos, angle, zone) {
+  #drawBig(pos, angle, zone, route) {
     const c = this.big;
     const dpr = sizeCanvas(c);
     const ctx = c.getContext('2d');
@@ -225,6 +256,7 @@ export class Minimap {
     const s = w / WORLD_SIZE;
     ctx.drawImage(this.base, 0, 0, w, w);
     drawZone(ctx, zone, pos, (x, z) => [(x + HALF) * s, (z + HALF) * s], s, w, dpr);
+    drawRoute(ctx, route, (x, z) => [(x + HALF) * s, (z + HALF) * s], dpr);
     // Grid with A–E / 1–5 callouts.
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
     ctx.lineWidth = dpr;

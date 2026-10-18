@@ -332,6 +332,38 @@ export class Soldier {
 
     this.base = this.#action('Idle_Loop');
     this.base.play();
+
+    this.chute = this.#buildChute(uniformColor);
+    this.object.add(this.chute);
+  }
+
+  /** Parachute canopy in the uniform color (lightened) with four risers; hidden until opened. */
+  #buildChute(uniformColor) {
+    const g = new THREE.Group();
+    this.chuteMat = new THREE.MeshStandardMaterial({
+      color: uniformColor.clone().lerp(new THREE.Color('#ffffff'), 0.35), roughness: 0.8, side: THREE.DoubleSide, flatShading: true,
+    });
+    const canopy = new THREE.Mesh(new THREE.SphereGeometry(2.6, 16, 6, 0, Math.PI * 2, 0, 1.0), this.chuteMat);
+    canopy.scale.y = 0.55;
+    canopy.position.y = 4.3;
+    canopy.castShadow = true;
+    const rim = 2.6 * Math.sin(1.0), rimY = 4.3 + 2.6 * Math.cos(1.0) * 0.55;
+    const pts = [];
+    for (const [x, z] of [[1, 1], [-1, 1], [1, -1], [-1, -1]]) {
+      pts.push(new THREE.Vector3(x * 0.22, 1.5, z * 0.1), new THREE.Vector3(x * rim * 0.7, rimY, z * rim * 0.7));
+    }
+    const risers = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: '#2b2a22' }));
+    g.add(canopy, risers);
+    g.visible = false;
+    return g;
+  }
+
+  /**
+   * In the air: `tilt` pitches the body forward (radians; diving ≈ 1.1), `chute` shows the canopy.
+   */
+  airPose({ tilt = 0, chute = false }) {
+    this.model.rotation.x = tilt;
+    this.chute.visible = chute;
   }
 
   get baseName() { return this.base.getClip().name; }
@@ -441,6 +473,7 @@ export class Soldier {
     for (const m of this.uniformMats) m.color.copy(c);
     this.gear.uniform.olive.color.copy(c).multiplyScalar(0.9);
     this.gear.uniform.darkOlive.color.copy(c).multiplyScalar(0.65);
+    this.chuteMat.color.copy(c).lerp(new THREE.Color('#ffffff'), 0.35);
   }
 
   playShoot() { this.shootAction.reset().play(); }

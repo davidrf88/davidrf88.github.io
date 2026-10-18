@@ -5,6 +5,7 @@ import { MAX_HP, BANDAGE } from '../player.js';
 import { makeZonePlan, zoneAt, outsideBy, ZONE_RAMP, ZONE_RAMP_MAX } from '../zone.js';
 import { PICKUP_RANGE, WEAPONS } from '../weapons.js';
 import { sanitizeColor, assignColor } from '../colors.js';
+import { makeFlight } from '../plane.js';
 import { fragDamage, THROWABLES, domeRadius, inDome } from '../throwables.js';
 
 // A dropped player keeps their slot (and their body in the world) this long, waiting to reconnect.
@@ -51,7 +52,7 @@ export function traceShot(origin, dir, near, players, traceWorld, maxDist = 320)
   let best = world ? world.distance : maxDist;
   let targetId = null, head = false;
   for (const p of players) {
-    if (!p.alive || !p.s) continue;
+    if (!p.alive || !p.s || p.s.m === 1) continue; // nobody can be hit while still in the plane
     for (const { c, r, head: isHead } of hitSpheres(p.s)) {
       const t = raySphere(origin, dir, c, r);
       if (t !== null && t >= near && t < best) { best = t; targetId = p.id; head = !!isHead; }
@@ -102,6 +103,12 @@ export class Session {
 
   get roomCode() { return this.transport.roomCode; }
   get aliveCount() { return [...this.players.values()].filter((p) => p.alive).length; }
+  /** The drop plane: { flight, t seconds since the match started }, or null outside a match. */
+  flightState() {
+    if (this.phase !== 'match' || !this.flight) return null;
+    return { flight: this.flight, t: (performance.now() - this.flightStart) / 1000 };
+  }
+
   /** Current blue zone (see zone.js), or null outside a match. */
   zoneState() {
     return this.zone ? zoneAt(this.zone.plan, (performance.now() - this.zone.start) / 1000) : null;
@@ -259,7 +266,10 @@ export class Session {
     const ids = [...this.players.keys()];
     const points = this.hooks.findSpawns(ids.length, 'match');
     const spawns = Object.fromEntries(ids.map((id, i) => [id, points[i]]));
-    this.#emitAll({ t: MSG.START, spawns, zone: makeZonePlan(Math.random, this.hooks.zoneSpeed ?? 1), pickups: this.hooks.makePickups('match') });
+    this.#emitAll({
+      t: MSG.START, spawns, flight: makeFlight(),
+      zone: makeZonePlan(Math.random, this.hooks.zoneSpeed ?? 1), pickups: this.hooks.makePickups('match'),
+    });
   }
 
   // --- internals --------------------------------------------------------------
@@ -355,6 +365,7 @@ export class Session {
       resumed,
       phase: this.phase,
       zone: this.zone && { plan: this.zone.plan, elapsed: performance.now() - this.zone.start },
+      flight: this.flight && { ...this.flight, elapsed: performance.now() - this.flightStart },
       pickups: [...this.pickups.values()],
       players: [...this.players.values()].map(({ id, name, color, hp, alive, kills, s }) => ({ id, name, color, hp, alive, kills, s })),
     });
@@ -513,6 +524,7 @@ export class Session {
         if (msg.resumed) players.clear(); // catch up from scratch after a reconnect
         for (const p of msg.players) players.set(p.id, { ...p, lastFire: 0, zoneOut: 0 });
         if (msg.zone) this.zone = { plan: msg.zone.plan, start: performance.now() - msg.zone.elapsed };
+        if (msg.flight) { this.flight = msg.flight; this.flightStart = performance.now() - msg.flight.elapsed; }
         this.#setPickups(msg.pickups);
         break;
       case MSG.JOIN:
@@ -547,6 +559,8 @@ export class Session {
         this.domes = [];
         this.phase = 'match';
         this.zone = { plan: msg.zone, start: performance.now() };
+        this.flight = msg.flight ?? null;
+        this.flightStart = performance.now();
         this.#setPickups(msg.pickups);
         reviveAll();
         for (const p of players.values()) { p.kills = 0; p.damage = 0; p.place = null; p.diedAt = null; p.spectator = false; }
@@ -569,10 +583,12 @@ export class Session {
       case MSG.WIN:
         this.phase = 'ended';
         this.zone = null;
+        this.flight = null;
         break;
       case MSG.LOBBY:
         this.phase = 'lobby';
         this.zone = null;
+        this.flight = null;
         this.#setPickups(msg.pickups);
         reviveAll();
         break;

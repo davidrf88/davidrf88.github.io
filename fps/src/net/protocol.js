@@ -11,7 +11,7 @@
  *   throw   { k: type, o: [x,y,z], v: [vx,vy,vz], f } threw a grenade (release point, velocity, fuse left)
  *
  * host → clients
- *   welcome { id, hostId, resumed, phase, zone: { plan, elapsed ms } | null, pickups, players: [{ id, name, color, hp, alive, kills, s }] }
+ *   welcome { id, hostId, resumed, phase, flight: { …, elapsed ms } | null, zone: { plan, elapsed ms } | null, pickups, players: [{ id, name, color, hp, alive, kills, s }] }
  *   join    { id, name, color }
  *   leave   { id }
  *   snap    { players: [{ id, s, hp, alive }] }   20 Hz
@@ -19,7 +19,8 @@
  *   hit     { target, by, hp, head, zone }         head: headshot; zone: blue-zone damage (by = null)
  *   death   { target, by, place, head, zone }                 eliminated; no respawn until the next round
  *   tp      { id, p: [x,y,z] }                     teleport (lobby arrivals)
- *   start   { spawns: { [id]: [x,y,z] }, zone, pickups }  match begins; players spread far apart; zone plan (zone.js); loot
+ *   start   { spawns, flight, zone, pickups }      match begins: everyone boards the drop plane (flight: plane.js makeFlight);
+ *                                                  zone plan (zone.js); loot. spawns: fallback positions without a flight
  *   take    { id, by }                             a player picked up item `id`
  *   heal    { target, hp }                         bandage healing tick
  *   away    { id, away }                           a player's connection dropped (true) / they reconnected (false)
@@ -32,7 +33,8 @@
  *
  * Phases: 'lobby' (no damage, host can start) → 'match' (battle royale) → 'ended' → 'lobby'.
  *
- * PlayerState: { p:[x,y,z], f:facing, b:baseClip, a:aimFrac, pi:aimPitch, l:lean, st:stance, r:reloading, v:visible, w:weapon }
+ * PlayerState: { p:[x,y,z], f:facing, b:baseClip, a:aimFrac, pi:aimPitch, l:lean, st:stance, r:reloading, v:visible, w:weapon, h:bandaging,
+ *               m: 0 on foot | 1 in the plane | 2 free fall | 3 parachute, tl: dive tilt }
  */
 export const MSG = {
   HELLO: 'hello',

@@ -31,6 +31,9 @@ export class Multiplayer {
 
   get selfId() { return this.session?.selfId; }
   get phase() { return this.session?.phase; }
+  /** Drop plane { flight, t } during a match, else null. */
+  get flight() { return this.session?.flightState() ?? null; }
+
   /** Blue zone state during a match, else null. */
   get zone() { return this.session?.phase === 'match' ? this.session.zoneState() : null; }
 
@@ -309,12 +312,13 @@ export class Multiplayer {
       case MSG.START:
         for (const r of this.remotes.values()) r.teleport();
         this.#placeSelf(msg.spawns);
+        if (msg.flight) player.boardPlane(); // everyone starts in the drop plane
         this.#syncPickups();
         this.game.throwables.clear();
         this.spectating = null;
-        ui.feed('Match started — last one standing wins. Watch the blue zone.');
-        ui.showOverlay('Fight!');
-        setTimeout(() => { if (this.phase === 'match' && player.alive) ui.hideOverlay(); }, 1500);
+        ui.feed('Match started — jump from the plane where you want to land. Last one standing wins.');
+        ui.showOverlay(msg.flight ? 'Get ready to jump!' : 'Fight!');
+        setTimeout(() => { if (this.phase === 'match' && player.alive) ui.hideOverlay(); }, 2000);
         break;
 
       case MSG.WIN:

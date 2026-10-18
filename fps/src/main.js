@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import { createTerrain, heightAt, slopeAt, WORLD_SIZE } from './terrain.js';
 import { createForest } from './forest.js';
-import { Player, BANDAGE, MAX_HP } from './player.js';
+import { Player, BANDAGE, MAX_HP, DROP } from './player.js';
 import { ShotEffects } from './combat.js';
 import { traceShot } from './net/session.js';
 import { Multiplayer } from './multiplayer.js';
 import { showMenu, menuOpen, showHealth, showThrowMenu, setHealth, flashDamage, showOverlay, hideOverlay, alert as showAlert } from './ui.js';
 import { Minimap } from './minimap.js';
 import { ZoneView } from './zone-view.js';
+import { PlaneView, PLANE, flightLine } from './plane.js';
 import { Pickups, scatterPickups } from './pickups.js';
 import { LOOT, SLOTS, WEAPONS } from './weapons.js';
 import { Throwables, THROWABLES, THROW_SLOTS, THROW_RELEASE, throwOrigin, throwVelocity, predictGrenade, fragDamage } from './throwables.js';
@@ -73,6 +74,7 @@ loadingEl.classList.add('done');
 
 const effects = new ShotEffects(scene);
 const minimap = new Minimap(markers);
+const planeView = new PlaneView(scene);
 const zoneView = new ZoneView(scene, sky.material.uniforms.horizon.value);
 // ?zone=fast compresses the blue zone timings (host decides) for quick tests.
 const zoneSpeed = new URLSearchParams(location.search).get('zone') === 'fast' ? 6 : 1;
@@ -220,6 +222,9 @@ addEventListener('keydown', (e) => {
   const gameKey = e.code === 'Space' || e.code === 'Tab' || e.code.startsWith('Arrow') || isAlt(e);
   if ((gameKey || e.altKey) && !e.ctrlKey && !e.metaKey) e.preventDefault();
   if (e.repeat) return;
+  // Plane drop: Space / F jumps out; Space in free fall opens the parachute.
+  if (player.alive && player.airMode === 'plane' && (e.code === 'Space' || e.code === 'KeyF')) { jumpOut(); return; }
+  if (player.alive && player.airMode === 'fall' && e.code === 'Space') { player.openChute(colliders); return; }
   if (e.code === 'Escape') { cancelThrow(); if (player.cancelBandage()) showAlert('Bandage cancelled'); }
   if (e.code === 'KeyH') useBandage();
   keys.add(e.code);
@@ -316,6 +321,46 @@ function readInput() {
   return { forward: f, right: r, sprint: keys.has('ShiftLeft') || keys.has('ShiftRight'), jump, aim: mouse.aim, lean };
 }
 
+// --- Drop plane: ride it, jump out where you like (forced at the end), fall, parachute, land ---
+const dropHintEl = document.getElementById('drop-hint');
+let plane = null; // current plane state (planeAt) during the flight, else null
+
+function updatePlane(dt) {
+  const flight = mp?.flight ?? null;
+  plane = planeView.update(flight, dt);
+  if (player.alive && player.airMode === 'plane') {
+    if (!plane) jumpOut(); // no flight info (e.g. after a reconnect late in the drop): just drop
+    else {
+      player.position.copy(plane.pos);
+      if (plane.forceJump) jumpOut();
+    }
+  }
+  updateDropHint();
+}
+
+function jumpOut() {
+  if (plane && !plane.canJump && !plane.forceJump) return; // not over the map yet
+  const dir = plane?.dir ?? new THREE.Vector3(0, 0, 1);
+  if (!player.jumpFromPlane(dir, PLANE.speed)) return;
+  player.position.y -= 3; // out of the cargo door, below the fuselage
+}
+
+function updateDropHint() {
+  const mode = player.alive ? player.airMode : null;
+  let text = '';
+  if (mode === 'plane' && plane) {
+    text = plane.canJump
+      ? `<b>Space</b> / <b>F</b> Jump · auto-jump in ${Math.ceil(plane.timeLeft)} s`
+      : `Over the map in ${Math.ceil(plane.timeToJump)} s — pick your landing spot (M: map)`;
+  } else if (mode === 'fall') {
+    text = `<b>W</b> dive faster · <b>Space</b> open parachute (opens itself at ${DROP.chuteAt} m)`;
+  } else if (mode === 'chute') {
+    text = '<b>WASD</b> steer · <b>W</b> faster';
+  }
+  dropHintEl.hidden = !text;
+  if (text) dropHintEl.innerHTML = text;
+}
+
 // --- Free spectator camera: eliminated players fly around (F toggles; click goes back to following) ---
 const freeCam = { on: false, pos: new THREE.Vector3() };
 const FLY_SPEED = 12, FLY_FAST = 32;
@@ -364,10 +409,13 @@ function updateCamera(dt) {
   if (freeCam.on) { updateFreeCam(dt); return; }
   // Over-the-shoulder: zoom in while aiming, lower the pivot when crouched/prone.
   cam.zoom = THREE.MathUtils.damp(cam.zoom, player.aiming ? 1 : 0, 10, dt);
-  const dist = THREE.MathUtils.lerp(cam.dist, 2.7, cam.zoom);
+  // Further out while riding the plane (it's big) and while dropping (to see where you'll land).
+  const airDist = player.alive ? { plane: 32, fall: 7, chute: 8 }[player.airMode] ?? 0 : 0;
+  cam.air = THREE.MathUtils.damp(cam.air ?? 0, airDist, 3, dt);
+  const dist = Math.max(THREE.MathUtils.lerp(cam.dist, 2.7, cam.zoom), cam.air);
   // Leaning slides the camera out with the upper body; leaning left swaps to the left shoulder.
   const baseShoulder = THREE.MathUtils.lerp(0.45, 0.75, cam.zoom);
-  const shoulder = baseShoulder * (1 - 2 * Math.max(0, -player.lean)) + player.lean * 0.45;
+  const shoulder = player.airMode ? 0 : baseShoulder * (1 - 2 * Math.max(0, -player.lean)) + player.lean * 0.45;
   camera.fov = THREE.MathUtils.lerp(60, 48, cam.zoom);
   camera.updateProjectionMatrix();
 
@@ -438,7 +486,7 @@ const aimRay = new THREE.Raycaster();
 const ownedGuns = () => SLOTS.filter((w) => player.has(w));
 
 function tryPickup() {
-  if (menuOpen() || !player.alive) return;
+  if (menuOpen() || !player.alive || player.airMode) return;
   const item = pickups.nearest(player.position);
   if (!item) return;
   if (!player.canTake(item.type)) return;
@@ -467,7 +515,7 @@ function updateThrow() {
   }
   cookEl.hidden = !player.cooking;
   if (player.cooking) cookEl.textContent = player.fuseLeft.toFixed(1);
-  throwReady = player.holdingThrowable && !player.applyingBandage && mouse.fire && player.alive && !menuOpen() && !look.active && player.throwCooldown <= 0;
+  throwReady = player.holdingThrowable && !player.applyingBandage && !player.airMode && mouse.fire && player.alive && !menuOpen() && !look.active && player.throwCooldown <= 0;
   if (!throwReady) { throwables.preview(null); return; }
   throwables.preview(throwOrigin(player.position, cam.yaw, _to), throwVelocity(cam.yaw, cam.pitch, throwMode(), _tv));
 }
@@ -579,12 +627,13 @@ function updateMap() {
   // Follow whoever the camera follows. Headings are clockwise from north (-z).
   const watched = mp?.spectateTarget();
   const zone = mp?.zone ?? null;
+  const route = mp?.flight && plane && !plane.gone ? { line: flightLine(mp.flight.flight), at: [plane.pos.x, plane.pos.z] } : null;
   if (freeCam.on) {
-    minimap.update(camera.position, -cam.yaw, zone);
+    minimap.update(camera.position, -cam.yaw, zone, route);
     return { viewer: camera.position, zone };
   }
-  if (watched) minimap.update(watched.position, Math.PI - watched.rotation.y, zone);
-  else minimap.update(player.position, -cam.yaw, zone); // where the camera looks
+  if (watched) minimap.update(watched.position, Math.PI - watched.rotation.y, zone, route);
+  else minimap.update(player.position, -cam.yaw, zone, route); // where the camera looks
   return { viewer: watched ? watched.position : player.position, zone };
 }
 
@@ -633,6 +682,7 @@ camTarget.copy(player.position).y += player.viewHeight;
 
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), 0.05);
+  updatePlane(dt);
   player.update(dt, readInput(), updateFreeLook(dt), colliders);
   updateCamera(dt);
   if (mouse.fire) fire();
@@ -646,6 +696,9 @@ renderer.setAnimationLoop(() => {
   const { viewer, zone } = updateMap();
   zoneView.update(zone, viewer, dt);
   if (player.scoped) scene.fog.density *= 0.35; // optics see through the haze
+  // High up (plane, free fall) the haze thins out so you can pick a landing spot from the sky.
+  const altitude = camera.position.y - heightAt(camera.position.x, camera.position.z);
+  scene.fog.density *= THREE.MathUtils.lerp(1, 0.25, THREE.MathUtils.smoothstep(altitude, 15, 80));
   updateBlueZoneGrenades(dt, viewer);
 
   // Keep the shadow frustum centered on the player.

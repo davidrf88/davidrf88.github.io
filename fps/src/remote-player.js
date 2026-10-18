@@ -116,6 +116,9 @@ export class RemotePlayer {
     const cur = t < 0.5 ? sa : sb;
     if (cur.b !== this.soldier.baseName) this.soldier.fadeTo(cur.b, 0.2, { sync: !ONCE_CLIPS.has(cur.b) });
     this.soldier.setWeapon(sb.w ?? 'pistol');
+    // Plane drop: dive tilt in free fall, canopy under the parachute.
+    const tilt = THREE.MathUtils.lerp(sa.tl ?? 0, sb.tl ?? 0, t);
+    this.soldier.airPose({ tilt: sb.m === 2 ? tilt : 0, chute: sb.m === 3 });
     this.soldier.bandaging = !!sb.h && this.alive;
     if (sb.r && !this.lastReload) this.soldier.playReload();
     this.lastReload = sb.r;
@@ -123,7 +126,7 @@ export class RemotePlayer {
     this.pose.aimFrac = THREE.MathUtils.lerp(sa.a, sb.a, t);
     this.pose.pitch = THREE.MathUtils.lerp(sa.pi, sb.pi, t);
     this.pose.lean = THREE.MathUtils.lerp(sa.l, sb.l, t);
-    this.pose.handsBusy = cur.st === 'prone' || !this.alive;
+    this.pose.handsBusy = cur.st === 'prone' || !this.alive || (sb.m ?? 0) >= 2;
     this.soldier.update(dt, this.pose);
 
     this.tag.visible = this.alive;
