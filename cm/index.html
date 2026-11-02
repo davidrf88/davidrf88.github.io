@@ -1,109 +1,307 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Wedding</title>
-		<link
-			rel="preconnect"
-			href="https://fonts.googleapis.com"
-		/>
-		<link
-			rel="preconnect"
-			href="https://fonts.gstatic.com"
-			crossorigin
-		/>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Playfair+Display:wght@400;500&display=swap"
-			rel="stylesheet"
-		/>
-		<script src="https://cdn.tailwindcss.com"></script>
-		<style>
-			:root {
-				--soft-gray: #353b2a;
-			}
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chelsea y Maximiliano · 05.12.2026</title>
+  <meta name="description" content="Chelsea y Maximiliano se casan — 5 de diciembre de 2026 · Monterrey, Nuevo León.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&family=Waterfall&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
 
-			@keyframes fadeInSlow {
-				from {
-					opacity: 0;
-				}
-				to {
-					opacity: 1;
-				}
-			}
+  <!-- ============ LOADER (3 s on every visit / refresh) ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <img class="loader__floral" src="assets/img/floral.png" alt="">
+      <p class="loader__mono">C <span>&amp;</span> M</p>
+      <p class="loader__date">05 · 12 · 2026</p>
+      <div class="loader__bar"><i id="loaderBar"></i></div>
+      <p class="loader__pct"><b id="loaderPct">0</b>%</p>
+    </div>
+  </div>
 
-			.fade-in-5s {
-				animation: fadeInSlow 5s ease-in-out forwards;
-			}
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__mark">C <span>&amp;</span> M</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Menú" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+    <nav class="nav__links" id="navLinks">
+      <a href="#story">Nuestra Historia</a>
+      <a href="#details">El Día</a>
+      <a href="#schedule">Itinerario</a>
+      <a href="#travel">Viaje</a>
+      <a href="#faq">Preguntas</a>
+      <a href="#rsvp" class="nav__rsvp">RSVP</a>
+    </nav>
+  </header>
 
-			.fade-in-title {
-				opacity: 0;
-				animation: fadeInSlow 3s ease-in-out forwards;
-				animation-delay: 2.5s;
-			}
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero__media" data-parallax="0.3" style="background-image:url('assets/img/hero-couple.jpg')"></div>
+    <div class="hero__veil"></div>
+    <div class="hero__content" data-hero-fade>
+      <p class="eyebrow" data-enter style="--e:.9s">Nos casamos</p>
+      <h1 class="hero__names" data-split>Chelsea <em>&amp;</em> Maximiliano</h1>
+      <p class="hero__date" data-enter style="--e:1.9s">05 de diciembre de 2026</p>
+      <div class="hero__meta" data-enter style="--e:2s">
+        <span>Monterrey, Nuevo León</span>
+      </div>
+      <a href="#rsvp" class="btn btn--light" data-enter style="--e:2.1s">Acompáñanos</a>
+    </div>
+    <a href="#countdown" class="hero__scroll" aria-label="Bajar" data-enter="fade" style="--e:2.6s"><span></span></a>
+  </section>
 
-			.fade-in-name {
-				opacity: 0;
-				animation: fadeInSlow 4s ease-in-out forwards;
-				animation-delay: 4s;
-			}
+  <!-- ============ COUNTDOWN ============ -->
+  <section class="countdown" id="countdown">
+    <img class="floral floral--left" src="assets/img/floral.png" alt="" aria-hidden="true" data-anim="pop">
+    <div class="countdown__wrap">
+    <p class="countdown__heading">¡Falta poco!</p>
+    <div class="countdown__grid" id="timer" data-stagger>
+      <div><b data-unit="days">--</b><small>días</small></div>
+      <div><b data-unit="hours">--</b><small>horas</small></div>
+      <div><b data-unit="minutes">--</b><small>minutos</small></div>
+      <div><b data-unit="seconds">--</b><small>segundos</small></div>
+    </div>
+    </div>
+    <img class="floral floral--right" src="assets/img/floral.png" alt="" aria-hidden="true" data-anim="pop">
+  </section>
 
-			.fade-in-date {
-				opacity: 0;
-				animation: fadeInSlow 3s ease-in-out forwards;
-				animation-delay: 7s;
-				font-family: "Playfair Display", serif;
-			}
+  <!-- ============ STORY ============ -->
+  <section class="story story--v1 section" id="story">
+    <div class="v1__photos" data-stagger>
+      <figure class="v1__ph" data-anim="pop"><img src="assets/img/novia.jpg" alt="Chelsea" loading="lazy"></figure>
+      <figure class="v1__ph" data-anim="pop"><img src="assets/img/novio.jpg" alt="Maximiliano" loading="lazy"></figure>
+    </div>
+    <div class="story__text" data-stagger>
+      <p class="eyebrow eyebrow--dark">Nuestra historia</p>
+      <h2 class="title">Dos caminos,<br><em>un patio</em></h2>
+      <p>Nos encontramos en el verano del 2019, casi por accidente, entre risas y conversaciones que no queríamos terminar. Desde entonces, cada circunstancia nos ha traído a este mismo camino, a decir que sí frente a quienes más queremos.</p>
+      <p class="signature">— Chelsea &amp; Maximiliano</p>
+    </div>
+  </section>
 
-			.font-imperial {
-				font-family: "Imperial Script", cursive;
-			}
+  <!-- ============ QUOTE BAND ============ -->
+  <section class="band" style="background-image:url('assets/img/gallery-8.jpg')">
+    <div class="band__veil"></div>
+    <blockquote class="band__quote" data-anim="zoom">
+      “De lo que sea que estén hechas nuestras almas, la suya y la mía son iguales.”
+      <cite>Emily Brontë</cite>
+    </blockquote>
+  </section>
 
-			.font-formal {
-				font-family: "Playfair Display", serif;
-			}
+  <!-- ============ DETAILS ============ -->
+  <section class="details section" id="details">
+    <header class="section__head reveal">
+      <p class="eyebrow eyebrow--dark">El día</p>
+      <h2 class="title">Nos <em>casamos</em></h2>
+      <p class="lead">Misa y recepción en dos lugares especiales.</p>
+    </header>
 
-			.bg-soft-gray {
-				background-color: var(--soft-gray);
-			}
+    <div class="cards" data-stagger>
+      <article class="card">
+        <figure class="card__img"><img src="assets/img/floral-arch.jpg" alt="Iglesia de la ceremonia" loading="lazy"></figure>
+        <div class="card__body">
+          <h3>Misa</h3>
+          <p class="card__time">2:00 PM</p>
+          <p>Parroquia Nuestra Señora Reina de los Ángeles</p>
+          <p class="card__address">Av. Roberto Garza Sada 300, Col. Carrizalejo, S.P.G.G., N.L.</p>
+          <a class="btn btn--outline btn--sm" href="https://maps.google.com/?q=Parroquia+Nuestra+Se%C3%B1ora+Reina+de+los+%C3%81ngeles+Av+Roberto+Garza+Sada+300+San+Pedro+Garza+Garcia" target="_blank" rel="noopener">Ver en Mapas</a>
+        </div>
+      </article>
+      <article class="card">
+        <figure class="card__img"><img src="assets/img/patio-table.jpg" alt="Jardín de la recepción" loading="lazy"></figure>
+        <div class="card__body">
+          <h3>Recepción</h3>
+          <p class="card__time">4:30 PM</p>
+          <p>Princess Wedding Gardens</p>
+          <p class="card__address">Juárez 100, Col. Los Rodríguez, Santiago, N.L.</p>
+          <a class="btn btn--outline btn--sm" href="https://maps.google.com/?q=Princess+Wedding+Gardens+Juarez+100+Santiago+Nuevo+Leon" target="_blank" rel="noopener">Ver en Mapas</a>
+        </div>
+      </article>
+    </div>
+  </section>
 
-			.fade-to-soft-gray {
-				background: linear-gradient(to bottom, transparent, var(--soft-gray));
-			}
+  <!-- ============ SCHEDULE ============ -->
+  <section class="schedule section" id="schedule">
+    <header class=”section__head reveal”>
+      <p class=”eyebrow eyebrow--dark”>Sábado 5 de diciembre</p>
+      <h2 class=”title”>Así será <em>el día</em></h2>
+    </header>
+    <ol class=”timeline” data-progress data-stagger>
+      <li><time>2:00 PM</time><div><h4>Misa</h4><p>Parroquia Nuestra Señora Reina de los Ángeles, S.P.G.G.</p></div></li>
+      <li><time>4:30 PM</time><div><h4>Recepción</h4><p>Bienvenida en Princess Wedding Gardens, Santiago.</p></div></li>
+      <li><time>5:00 PM</time><div><h4>Cóctel</h4><p>Botanas, bebidas y música.</p></div></li>
+      <li><time>6:30 PM</time><div><h4>Cena</h4><p>Cena y brindis.</p></div></li>
+      <li><time>8:00 PM</time><div><h4>Primer baile y fiesta</h4><p>Trae tus zapatos de baile.</p></div></li>
+    </ol>
+  </section>
 
-			.letters {
-				position: absolute;
-				top: 20%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				width: 90%;
-			}
-		</style>
-	</head>
-	<body class="bg-black h-screen overflow-hidden">
-		<main class="relative w-screen h-[100svh] overflow-hidden">
-			<img
-				src="images/spalshy.jpg"
-				alt="Wedding splash"
-				class="block w-screen h-[100svh] object-cover lg:object-center fade-in-5s"
-			/>
-			<div class="absolute inset-0 bg-black/60"></div>
-			<div class="pointer-events-none absolute bottom-0 left-0 h-12 w-full"></div>
-			<div class="letters text-center text-white fade-in-title">
-				<p class="text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-[0.2em] uppercase font-formal">
-					Save <span class="font-imperial normal-case tracking-normal text-2xl sm:text-3xl md:text-4xl lg:text-4xl">the</span> Date
-				</p>
-				<h1 class="mt-4 sm:mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-wide font-imperial fade-in-name">
-					Chelsea &amp; Maximiliano
-				</h1>
-				<br/>
-				<p class="text-sm sm:text-base md:text-lg lg:text-xl tracking-[0.15em] font-formal fade-in-date">
-					Diciembre 05, 2026
-				</p>
-			</div>
+  <!-- ============ DRESS CODE ============ -->
+  <section class="dress section">
+    <div class="dress__img" data-anim="wipe-left"><img src="assets/img/lawn-chairs.jpg" alt="Dos sillas decoradas en el jardín" loading="lazy"></div>
+    <div class="dress__text" data-stagger>
+      <p class="eyebrow eyebrow--dark">Código de vestimenta</p>
+      <h2 class="title">Formal <em>de jardín</em></h2>
+      <p>Piensa en lino, trajes ligeros, vestidos con caída y tonos tierra. La corbata es opcional. Las tardes de diciembre en Monterrey son frescas (alrededor de 10–15°C), así que trae chamarra o rebozo.</p>
+      <p class="note">La recepción es en jardín — recomendamos tacón grueso o zapato bajo.</p>
+      <ul class="swatches" aria-label="Paleta sugerida" data-stagger>
+        <li data-anim="pop" style="--c:#8A9A7B" title="Salvia"></li>
+        <li data-anim="pop" style="--c:#C07A5A" title="Terracota"></li>
+        <li data-anim="pop" style="--c:#D9C3A5" title="Arena"></li>
+        <li data-anim="pop" style="--c:#5E6B52" title="Olivo"></li>
+        <li data-anim="pop" style="--c:#E9E1D3" title="Lino"></li>
+      </ul>
+    </div>
+  </section>
 
+  <!-- ============ TRAVEL ============ -->
+  <section class="travel section" id="travel">
+    <header class="section__head reveal">
+      <p class="eyebrow eyebrow--dark">Cómo llegar</p>
+      <h2 class="title">Viaje y <em>hospedaje</em></h2>
+    </header>
+    <div class="travel__grid" data-stagger>
+      <div class="tile">
+        <span class="tile__num">01</span>
+        <h4>Vuelo</h4>
+        <p>El Aeropuerto Internacional de Monterrey (MTY) está a unos 30 minutos del centro. Uber y DiDi funcionan muy bien.</p>
+      </div>
+      <div class="tile">
+        <span class="tile__num">02</span>
+        <h4>Dónde hospedarse</h4>
+        <p>Recomendamos San Pedro Garza García o Valle Oriente — caminables, seguros y cerca del lugar. Pronto compartiremos detalles del bloqueo de habitaciones.</p>
+      </div>
+      <div class="tile">
+        <span class="tile__num">03</span>
+        <h4>Haz un fin de semana</h4>
+        <p>Sube a Chipinque, camina el Paseo Santa Lucía y no te vayas sin probar cabrito y carne asada.</p>
+      </div>
+    </div>
+  </section>
 
-		</main>
+  <!-- ============ GALLERY ============ -->
+  <section class="gallery" aria-label="Galería" data-stagger>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-1.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-2.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-3.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-4.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-5.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-6.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-7.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-8.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-9.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+    <figure data-anim="wipe-up"><img src="assets/img/gallery-10.jpg" alt="Chelsea y Maximiliano" loading="lazy"></figure>
+  </section>
 
-	</body>
+  <!-- ============ RSVP ============ -->
+  <section class="rsvp" id="rsvp">
+    <div class="rsvp__inner reveal">
+      <img class="floral floral--center" src="assets/img/floral.png" alt="" aria-hidden="true" data-anim="pop">
+      <h2 class="title title--light">¿Nos <em>acompañas?</em></h2>
+      <p>Por favor confírmanos antes del 1 de noviembre de 2026.</p>
+      <a class="btn btn--light btn--lg" id="rsvpLink" href="#" target="_blank" rel="noopener">Confirmar asistencia</a>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq section" id="faq">
+    <header class="section__head reveal">
+      <p class="eyebrow eyebrow--dark">Bueno saber</p>
+      <h2 class="title">Preguntas <em>frecuentes</em></h2>
+    </header>
+    <div class="faq__list" data-stagger>
+      <details>
+        <summary>¿Puedo llevar acompañante?</summary>
+        <p>Tu invitación y la confirmación indican cuántos lugares hay reservados para ti.</p>
+      </details>
+      <details>
+        <summary>¿Pueden ir niños?</summary>
+        <p>Queremos mucho a sus pequeños, pero esta será una celebración solo para adultos.</p>
+      </details>
+      <details>
+        <summary>¿Y si llueve?</summary>
+        <p>El patio tiene un área techada y un plan B listo — la fiesta sigue.</p>
+      </details>
+      <details>
+        <summary>¿Hay estacionamiento?</summary>
+        <p>Sí, habrá valet parking. Aun así recomendamos Uber para que disfrutes la fiesta.</p>
+      </details>
+      <details>
+        <summary>¿Regalos?</summary>
+        <p>Tu presencia es el mejor regalo. Si deseas contribuir, pronto compartiremos la mesa de regalos.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <p class="footer__names" data-anim="up">Chelsea <em>&amp;</em> Maximiliano</p>
+    <p>05 · 12 · 2026 — Monterrey, N.L.</p>
+    <p class="footer__tag">#ChelseaYMax</p>
+  </footer>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" id="lbClose" aria-label="Cerrar">&times;</button>
+    <button class="lightbox__prev" id="lbPrev" aria-label="Anterior">&#8249;</button>
+    <button class="lightbox__next" id="lbNext" aria-label="Siguiente">&#8250;</button>
+    <img class="lightbox__img" id="lbImg" src="" alt="">
+    <p class="lightbox__counter" id="lbCounter"></p>
+  </div>
+
+  <!-- ============ CONFIG PANEL ============ -->
+  <button class="config-btn" id="configBtn" aria-label="Configurar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+
+  <aside class="config-panel" id="configPanel">
+    <div class="config-panel__header">
+      <h3>Configurar</h3>
+      <button class="config-panel__close" id="configClose">&times;</button>
+    </div>
+    <div class="config-panel__body">
+
+      <!-- Fuentes -->
+      <fieldset class="config-section">
+        <legend>Fuentes <button class="config-reset" data-reset="fonts">Reset</button></legend>
+        <div class="cfg-picker" data-cfg="font-script" data-options="Waterfall,Tangerine,Great Vibes,Dancing Script,Parisienne,Alex Brush,Sacramento,Allura,Pinyon Script,Petit Formal Script,Italianno,Satisfy,Carattere,Fleur De Leah,Birthstone,Lavishly Yours,Marck Script,Rouge Script,Niconne,Euphoria Script,Mrs Saint Delafield,Monsieur La Doulaise,Style Script,Berkshire Swash,Yesteryear,Lovers Quarrel">
+          <span class="cfg-picker__label">Nombres (script)</span>
+          <div class="cfg-picker__ctrl">
+            <button class="cfg-picker__prev" aria-label="Anterior">&#8249;</button>
+            <span class="cfg-picker__val">Waterfall</span>
+            <button class="cfg-picker__next" aria-label="Siguiente">&#8250;</button>
+          </div>
+        </div>
+        <div class="cfg-picker" data-cfg="font-serif" data-options="Cormorant Garamond,Playfair Display,Libre Baskerville,EB Garamond,Crimson Text,Lora,Merriweather,Spectral,Cardo,Sorts Mill Goudy,Cormorant,Noto Serif,Source Serif 4,DM Serif Display,Bodoni Moda,Petrona,Bitter,Domine,Gentium Book Plus,Arapey,Gilda Display,Vollkorn,Old Standard TT,Bellefair,Forum">
+          <span class="cfg-picker__label">Títulos (serif)</span>
+          <div class="cfg-picker__ctrl">
+            <button class="cfg-picker__prev" aria-label="Anterior">&#8249;</button>
+            <span class="cfg-picker__val">Cormorant Garamond</span>
+            <button class="cfg-picker__next" aria-label="Siguiente">&#8250;</button>
+          </div>
+        </div>
+        <div class="cfg-picker" data-cfg="font-sans" data-options="Jost,Montserrat,Raleway,Lato,Poppins,Inter,DM Sans,Nunito,Outfit,Work Sans,Quicksand,Karla,Josefin Sans,Cabin,Mulish,Manrope,Figtree,Plus Jakarta Sans,Albert Sans,Urbanist,Geologica,Lexend,Onest,Red Hat Display,Rubik">
+          <span class="cfg-picker__label">Cuerpo (sans)</span>
+          <div class="cfg-picker__ctrl">
+            <button class="cfg-picker__prev" aria-label="Anterior">&#8249;</button>
+            <span class="cfg-picker__val">Jost</span>
+            <button class="cfg-picker__next" aria-label="Siguiente">&#8250;</button>
+          </div>
+        </div>
+      </fieldset>
+
+    </div>
+    <div class="config-panel__footer">
+      <button class="btn btn--outline btn--sm" id="configResetAll">Reset Todo</button>
+      <button class="btn btn--outline btn--sm" id="configExport">Exportar</button>
+    </div>
+  </aside>
+
+  <script src="js/main.js"></script>
+</body>
 </html>
